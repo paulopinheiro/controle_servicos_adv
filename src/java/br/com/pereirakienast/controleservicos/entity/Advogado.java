@@ -21,7 +21,6 @@ public class Advogado implements Comparable, Serializable {
     private Integer id;
     @NotNull
     private String oab;
-    @NotNull
     private String digestPassword;
     @NotNull
     private String nome;
@@ -86,7 +85,12 @@ public class Advogado implements Comparable, Serializable {
         this.ativo = ativo;
     }
 
-    private static String digestPassword(String password) {
+     /**
+     * Retorna hash para senha informada. 
+     * @param password a senha de onde se gerará o hash
+     * @return hash gerado gerado com algoritmo SHA para codificação UTF-8
+     */
+    public static String digestPassword(String password) {
         if ((password==null)||(password.isEmpty())) return null;
         try {
             byte[] bytesOfParameter;
@@ -108,13 +112,11 @@ public class Advogado implements Comparable, Serializable {
      * codificação UTF-8
      * @param password a senha informada, de onde se gerará um hash para
      * comparar com o persistido no banco de dados
-     * @return True se:
-     * 1. a senha informada é não nula;
-     * 2. o hash persistido for não nulo e
-     * 3. o hash da senha informada é igual ao persistido.
-     * False se quaisquer dessas condições falharem
+     * @return True se hash da senha informada é igual ao hash persistido ou 
+     * False se são diferentes. Quando ambos são nulos retorna True.
      */
     public boolean confirmaPassword(String password) {
+        if ((password==null)&&(this.digestPassword==null)) return true;
         return (this.digestPassword != null) &&
                 (password !=null) &&
                 (!password.isEmpty()) &&
