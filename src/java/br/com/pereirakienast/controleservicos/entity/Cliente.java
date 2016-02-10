@@ -5,6 +5,7 @@ import java.text.Collator;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
@@ -22,6 +23,8 @@ public class Cliente implements Comparable, Serializable {
     private String email;
     private String redeSocial;
     private boolean ativo;
+    @ManyToOne
+    private Advogado advogado;
     @OneToMany(mappedBy = "cliente")
     private List<Historico> historicos;
     @OneToMany(mappedBy = "cliente")
@@ -91,6 +94,14 @@ public class Cliente implements Comparable, Serializable {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public Advogado getAdvogado() {
+        return advogado;
+    }
+
+    public void setAdvogado(Advogado advogado) {
+        this.advogado = advogado;
     }
 
     public List<Historico> getHistoricos() {

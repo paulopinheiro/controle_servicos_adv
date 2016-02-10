@@ -54,11 +54,11 @@ public class Advogado implements Comparable, Serializable {
     /**
      * Insere hash da senha, gerado com algoritmo SHA para codificação
      * UTF-8
-     * @param digestPassword a senha de onde se gerará o hash para persistir no
+     * @param password a senha de onde se gerará o hash para persistir no
      * banco de dados
      */
-    public void setDigestPassword(String digestPassword) {
-        this.digestPassword = digestPassword(digestPassword);
+    public void setDigestPassword(String password) {
+        this.digestPassword = digestPassword(password);
     }
 
     public String getNome() {
