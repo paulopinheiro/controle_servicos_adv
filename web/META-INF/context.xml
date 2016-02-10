@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJARLocking="true" path="/controle_servicos_adv">
-    <Resource name="jdbc/dbPereiraKienast" auth="Container" type="javax.sql.DataSource"
-               description="Banco de dados Controle Advogados"
-               maxTotal="100" maxIdle="30" maxWaitMillis="10000"
-               username="estudo" password="estudo" driverClassName="org.postgresql.Driver"
-               url="jdbc:mysql://localhost:5432/controladv"/>
+
 </Context>
