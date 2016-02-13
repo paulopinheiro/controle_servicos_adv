@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition template="./../resources/templates/topBottom.xhtml">
+            <ui:define name="top">Cadastro de Advogados</ui:define>
+            <ui:define name="content">
+                <f:view>
+                    <h:form id="formAdvogado">
+                        <p:dataTable value="#{advogadoMB.lista}" var="advogado">
+                            <p:column>
+                                <f:facet name="header">OAB</f:facet>
+                                <h:outputText value="#{advogado.oab}" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Nome</f:facet>
+                                <h:outputText value="#{advogado.nome}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

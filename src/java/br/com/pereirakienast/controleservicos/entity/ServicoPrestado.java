@@ -2,8 +2,10 @@ package br.com.pereirakienast.controleservicos.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
@@ -16,19 +18,29 @@ public class ServicoPrestado implements Comparable, Serializable {
     @Id
     private Integer id;
     @ManyToOne
+    @JoinColumn(name="cliente_id")
     private Cliente cliente;
     @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name="data_prestacao")
     private Date dataPrestacao;
     @ManyToOne
+    @JoinColumn(name="advogado_id")
     private Advogado advogado;
     private String detalhes;
+    @Column(name="valor_servico")
     private double valorServico;
     @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name="data_pagamento")
     private Date dataPagamento;
     @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name="data_repasse_escritorio")
     private Date dataRepasseEscritorio;
     @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name="data_repasse_advogado")
     private Date dataRepasseAdvogado;
+    @ManyToOne
+    @JoinColumn(name="tipo_servico_id")
+    private TipoServico tipoServico;
 
     public Integer getId() {
         return id;
@@ -100,6 +112,14 @@ public class ServicoPrestado implements Comparable, Serializable {
 
     public void setDataRepasseAdvogado(Date dataRepasseAdvogado) {
         this.dataRepasseAdvogado = dataRepasseAdvogado;
+    }
+
+    public TipoServico getTipoServico() {
+        return tipoServico;
+    }
+
+    public void setTipoServico(TipoServico tipoServico) {
+        this.tipoServico = tipoServico;
     }
 
     @Override

@@ -3,8 +3,10 @@ package br.com.pereirakienast.controleservicos.entity;
 import java.io.Serializable;
 import java.text.Collator;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -21,9 +23,11 @@ public class Cliente implements Comparable, Serializable {
     private String qualificacao;
     private String telefone;
     private String email;
+    @Column(name="rede_social")
     private String redeSocial;
     private boolean ativo;
     @ManyToOne
+    @JoinColumn(name="advogado_id")
     private Advogado advogado;
     @OneToMany(mappedBy = "cliente")
     private List<Historico> historicos;

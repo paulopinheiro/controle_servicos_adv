@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.Collator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ public class Advogado implements Comparable, Serializable {
     private Integer id;
     @NotNull
     private String oab;
+    @Column(name="digest_password")
     private String digestPassword;
     @NotNull
     private String nome;
@@ -90,7 +92,7 @@ public class Advogado implements Comparable, Serializable {
      * @param password a senha de onde se gerará o hash
      * @return hash gerado gerado com algoritmo SHA para codificação UTF-8
      */
-    public static String digestPassword(String password) {
+    private static String digestPassword(String password) {
         if ((password==null)||(password.isEmpty())) return null;
         try {
             byte[] bytesOfParameter;

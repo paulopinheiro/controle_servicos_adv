@@ -1,8 +1,10 @@
 package br.com.pereirakienast.controleservicos.entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 /**
@@ -14,8 +16,10 @@ public class Documento implements Serializable {
     @Id
     private Integer id;
     @ManyToOne
+    @JoinColumn(name="tipo_documento_id")
     private TipoDocumento tipo;
     @ManyToOne
+    @JoinColumn(name="cliente_id")
     private Cliente cliente;
     private String numero;
     private String orgaoEmissor;

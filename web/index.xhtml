@@ -1,11 +1,19 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
     <body>
         <ui:composition template="./resources/templates/topBottom.xhtml">
             <ui:define name="top">Controle de Serviços de Advocacia</ui:define>
-            <ui:define name="content">content</ui:define>
+            <ui:define name="content">
+                <f:view>
+                    <h:form id="formMenu">
+                        <h:commandLink action="./cadastros/cadAdvogado.xhtml">Advogados</h:commandLink>
+                    </h:form>
+                </f:view>
+            </ui:define>
             <ui:define name="bottom">bottom</ui:define>
         </ui:composition>
     </body>

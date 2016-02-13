@@ -2,8 +2,10 @@ package br.com.pereirakienast.controleservicos.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
@@ -16,9 +18,11 @@ public class Historico implements Comparable, Serializable {
     @Id
     private Integer id;
     @Temporal(javax.persistence.TemporalType.DATE)
+    @Column(name="data_historico")
     private Date dataHistorico;
     private String descricao;
     @ManyToOne
+    @JoinColumn(name="cliente_id")
     private Cliente cliente;
 
     public Integer getId() {
