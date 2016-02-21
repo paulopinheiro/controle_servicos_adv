@@ -11,7 +11,34 @@
             <ui:define name="content">
                 <f:view>
                     <h:form id="formAdvogado">
-                        <p:dataTable value="#{advogadoMB.lista}" var="advogado">
+                        <p:panelGrid columns="2">
+                            <f:facet name="header">
+                                <h:outputText value="Formulário de cadastro de advogado" />
+                            </f:facet>
+                            <p:outputLabel id="lblOAB" value="OAB:" for="oab" />
+                            <p:inputText id="oab" value="#{advogadoMB.advogado.oab}" size="8" />
+                            <p:outputLabel id="lblNome" value="Nome" for="nome" />
+                            <p:inputText id="nome" value="#{advogadoMB.advogado.nome}" size="80" />
+                            <p:outputLabel id="lblAdministrador" value="Administrador:" for="administrador" />
+                            <p:selectBooleanCheckbox id="administrador" value="#{advogadoMB.advogado.administrador}" />
+                            <p:outputLabel id="lblAtivo" value="Ativo:" for="ativo" />
+                            <p:selectBooleanCheckbox id="ativo" value="#{advogadoMB.advogado.ativo}" />
+                            <f:facet name="footer">
+                                <h:panelGroup>
+                                    <p:commandButton value="Salvar" actionListener="#{advogadoMB.salvar}">
+                                        <f:ajax execute="@form" render="@form" />
+                                    </p:commandButton>
+                                    <p:commandButton value="Novo" actionListener="#{advogadoMB.limparElemento}">
+                                        <f:ajax execute="@this" render="@form" />
+                                    </p:commandButton>
+                                    <p:commandButton value="Excluir" disabled="#{advogadoMB.novoElemento}" actionListener="#{advogadoMB.excluir}">
+                                        <f:ajax execute="@this" render="@form" />
+                                    </p:commandButton>
+                                </h:panelGroup>
+                            </f:facet>
+                        </p:panelGrid>
+                        <p:messages id="messages" showDetail="true" showSummary="true" autoUpdate="true" />
+                        <p:dataTable id="dtLista" value="#{advogadoMB.listaAdvogados}" var="advogado">
                             <p:column>
                                 <f:facet name="header">OAB</f:facet>
                                 <h:outputText value="#{advogado.oab}" />

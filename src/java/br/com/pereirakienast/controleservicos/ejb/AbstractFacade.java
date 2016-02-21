@@ -5,6 +5,7 @@
  */
 package br.com.pereirakienast.controleservicos.ejb;
 
+import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -21,6 +22,9 @@ public abstract class AbstractFacade<T> {
     }
 
     protected abstract EntityManager getEntityManager();
+    public abstract void salvar(T entity) throws LogicalException;
+    public abstract void excluir(T entity) throws LogicalException;
+    public abstract List<T> findFiltro(T entity) throws LogicalException;
 
     public void create(T entity) {
         getEntityManager().persist(entity);
