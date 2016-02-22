@@ -11,6 +11,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -22,14 +24,18 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "advogado", catalog = "controladv", schema = "public")
 // colocar configurações de sequence e as de tabela
+@NamedQueries(value = {
+    @NamedQuery(name = "Advogado.findByOab", query = "select a from Advogado a where UPPER(a.oab) = :oabUpper")
+})
 public class Advogado implements Comparable, Serializable {
+
     @Id
-    @SequenceGenerator(name="Advogado_Gen",sequenceName="advogado_id_seq",allocationSize=1)
-    @GeneratedValue(generator="Advogado_Gen")
+    @SequenceGenerator(name = "Advogado_Gen", sequenceName = "advogado_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "Advogado_Gen")
     private Integer id;
     @NotNull
     private String oab;
-    @Column(name="digest_password")
+    @Column(name = "digest_password")
     private String digestPassword;
     @NotNull
     private String nome;
@@ -58,7 +64,7 @@ public class Advogado implements Comparable, Serializable {
     }
 
     /**
-     * 
+     *
      * @return Hash da senha escolhida pelo usuário
      */
     public String getDigestPassword() {
@@ -66,10 +72,10 @@ public class Advogado implements Comparable, Serializable {
     }
 
     /**
-     * Insere hash da senha, gerado com algoritmo SHA para codificação
-     * UTF-8
-     * @param password a senha de onde se gerará o hash para persistir no
-     * banco de dados
+     * Insere hash da senha, gerado com algoritmo SHA para codificação UTF-8
+     *
+     * @param password a senha de onde se gerará o hash para persistir no banco
+     * de dados
      */
     public void setDigestPassword(String password) {
         this.digestPassword = digestPassword(password);
@@ -99,18 +105,21 @@ public class Advogado implements Comparable, Serializable {
         this.ativo = ativo;
     }
 
-     /**
-     * Retorna hash para senha informada. 
+    /**
+     * Retorna hash para senha informada.
+     *
      * @param password a senha de onde se gerará o hash
      * @return hash gerado gerado com algoritmo SHA para codificação UTF-8
      */
     private static String digestPassword(String password) {
-        if ((password==null)||(password.isEmpty())) return null;
+        if ((password == null) || (password.isEmpty())) {
+            return null;
+        }
         try {
             byte[] bytesOfParameter;
             bytesOfParameter = password.getBytes("UTF-8");
             byte[] digest = MessageDigest.getInstance("SHA").digest(bytesOfParameter);
-            return new String(digest,"UTF-8");
+            return new String(digest, "UTF-8");
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(Advogado.class.getName()).log(Level.SEVERE, null, ex);
             return password;
@@ -124,18 +133,21 @@ public class Advogado implements Comparable, Serializable {
      * Gera hash da senha informada e compara com o hash anteriormente
      * persistido. O hash da senha é implementada com algoritmo SHA para
      * codificação UTF-8
+     *
      * @param password a senha informada, de onde se gerará um hash para
      * comparar com o persistido no banco de dados
-     * @return True se hash da senha informada é igual ao hash persistido ou 
+     * @return True se hash da senha informada é igual ao hash persistido ou
      * False se são diferentes. Quando ambos são nulos retorna True.
      */
     public boolean confirmaPassword(String password) {
-        if ((password==null)&&(this.digestPassword==null)) return true;
-        return (this.digestPassword != null) &&
-                (password !=null) &&
-                (!password.isEmpty()) &&
-               (!this.digestPassword.isEmpty()) &&
-               this.digestPassword.equals(digestPassword(password));
+        if ((password == null) && (this.digestPassword == null)) {
+            return true;
+        }
+        return (this.digestPassword != null)
+                && (password != null)
+                && (!password.isEmpty())
+                && (!this.digestPassword.isEmpty())
+                && this.digestPassword.equals(digestPassword(password));
     }
 
     @Override

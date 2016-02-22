@@ -2,8 +2,6 @@ package br.com.pereirakienast.controleservicos.mbeans.comum;
 
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.event.ActionEvent;
 
 public abstract class AbListaMB<T> extends AbBasicoMB<T> {
