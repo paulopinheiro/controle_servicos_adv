@@ -2,7 +2,7 @@ package br.com.pereirakienast.controleservicos.mbeans;
 
 import br.com.pereirakienast.controleservicos.ejb.AdvogadoFacade;
 import br.com.pereirakienast.controleservicos.entity.Advogado;
-import br.com.pereirakienast.controleservicos.mbeans.interfaces.AbListaMB;
+import br.com.pereirakienast.controleservicos.mbeans.comum.AbListaMB;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;

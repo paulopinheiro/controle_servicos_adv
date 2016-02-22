@@ -1,10 +1,8 @@
-package br.com.pereirakienast.controleservicos.mbeans.interfaces;
+package br.com.pereirakienast.controleservicos.mbeans.comum;
 
 import br.com.pereirakienast.controleservicos.ejb.AbstractFacade;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import br.com.pereirakienast.controleservicos.util.ContextoJSF;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.event.ActionEvent;
 
@@ -22,8 +20,7 @@ public abstract class AbBasicoMB<T> {
         } catch (LogicalException ex) {
             mensagemErro(ex.getMessage());
         } catch (Exception ex) {
-            mensagemErro(ex.getLocalizedMessage());
-            Logger.getGlobal().log(Level.SEVERE, ex.getLocalizedMessage());
+            mensagemErro("Erro de sistema. Favor contatar o responsável. Mensagem: " + ex.getLocalizedMessage());
         }
     }
 
@@ -39,8 +36,7 @@ public abstract class AbBasicoMB<T> {
         } catch (LogicalException ex) {
             mensagemErro(ex.getMessage());
         } catch (Exception ex) {
-            mensagemErro(ex.getLocalizedMessage());
-            Logger.getGlobal().log(Level.SEVERE, ex.getLocalizedMessage());
+            mensagemErro("Erro de sistema. Favor contatar o responsável. Mensagem: " + ex.getLocalizedMessage());
         }
     }
 

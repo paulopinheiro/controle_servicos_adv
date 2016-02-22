@@ -1,4 +1,4 @@
-package br.com.pereirakienast.controleservicos.mbeans.interfaces;
+package br.com.pereirakienast.controleservicos.mbeans.comum;
 
 import java.util.List;
 

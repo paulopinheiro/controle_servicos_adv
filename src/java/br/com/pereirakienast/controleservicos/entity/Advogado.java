@@ -9,7 +9,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -17,8 +20,12 @@ import javax.validation.constraints.NotNull;
  * @author paulopinheiro
  */
 @Entity
+@Table(name = "advogado", catalog = "controladv", schema = "public")
+// colocar configurações de sequence e as de tabela
 public class Advogado implements Comparable, Serializable {
     @Id
+    @SequenceGenerator(name="Advogado_Gen",sequenceName="advogado_id_seq",allocationSize=1)
+    @GeneratedValue(generator="Advogado_Gen")
     private Integer id;
     @NotNull
     private String oab;
@@ -28,6 +35,11 @@ public class Advogado implements Comparable, Serializable {
     private String nome;
     private boolean administrador;
     private boolean ativo;
+
+    public Advogado() {
+        this.administrador = false;
+        this.ativo = true;
+    }
 
     public Integer getId() {
         return id;

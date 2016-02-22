@@ -1,4 +1,4 @@
-package br.com.pereirakienast.controleservicos.mbeans.interfaces;
+package br.com.pereirakienast.controleservicos.mbeans.comum;
 
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.util.List;
@@ -19,8 +19,7 @@ public abstract class AbListaMB<T> extends AbBasicoMB<T> {
         } catch (LogicalException ex) {
             mensagemErro(ex.getMessage());
         } catch (Exception ex) {
-            mensagemErro(ex.getLocalizedMessage());
-            Logger.getGlobal().log(Level.SEVERE, ex.getLocalizedMessage());
+            mensagemErro("Erro de sistema. Favor contatar o responsável. Mensagem: " + ex.getLocalizedMessage());
         }
     }
 
@@ -32,8 +31,7 @@ public abstract class AbListaMB<T> extends AbBasicoMB<T> {
             setLista(null);
             mensagemSucesso("Registro removido com sucesso");
         } catch (Exception ex) {
-            mensagemErro(ex.getLocalizedMessage());
-            Logger.getGlobal().log(Level.SEVERE, ex.getLocalizedMessage());
+            mensagemErro("Erro de sistema. Favor contatar o responsável. Mensagem: " + ex.getLocalizedMessage());
         }
     }
 
@@ -43,8 +41,7 @@ public abstract class AbListaMB<T> extends AbBasicoMB<T> {
         } catch (LogicalException ex) {
             mensagemErro(ex.getMessage());
         } catch (Exception ex) {
-            mensagemErro(ex.getLocalizedMessage());
-            Logger.getGlobal().log(Level.SEVERE, ex.getLocalizedMessage());
+            mensagemErro("Erro de sistema. Favor contatar o responsável. Mensagem: " + ex.getLocalizedMessage());
         }
     }
 
