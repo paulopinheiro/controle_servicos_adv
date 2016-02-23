@@ -9,15 +9,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author paulopinheiro
  */
 @Entity
+@Table(name = "cliente", catalog = "controladv", schema = "public")
 public class Cliente implements Comparable, Serializable {
     @Id
     private Integer id;
+    @Column(name="cpf_cnpj")
     private String cpfCnpj;
     private String nome;
     private String qualificacao;

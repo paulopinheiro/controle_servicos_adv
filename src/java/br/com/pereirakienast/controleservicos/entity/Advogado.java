@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.Collator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -41,6 +43,10 @@ public class Advogado implements Comparable, Serializable {
     private String nome;
     private boolean administrador;
     private boolean ativo;
+    @OneToMany(mappedBy = "advogado")
+    private List<Cliente> listaClientes;
+    @OneToMany(mappedBy = "advogado")
+    private List<ServicoPrestado> listaServicosPrestados;
 
     public Advogado() {
         this.administrador = false;
@@ -103,6 +109,22 @@ public class Advogado implements Comparable, Serializable {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public List<Cliente> getListaClientes() {
+        return listaClientes;
+    }
+
+    public void setListaClientes(List<Cliente> listaClientes) {
+        this.listaClientes = listaClientes;
+    }
+
+    public List<ServicoPrestado> getListaServicosPrestados() {
+        return listaServicosPrestados;
+    }
+
+    public void setListaServicosPrestados(List<ServicoPrestado> listaServicosPrestados) {
+        this.listaServicosPrestados = listaServicosPrestados;
     }
 
     /**

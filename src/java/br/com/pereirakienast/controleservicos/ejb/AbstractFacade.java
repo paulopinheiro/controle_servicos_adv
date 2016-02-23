@@ -26,15 +26,15 @@ public abstract class AbstractFacade<T> {
     public abstract void excluir(T entity) throws LogicalException;
     public abstract List<T> findFiltro(T entity) throws LogicalException;
 
-    public void create(T entity) {
+    protected void create(T entity) {
         getEntityManager().persist(entity);
     }
 
-    public void edit(T entity) {
+    protected void edit(T entity) {
         getEntityManager().merge(entity);
     }
 
-    public void remove(T entity) {
+    protected void remove(T entity) {
         getEntityManager().remove(getEntityManager().merge(entity));
     }
 
