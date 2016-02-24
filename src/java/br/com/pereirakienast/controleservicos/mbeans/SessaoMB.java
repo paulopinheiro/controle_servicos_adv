@@ -22,6 +22,7 @@ public class SessaoMB implements Serializable {
     public SessaoMB() {}
 
     public Advogado getAdvogadoConectado() {
+        if (this.advogadoConectado == null) this.advogadoConectado = new Advogado();
         return advogadoConectado;
     }
 
@@ -39,7 +40,7 @@ public class SessaoMB implements Serializable {
     }
 
     public String conectar () {
-        if (this.getAdvogadoConectado()!=null)
+        if (this.getAdvogadoConectado().getId()!=null)
             return "cadastros/cadAdvogado.xhtml";
         else
             return "";

@@ -175,7 +175,7 @@ public class Advogado implements Comparable, Serializable {
 
     @Override
     public String toString() {
-        return "Advogado{" + "oab=" + oab + ", nome=" + nome + '}';
+        return this.getNome();
     }
 
     @Override
@@ -201,6 +201,10 @@ public class Advogado implements Comparable, Serializable {
     public int compareTo(Object o) {
         Advogado other = (Advogado) o;
         Collator c = Collator.getInstance();
-        return c.compare(this.getNome(), other.getNome());
+        try {
+            return c.compare(this.getNome(), other.getNome());
+        } catch (NullPointerException ex) {
+            return 1;
+        }
     }
 }
