@@ -17,7 +17,6 @@ import javax.persistence.criteria.Root;
 
 @Stateless
 public class AdvogadoFacade extends AbstractFacade<Advogado> {
-
     @PersistenceContext(unitName = "pkServicosPU")
     private EntityManager em;
 
@@ -78,7 +77,8 @@ public class AdvogadoFacade extends AbstractFacade<Advogado> {
         }
     }
 
-    private CriteriaQuery<Advogado> getCq(Advogado filtro) {
+    @Override
+    protected CriteriaQuery<Advogado> getCq(Advogado filtro) {
         CriteriaBuilder cb = this.getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Advogado> cq = cb.createQuery(Advogado.class);
         Root<Advogado> root = cq.from(Advogado.class);
@@ -103,18 +103,6 @@ public class AdvogadoFacade extends AbstractFacade<Advogado> {
         cq.where(oab,nome,ativo,administrador);
 
         return cq;
-    }
-
-    @Override
-    public List<Advogado> findFiltro(Advogado entity) throws LogicalException {
-        if (entity==null) throw new LogicalException("Filtro não pode ser nulo");
-        List<Advogado> resposta;
-
-        Query pesquisa = getEntityManager().createQuery(getCq(entity));
-
-        resposta = pesquisa.getResultList();
-
-        return resposta;
     }
 
     public List<Advogado> findAtivos() {

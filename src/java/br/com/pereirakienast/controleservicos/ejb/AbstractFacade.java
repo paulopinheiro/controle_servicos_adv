@@ -8,13 +8,14 @@ package br.com.pereirakienast.controleservicos.ejb;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
 
 /**
  *
  * @author paulopinheiro
  */
 public abstract class AbstractFacade<T> {
-
     private Class<T> entityClass;
 
     public AbstractFacade(Class<T> entityClass) {
@@ -24,7 +25,7 @@ public abstract class AbstractFacade<T> {
     protected abstract EntityManager getEntityManager();
     public abstract void salvar(T entity) throws LogicalException;
     public abstract void excluir(T entity) throws LogicalException;
-    public abstract List<T> findFiltro(T entity) throws LogicalException;
+    protected abstract CriteriaQuery<T> getCq(T filtro) throws LogicalException;
 
     protected void create(T entity) {
         getEntityManager().persist(entity);
@@ -64,5 +65,15 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
+
+    public List<T> findFiltro(T entity) throws LogicalException {
+        if (entity==null) throw new LogicalException("Filtro não pode ser nulo");
+        List<T> resposta;
+
+        Query pesquisa = getEntityManager().createQuery(getCq(entity));
+
+        resposta = pesquisa.getResultList();
+
+        return resposta;        
+    }
 }

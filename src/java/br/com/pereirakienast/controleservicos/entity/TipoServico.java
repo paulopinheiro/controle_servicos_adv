@@ -2,18 +2,35 @@ package br.com.pereirakienast.controleservicos.entity;
 
 import java.io.Serializable;
 import java.text.Collator;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author paulopinheiro
  */
 @Entity
+@Table(name = "tipo_servico", catalog = "controladv", schema = "public")
+@NamedQueries(value = {
+    @NamedQuery(name = "TipoServico.findByNome", query = "select t from TipoServico t where UPPER(t.nome) = :nomeUpper")
+})
 public class TipoServico implements Comparable, Serializable {
     @Id
+    @SequenceGenerator(name = "TipoServico_Gen", sequenceName = "tipo_servico_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "TipoServico_Gen")
     private Integer id;
+    @NotNull
     private String nome;
+    @OneToMany(mappedBy="tipoServico")
+    private List<ServicoPrestado> listaServicosPrestados;
 
     public Integer getId() {
         return id;
@@ -29,6 +46,14 @@ public class TipoServico implements Comparable, Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public List<ServicoPrestado> getListaServicosPrestados() {
+        return listaServicosPrestados;
+    }
+
+    public void setListaServicosPrestados(List<ServicoPrestado> listaServicosPrestados) {
+        this.listaServicosPrestados = listaServicosPrestados;
     }
 
     @Override
@@ -55,7 +80,7 @@ public class TipoServico implements Comparable, Serializable {
 
     @Override
     public String toString() {
-        return "TipoServico{" + "nome=" + nome + '}';
+        return this.getNome();
     }
 
     @Override
