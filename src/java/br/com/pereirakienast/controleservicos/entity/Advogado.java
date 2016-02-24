@@ -27,7 +27,8 @@ import javax.validation.constraints.NotNull;
 @Table(name = "advogado", catalog = "controladv", schema = "public")
 // colocar configurações de sequence e as de tabela
 @NamedQueries(value = {
-    @NamedQuery(name = "Advogado.findByOab", query = "select a from Advogado a where UPPER(a.oab) = :oabUpper")
+    @NamedQuery(name = "Advogado.findByOab", query = "select a from Advogado a where UPPER(a.oab) = :oabUpper"),
+    @NamedQuery(name = "Advogado.findAtivos", query = "select a from Advogado a where a.ativo = true")
 })
 public class Advogado implements Comparable, Serializable {
 

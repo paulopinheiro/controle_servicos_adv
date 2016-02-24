@@ -117,4 +117,12 @@ public class AdvogadoFacade extends AbstractFacade<Advogado> {
         return resposta;
     }
 
+    public List<Advogado> findAtivos() {
+        List<Advogado> resposta;
+
+        Query pesquisa = getEntityManager().createNamedQuery("Advogado.findAtivos");
+        resposta = pesquisa.getResultList();
+
+        return resposta;
+    }
 }

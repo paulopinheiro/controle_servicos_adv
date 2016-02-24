@@ -1,20 +1,30 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-    <body>
-        <ui:composition template="./resources/templates/topBottom.xhtml">
-            <ui:define name="top">Controle de Serviços de Advocacia</ui:define>
-            <ui:define name="content">
-                <f:view>
-                    <h:form id="formMenu">
-                        <h:commandLink action="cadastros/cadAdvogado.xhtml">Advogados</h:commandLink>
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view>
+        <body>
+            <ui:composition template="./resources/templates/topOnly.xhtml">
+                <ui:define name="top">Sistema de Controle de Serviços de Advocacia</ui:define>
+                <ui:define name="content">
+                    <h:form id="formAcesso">
+                        <p:panelGrid id="gridUsuario" columns="2">
+                            <p:outputLabel id="labelAdvogado" for="advogado" value="Advogado:" />
+                            <p:selectOneMenu id="advogado" value="#{sessaoMB.advogadoConectado}" converter="converteAdvogado">
+                                <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="--- Selecione o usuário ---" />
+                                <f:selectItems id="sgiAdvogado" value="#{sessaoMB.advogadosAtivos}" var="advogado" itemValue="#{advogado.nome}" itemLabel="#{advogado.nome}" />
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:panelGrid id="gridBotoes" columns="1">
+                            <p:commandButton value="Conectar" action="#{sessaoMB.conectar}" />
+                        </p:panelGrid>
+                        <p:messages id="mensagem" globalOnly="true" showDetail="false" showSummary="true"/>
                     </h:form>
-                </f:view>
-            </ui:define>
-            <ui:define name="bottom">bottom</ui:define>
-        </ui:composition>
-    </body>
+                </ui:define>
+            </ui:composition>
+        </body>
+    </f:view>
 </html>
