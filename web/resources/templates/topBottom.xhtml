@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <f:view>
         <h:head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -12,16 +13,39 @@
             <title><ui:insert name="top">Titulo</ui:insert></title>
         </h:head>
 
-        <h:body>
+        <h:body rendered="#{!sessaoMB.advogadoSessaoEmpty}">
             <div align="center" id="top" class="top">
                 <h2><ui:insert name="top">Top</ui:insert></h2>
-             </div>
+            </div>
+            <div id="menu">
+                <h:form id="formMenu">
+                    <p:menubar id="menubarGeral">
+                        <p:submenu id="submenuSistema" label="Sistema">
+                            <p:menuitem id="menuitemHome">
+                                <h:link outcome="/home.xhtml" value="Início" />
+                            </p:menuitem>
+                            <p:separator />
+                            <p:menuitem id="menuitemSair" value="Sair" action="#{sessaoMB.desconectar()}" />
+                        </p:submenu>
+                        <p:submenu id="submenuCadastros" label="Cadastros">
+                            <p:submenu id="submenuCadastrosAdministrativos" label="Administrativos" rendered="#{sessaoMB.advogadoAdmin}">
+                                <p:menuitem id="menuitemCadAdvogado" value="Advogados">
+                                    <h:link outcome="/cadastros/cadAdvogado.xhtml" value="Advogados" />
+                                </p:menuitem>
+                            </p:submenu>
+                        </p:submenu>
+                    </p:menubar>
+                </h:form>
+            </div>
             <div id="content" class="center_content">
                 <ui:insert name="content">Content</ui:insert>
             </div>
             <div align="center" id="bottom">
-                <ui:insert name="bottom">Advogado conectado: #{sessaoMB.advogadoConectado}</ui:insert>
+                <ui:insert name="bottom">Advogado conectado: #{sessaoMB.advogadoSessao}</ui:insert>
             </div>
+        </h:body>
+        <h:body rendered="#{sessaoMB.advogadoSessaoEmpty}">
+            <h:link value="Esta página expirou. Retornar à página inicial." outcome="/index.xhtml" />
         </h:body>
     </f:view>
 </html>

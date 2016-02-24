@@ -1,11 +1,10 @@
 package br.com.pereirakienast.controleservicos.mbeans;
 
-import br.com.pereirakienast.controleservicos.ejb.AdvogadoFacade;
 import br.com.pereirakienast.controleservicos.entity.Advogado;
+import br.com.pereirakienast.controleservicos.util.ContextoJSF;
+import br.com.pereirakienast.controleservicos.util.DadosSessao;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.List;
-import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 
 /**
@@ -15,34 +14,23 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean
 @SessionScoped
 public class SessaoMB implements Serializable {
-    @EJB private AdvogadoFacade facade;
-    private List<Advogado> advogadosAtivos;
-    private Advogado advogadoConectado;
+    public SessaoMB(){}
 
-    public SessaoMB() {}
-
-    public Advogado getAdvogadoConectado() {
-        if (this.advogadoConectado == null) this.advogadoConectado = new Advogado();
-        return advogadoConectado;
+    public String desconectar() {
+        ContextoJSF.getFacesSession().invalidate();
+        return "/faces/index.xhtml";
     }
 
-    public void setAdvogadoConectado(Advogado advogadoConectado) {
-        this.advogadoConectado = advogadoConectado;
+    public boolean isAdvogadoSessaoEmpty() {
+        return DadosSessao.getAdvogadoSessao()==null || DadosSessao.getAdvogadoSessao().getId()==null;
     }
 
-    public List<Advogado> getAdvogadosAtivos() {
-        if (this.advogadosAtivos==null) this.advogadosAtivos = this.facade.findAtivos();
-        return advogadosAtivos;
+    public boolean isAdvogadoAdmin() {
+        if (isAdvogadoSessaoEmpty()) return false;
+        return DadosSessao.getAdvogadoSessao().isAdministrador();
     }
 
-    public void setAdvogadosAtivos(List<Advogado> advogadosAtivos) {
-        this.advogadosAtivos = advogadosAtivos;
-    }
-
-    public String conectar () {
-        if (this.getAdvogadoConectado().getId()!=null)
-            return "cadastros/cadAdvogado.xhtml";
-        else
-            return "";
+    public Advogado getAdvogadoSessao() {
+        return DadosSessao.getAdvogadoSessao();
     }
 }

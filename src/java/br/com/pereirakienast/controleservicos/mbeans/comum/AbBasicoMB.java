@@ -51,7 +51,6 @@ public abstract class AbBasicoMB<T> {
 
     protected void mensagemErro(String mensagem) {
         ContextoJSF.getFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,mensagem,null));
-        System.out.println(mensagem);
     }
 
     protected void mensagemSucesso(String mensagem) {

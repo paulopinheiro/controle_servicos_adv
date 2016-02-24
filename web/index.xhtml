@@ -11,16 +11,18 @@
                 <ui:define name="top">Sistema de Controle de Serviços de Advocacia</ui:define>
                 <ui:define name="content">
                     <h:form id="formAcesso">
-                        <p:panelGrid id="gridUsuario" columns="2">
+                        <p:panelGrid id="gridUsuario" columns="3" rendered="#{!geralMB.vazioAdvogadosAtivos}">
                             <p:outputLabel id="labelAdvogado" for="advogado" value="Advogado:" />
-                            <p:selectOneMenu id="advogado" value="#{sessaoMB.advogadoConectado}" converter="converteAdvogado">
+                            <h:selectOneMenu id="advogado" value="#{geralMB.advogado}" converter="converteAdvogado">
                                 <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="--- Selecione o usuário ---" />
-                                <f:selectItems id="sgiAdvogado" value="#{sessaoMB.advogadosAtivos}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado}" />
-                            </p:selectOneMenu>
+                                <f:selectItems id="sgiAdvogado" value="#{geralMB.advogadosAtivos}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado}" />
+                            </h:selectOneMenu>
+                            <p:commandButton value="Conectar" action="#{geralMB.conectar}" />
                         </p:panelGrid>
-                        <p:panelGrid id="gridBotoes" columns="1">
-                            <p:commandButton value="Conectar" action="#{sessaoMB.conectar}" />
-                        </p:panelGrid>
+                        <p:outputPanel rendered="#{geralMB.vazioAdvogadosAtivos}">
+                            <h:outputText value="Não há advogados ativos cadastrados. " />
+                            <p:link value="Clique aqui para cadastrar advogados" outcome="/cadastros/cadAdvogadoInicio.xhtml" />
+                        </p:outputPanel>
                         <p:messages id="mensagem" globalOnly="true" showDetail="false" showSummary="true"/>
                     </h:form>
                 </ui:define>

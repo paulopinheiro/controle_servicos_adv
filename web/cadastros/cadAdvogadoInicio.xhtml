@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition template="./../resources/templates/topOnly.xhtml">
+            <ui:define name="top">Cadastro de Advogados</ui:define>
+            <ui:define name="content">
+                <f:view>
+                    <h:form id="formAdvogado">
+                        <p:panelGrid columns="2">
+                            <f:facet name="header">
+                                <h:outputText value="Formulário de cadastro de advogado" />
+                            </f:facet>
+                            <p:outputLabel id="lblOAB" value="OAB:" for="oab" />
+                            <p:inputText id="oab" value="#{advogadoMB.advogado.oab}" size="8" />
+                            <p:outputLabel id="lblNome" value="Nome" for="nome" />
+                            <p:inputText id="nome" value="#{advogadoMB.advogado.nome}" size="80" />
+                            <p:outputLabel id="lblAdministrador" value="Administrador:" for="administrador" />
+                            <p:selectBooleanCheckbox id="administrador" value="#{advogadoMB.advogado.administrador}" />
+                            <p:outputLabel id="lblAtivo" value="Ativo:" for="ativo" />
+                            <p:selectBooleanCheckbox id="ativo" value="#{advogadoMB.advogado.ativo}" />
+                            <f:facet name="footer">
+                                <h:panelGroup>
+                                    <p:commandButton ajax="false" value="Salvar" actionListener="#{advogadoMB.salvar}">
+                                        <f:ajax execute="@form" render="@form :tabAdvogado :mensagem" />
+                                    </p:commandButton>
+                                    <p:commandButton ajax="false" value="Novo" actionListener="#{advogadoMB.limparElemento}">
+                                        <f:ajax execute="@form" render="@form :mensagem" />
+                                    </p:commandButton>
+                                    <p:commandButton ajax ="false" value="Excluir" disabled="#{advogadoMB.novoElemento}" actionListener="#{advogadoMB.excluir}">
+                                        <f:ajax execute="@form" render="@form :tabAdvogado :mensagem" />
+                                    </p:commandButton>
+                                    <p:commandButton ajax ="false" value="Sair" action="/index.xhtml" />
+                                </h:panelGroup>
+                            </f:facet>
+                        </p:panelGrid>
+                    </h:form>
+                    <p:messages id="mensagem" globalOnly="true" />
+                    <h:form id="tabAdvogado">
+                        <p:dataTable id="dtLista" value="#{advogadoMB.listaAdvogados}" var="advogado">
+                            <f:facet name="header"><h:outputText value="Advogados Cadastrados" /></f:facet>
+                            <p:column>
+                                <h:commandLink value="#{advogado.oab}">
+                                    <f:setPropertyActionListener value="#{advogado}" target="#{advogadoMB.advogado}" />
+                                    <f:ajax execute="@this" render=":formAdvogado :mensagem" />
+                                </h:commandLink>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Nome</f:facet>
+                                <h:outputText value="#{advogado.nome}" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Admin</f:facet>
+                                <p:selectBooleanCheckbox value="#{advogado.administrador}" disabled="true" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Ativo</f:facet>
+                                <p:selectBooleanCheckbox value="#{advogado.ativo}" disabled="true" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
