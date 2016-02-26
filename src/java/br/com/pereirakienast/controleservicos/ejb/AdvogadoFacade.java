@@ -2,6 +2,7 @@ package br.com.pereirakienast.controleservicos.ejb;
 
 import br.com.pereirakienast.controleservicos.entity.Advogado;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -110,6 +111,10 @@ public class AdvogadoFacade extends AbstractFacade<Advogado> {
 
         Query pesquisa = getEntityManager().createNamedQuery("Advogado.findAtivos");
         resposta = pesquisa.getResultList();
+        if (resposta==null) {
+        } else {
+            Collections.sort(resposta);
+        }
 
         return resposta;
     }

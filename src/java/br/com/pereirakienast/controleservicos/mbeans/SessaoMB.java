@@ -3,7 +3,7 @@ package br.com.pereirakienast.controleservicos.mbeans;
 import br.com.pereirakienast.controleservicos.entity.Advogado;
 import br.com.pereirakienast.controleservicos.util.ContextoJSF;
 import br.com.pereirakienast.controleservicos.util.DadosSessao;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 

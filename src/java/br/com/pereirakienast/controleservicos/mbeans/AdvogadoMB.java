@@ -4,6 +4,7 @@ import br.com.pereirakienast.controleservicos.ejb.AdvogadoFacade;
 import br.com.pereirakienast.controleservicos.entity.Advogado;
 import br.com.pereirakienast.controleservicos.mbeans.comum.AbListaMB;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -29,7 +30,9 @@ public class AdvogadoMB extends AbListaMB<Advogado> implements Serializable {
     }
 
     public List<Advogado> getListaAdvogados() {
-        return super.getLista();
+        List<Advogado> lista = super.getLista();
+        Collections.sort(lista);
+        return lista;
     }
 
     public void setListaAdvogados(List<Advogado> listaAdvogados) {

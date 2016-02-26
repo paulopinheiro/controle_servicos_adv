@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
     <body>
         <ui:composition template="./../resources/templates/topBottom.xhtml">
             <ui:define name="top">Cadastro de Tipos de Serviço Prestados</ui:define>
@@ -12,11 +12,9 @@
                 <f:view>
                     <h:form id="formTipoServico">
                         <p:panelGrid columns="2">
-                            <f:facet name="header">
-                                <h:outputText value="Formulário de Cadastro de Tipos de Serviço" />
-                            </f:facet>
-                            <p:outputLabel id="lblNome" value="Nome" for="nome" />
-                            <p:inputText id="nome" value="#{tipoServicoMB.tipoServico.nome}" size="80" />
+                            <f:facet name="header"><h:outputText value="Formulário de cadastro de tipos de serviço" /></f:facet>
+                            <p:outputLabel for="nome" id="lblNome" value="Nome" />
+                            <p:inputText id="nome" value="#{tipoServicoMB.tipoServico.nome}" />
                             <f:facet name="footer">
                                 <h:panelGroup>
                                     <p:commandButton ajax="false" value="Salvar" actionListener="#{tipoServicoMB.salvar}">
@@ -34,9 +32,10 @@
                     </h:form>
                     <p:messages id="mensagem" globalOnly="true" />
                     <h:form id="tabTipoServico">
-                        <p:dataTable id="dtLista" value="#{tipoServicoMB.listaTiposServico}" var="tipoServico">
+                        <p:dataTable id="dtLista" value="#{tipoServicoMB.listaTipoServico}" var="tipoServico">
                             <f:facet name="header"><h:outputText value="Tipos de Serviço Cadastrados" /></f:facet>
                             <p:column>
+                                <f:facet name="header">Nome</f:facet>
                                 <h:commandLink value="#{tipoServico.nome}">
                                     <f:setPropertyActionListener value="#{tipoServico}" target="#{tipoServicoMB.tipoServico}" />
                                     <f:ajax execute="@this" render=":formTipoServico :mensagem" />

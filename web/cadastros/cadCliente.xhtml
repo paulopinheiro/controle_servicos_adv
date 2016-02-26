@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <body>
+        <ui:composition template="./../resources/templates/topBottom.xhtml">
+            <ui:define name="top">Cadastro de Clientes</ui:define>
+            <ui:define name="content">
+                <f:view>
+                    <h:form id="formCliente">
+                        <p:panelGrid columns="2">
+                            <f:facet name="header"><h:outputText value="Formulário de cadastro de cliente" /></f:facet>
+                            <p:outputLabel for="nome" id="lblNome" value="Nome" />
+                            <p:inputText id="nome" value="#{clienteMB.cliente.nome}" />
+                            <p:outputLabel for="cpfCnpj" id="lblCpfCnpj" value="CPF/CNPJ (somente números)" />
+                            <p:inputText id="cpfCnpj" value="#{clienteMB.cliente.cpfCnpj}" />
+                            <p:outputLabel for="qualificacao" id="lblQualificacao" value="Qualificação" />
+                            <p:inputTextarea id="qualificacao" value="#{clienteMB.cliente.qualificacao}" />
+                            <p:outputLabel for="telefone" id="lblTelefone" value="Telefone" />
+                            <p:inputText id="telefone" value="#{clienteMB.cliente.telefone}" />
+                            <p:outputLabel for="email" id="lblEmail" value="e-mail" />
+                            <p:inputText id="email" value="#{clienteMB.cliente.email}" />
+                            <p:outputLabel for="redeSocial" id="lblRedeSocial" value="Rede social" />
+                            <p:inputText id="redeSocial" value="#{clienteMB.cliente.redeSocial}" />
+                            <p:outputLabel for="advogado" id="lblAdvogado" value="Advogado preferencial" />
+                            <h:selectOneMenu id="advogado" label="Advogados" value="#{clienteMB.cliente.advogado}" converter="converteAdvogado" >
+                                <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um advogado --" />
+                                <f:selectItems value="#{clienteMB.listaAdvogados}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado}" />
+                            </h:selectOneMenu>
+                            <p:outputLabel id="lblAtivo" value="Ativo:" for="ativo" />
+                            <p:selectBooleanCheckbox id="ativo" value="#{clienteMB.cliente.ativo}" />
+                            <f:facet name="footer">
+                                <h:panelGroup>
+                                    <p:commandButton ajax="false" value="Salvar" actionListener="#{clienteMB.salvar}">
+                                        <f:ajax execute="@form" render="@form :tabCliente :mensagem" />
+                                    </p:commandButton>
+                                    <p:commandButton ajax="false" value="Novo" actionListener="#{clienteMB.limparElemento}">
+                                        <f:ajax execute="@form" render="@form :mensagem" />
+                                    </p:commandButton>
+                                    <p:commandButton ajax ="false" value="Excluir" disabled="#{clienteMB.novoElemento}" actionListener="#{clienteMB.excluir}">
+                                        <f:ajax execute="@form" render="@form :tabCliente :mensagem" />
+                                    </p:commandButton>
+                                    <p:commandButton ajax="false" value="Filtrar" actionListener="#{clienteMB.filtrar}">
+                                        <f:ajax execute="@form" render=":tabCliente :mensagem" />
+                                    </p:commandButton>
+                                </h:panelGroup>
+                            </f:facet>
+                        </p:panelGrid>
+                    </h:form>
+                    <p:messages id="mensagem" globalOnly="true" />
+                    <h:form id="tabCliente">
+                        <p:dataTable id="dtLista" value="#{clienteMB.listaClientes}" var="cliente">
+                            <f:facet name="header"><h:outputText value="Clientes Cadastrados" /></f:facet>
+                            <p:column>
+                                <f:facet name="header">Nome</f:facet>
+                                <h:commandLink value="#{cliente.nome}">
+                                    <f:setPropertyActionListener value="#{cliente}" target="#{clienteMB.cliente}" />
+                                    <f:ajax execute="@this" render=":formCliente :mensagem" />
+                                </h:commandLink>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">CPF/CNPJ</f:facet>
+                                <h:outputText value="#{cliente.cpfCnpj}" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Advogado preferencial</f:facet>
+                                <h:outputText value="#{cliente.advogado}" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Ativo</f:facet>
+                                <p:selectBooleanCheckbox value="#{cliente.ativo}" disabled="true" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

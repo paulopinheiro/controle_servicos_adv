@@ -24,7 +24,6 @@ public abstract class AbListaMB<T> extends AbBasicoMB<T> {
     @Override
     public void excluir(ActionEvent evt) {
         try {
-            System.out.println("Vamos excluir o serviço (Managed Bean)");
             getFacade().excluir(this.getElemento());
             setElemento(null);
             setLista(null);

@@ -43,6 +43,7 @@
                         <p:dataTable id="dtLista" value="#{advogadoMB.listaAdvogados}" var="advogado">
                             <f:facet name="header"><h:outputText value="Advogados Cadastrados" /></f:facet>
                             <p:column>
+                                <f:facet name="header">OAB</f:facet>
                                 <h:commandLink value="#{advogado.oab}">
                                     <f:setPropertyActionListener value="#{advogado}" target="#{advogadoMB.advogado}" />
                                     <f:ajax execute="@this" render=":formAdvogado :mensagem" />

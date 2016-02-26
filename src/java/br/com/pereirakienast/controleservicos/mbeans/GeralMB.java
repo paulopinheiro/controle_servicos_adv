@@ -4,6 +4,7 @@ import br.com.pereirakienast.controleservicos.ejb.AdvogadoFacade;
 import br.com.pereirakienast.controleservicos.entity.Advogado;
 import br.com.pereirakienast.controleservicos.util.DadosSessao;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -29,6 +30,7 @@ public class GeralMB implements Serializable {
 
     public List<Advogado> getAdvogadosAtivos() {
         if (this.advogadosAtivos==null) this.advogadosAtivos = this.facade.findAtivos();
+        Collections.sort(advogadosAtivos);
         return advogadosAtivos;
     }
 

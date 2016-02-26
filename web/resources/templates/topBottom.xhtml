@@ -28,6 +28,10 @@
                             <p:menuitem id="menuitemSair" value="Sair" action="#{sessaoMB.desconectar()}" />
                         </p:submenu>
                         <p:submenu id="submenuCadastros" label="Cadastros">
+                            <p:menuitem id="menuitemCadCliente" value="Clientes">
+                                <h:link outcome="/cadastros/cadCliente.xhtml" value="Clientes" />
+                            </p:menuitem>
+                            <p:separator />
                             <p:submenu id="submenuCadastrosAdministrativos" label="Administrativos" rendered="#{sessaoMB.advogadoAdmin}">
                                 <p:menuitem id="menuitemCadAdvogado" value="Advogados">
                                     <h:link outcome="/cadastros/cadAdvogado.xhtml" value="Advogados" />
