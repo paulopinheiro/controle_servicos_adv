@@ -14,7 +14,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -30,15 +29,19 @@ public class Cliente implements Comparable, Serializable {
     @SequenceGenerator(name = "Cliente_Gen", sequenceName = "cliente_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "Cliente_Gen")
     private Integer id;
-    @Column(name="cpf_cnpj")
+    @Column(name="cpf_cnpj", length=20)
     private String cpfCnpj;
-    @NotNull
+    @Column(nullable=false,length=255)
     private String nome;
+    @Column(length=800)
     private String qualificacao;
+    @Column(length=40)
     private String telefone;
+    @Column(length=60)
     private String email;
+    @Column(length=800)
     private String endereco;
-    @Column(name="rede_social")
+    @Column(name="rede_social",length=255)
     private String redeSocial;
     private boolean ativo;
     @ManyToOne

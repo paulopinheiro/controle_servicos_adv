@@ -14,19 +14,25 @@
                         <p:panelGrid columns="2">
                             <f:facet name="header"><h:outputText value="Formulário de cadastro de cliente" /></f:facet>
                             <p:outputLabel for="nome" id="lblNome" value="Nome" />
-                            <p:inputText id="nome" value="#{clienteMB.cliente.nome}" />
+                            <p:inputText id="nome" value="#{clienteMB.cliente.nome}" size="100" onkeydown="limitText(this, 255);" onkeyup="limitText(this, 255);" />
                             <p:outputLabel for="cpfCnpj" id="lblCpfCnpj" value="CPF/CNPJ (somente números)" />
-                            <p:inputText id="cpfCnpj" value="#{clienteMB.cliente.cpfCnpj}" />
+                            <p:panelGrid id="gridCpfCnpj" columns="3">
+                                <p:inputText id="cpfCnpj" value="#{clienteMB.cliente.cpfCnpj}" size="20" onkeydown="limitText(this, 14); doCheckNatural(this);" onkeyup="limitText(this, 14); doCheckNatural(this);">
+                                    <f:ajax event="keyup" render=":formCliente:maskcpf_cnpj" />
+                                </p:inputText>
+                                <p:outputLabel id="labelmaskcpf_cnpj" for="maskcpf_cnpj" value="No formato:" />
+                                <h:outputText transient="true" id="maskcpf_cnpj" value="#{clienteMB.cliente.cpfCnpj}" converter="converteCpfCnpj" />
+                            </p:panelGrid>
                             <p:outputLabel for="endereco" id="lblEndereco" value="Endereço" />
-                            <p:inputTextarea id="endereco" value="#{clienteMB.cliente.endereco}" />
+                            <p:inputTextarea id="endereco" value="#{clienteMB.cliente.endereco}" rows="3" cols="100" onkeydown="limitText(this, 800);" onkeyup="limitText(this, 800);" />
                             <p:outputLabel for="qualificacao" id="lblQualificacao" value="Qualificação" />
-                            <p:inputTextarea id="qualificacao" value="#{clienteMB.cliente.qualificacao}" />
+                            <p:inputTextarea id="qualificacao" value="#{clienteMB.cliente.qualificacao}" rows="3" cols="100" onkeydown="limitText(this, 800);" onkeyup="limitText(this, 800);" />
                             <p:outputLabel for="telefone" id="lblTelefone" value="Telefone" />
-                            <p:inputText id="telefone" value="#{clienteMB.cliente.telefone}" />
+                            <p:inputText id="telefone" value="#{clienteMB.cliente.telefone}" size="50" onkeydown="limitText(this, 40);" onkeyup="limitText(this, 40);" />
                             <p:outputLabel for="email" id="lblEmail" value="e-mail" />
-                            <p:inputText id="email" value="#{clienteMB.cliente.email}" />
+                            <p:inputText id="email" value="#{clienteMB.cliente.email}" size="75" onkeydown="limitText(this, 60);" onkeyup="limitText(this, 60);"/>
                             <p:outputLabel for="redeSocial" id="lblRedeSocial" value="Rede social" />
-                            <p:inputText id="redeSocial" value="#{clienteMB.cliente.redeSocial}" />
+                            <p:inputText id="redeSocial" value="#{clienteMB.cliente.redeSocial}" size="150" onkeydown="limitText(this, 255);" onkeyup="limitText(this, 255);"/>
                             <p:outputLabel for="advogado" id="lblAdvogado" value="Advogado preferencial" />
                             <h:selectOneMenu id="advogado" label="Advogados" value="#{clienteMB.cliente.advogado}" converter="converteAdvogado" >
                                 <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um advogado --" />
@@ -54,7 +60,7 @@
                     </h:form>
                     <p:messages id="mensagem" globalOnly="true" />
                     <h:form id="tabCliente">
-                        <p:dataTable id="dtLista" value="#{clienteMB.listaClientes}" var="cliente">
+                        <p:dataTable id="dtLista" value="#{clienteMB.listaClientes}" var="cliente" paginator="true" rows="10">
                             <f:facet name="header"><h:outputText value="Clientes Cadastrados" /></f:facet>
                             <p:column>
                                 <f:facet name="header">Nome</f:facet>
@@ -65,7 +71,7 @@
                             </p:column>
                             <p:column>
                                 <f:facet name="header">CPF/CNPJ</f:facet>
-                                <h:outputText value="#{cliente.cpfCnpj}" />
+                                <h:outputText value="#{cliente.cpfCnpj}" converter="converteCpfCnpj" />
                             </p:column>
                             <p:column>
                                 <f:facet name="header">Advogado preferencial</f:facet>

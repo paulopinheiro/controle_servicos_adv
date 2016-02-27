@@ -1,5 +1,6 @@
 package br.com.pereirakienast.controleservicos.ejb;
 
+import br.jus.trt12.paulopinheiro.cpfcnpjutil.Validador;
 import br.com.pereirakienast.controleservicos.entity.Cliente;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.util.Collections;
@@ -35,6 +36,7 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
                 throw new LogicalException("Informe o nome do Cliente");
             if (entity.getAdvogado()==null)
                 throw new LogicalException("Informe o advogado preferencial do cliente");
+            if ((entity.getCpfCnpj()!=null)&& !Validador.isCpfOuCnpjValido(entity.getCpfCnpj())) throw new LogicalException("CPF/CNPJ inválido");
 
             entity.setNome(entity.getNome().trim().toUpperCase());
 

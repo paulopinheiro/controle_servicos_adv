@@ -22,14 +22,7 @@ public class ClienteMB extends AbListaMB<Cliente> implements Serializable {
     private List<Advogado> listaAdvogados;
 
     //TODO:
-    // . falta limitar o tamanho dos campos String (funções javascript)
-    // . falta implementar crítica de CPF/CNPJ (considerar na camada EJB)
-    // . campo outputText automático com pontuação para CPF/CNPJ
-    // . pontuação na coluna CPF/CNPJ
-    // . limitar a apenas números no campo CPF/CNPJ
-    // . implementar paginação na tabela
     // . implementar visualização de histórico e serviços prestados
-    // . estudar validador de e-mail
 
     public Cliente getCliente() {
         return super.getElemento();
