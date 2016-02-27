@@ -37,6 +37,7 @@ public class Cliente implements Comparable, Serializable {
     private String qualificacao;
     private String telefone;
     private String email;
+    private String endereco;
     @Column(name="rede_social")
     private String redeSocial;
     private boolean ativo;
@@ -96,6 +97,14 @@ public class Cliente implements Comparable, Serializable {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
     public void setEmail(String email) {
