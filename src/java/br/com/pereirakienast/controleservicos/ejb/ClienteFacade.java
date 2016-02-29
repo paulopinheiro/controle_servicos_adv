@@ -36,7 +36,7 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
                 throw new LogicalException("Informe o nome do Cliente");
             if (entity.getAdvogado()==null)
                 throw new LogicalException("Informe o advogado preferencial do cliente");
-            if ((entity.getCpfCnpj()!=null)&& !Validador.isCpfOuCnpjValido(entity.getCpfCnpj())) throw new LogicalException("CPF/CNPJ inválido");
+            if ((entity.getCpfCnpj()!=null)&&(!entity.getCpfCnpj().isEmpty())&& !Validador.isCpfOuCnpjValido(entity.getCpfCnpj())) throw new LogicalException("CPF/CNPJ inválido");
 
             entity.setNome(entity.getNome().trim().toUpperCase());
 
