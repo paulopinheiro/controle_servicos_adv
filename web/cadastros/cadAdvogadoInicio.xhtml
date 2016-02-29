@@ -16,9 +16,9 @@
                                 <h:outputText value="Formulário de cadastro de advogado" />
                             </f:facet>
                             <p:outputLabel id="lblOAB" value="OAB:" for="oab" />
-                            <p:inputText id="oab" value="#{advogadoMB.advogado.oab}" size="8" />
+                            <p:inputText id="oab" value="#{advogadoMB.advogado.oab}" size="8" maxlength="10" />
                             <p:outputLabel id="lblNome" value="Nome" for="nome" />
-                            <p:inputText id="nome" value="#{advogadoMB.advogado.nome}" size="80" />
+                            <p:inputText id="nome" value="#{advogadoMB.advogado.nome}" size="80" maxlength="255" />
                             <p:outputLabel id="lblAdministrador" value="Administrador:" for="administrador" />
                             <p:selectBooleanCheckbox id="administrador" value="#{advogadoMB.advogado.administrador}" />
                             <p:outputLabel id="lblAtivo" value="Ativo:" for="ativo" />
@@ -39,6 +39,7 @@
                             </f:facet>
                         </p:panelGrid>
                     </h:form>
+                    <p:growl id="gmensagem" globalOnly="true" />
                     <p:messages id="mensagem" globalOnly="true" />
                     <h:form id="tabAdvogado">
                         <p:dataTable id="dtLista" value="#{advogadoMB.listaAdvogados}" var="advogado">

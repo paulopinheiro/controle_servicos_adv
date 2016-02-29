@@ -22,7 +22,7 @@ public class ClienteMB extends AbListaMB<Cliente> implements Serializable {
     private List<Advogado> listaAdvogados;
 
     //TODO:
-    // . implementar visualização de histórico e serviços prestados
+    // . implementar cadastro de documentos do cliente
 
     public Cliente getCliente() {
         return super.getElemento();

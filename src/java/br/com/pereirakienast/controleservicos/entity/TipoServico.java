@@ -3,6 +3,7 @@ package br.com.pereirakienast.controleservicos.entity;
 import java.io.Serializable;
 import java.text.Collator;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -27,7 +28,7 @@ public class TipoServico implements Comparable, Serializable {
     @SequenceGenerator(name = "TipoServico_Gen", sequenceName = "tipo_servico_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "TipoServico_Gen")
     private Integer id;
-    @NotNull
+    @Column(nullable=false,length=100)
     private String nome;
     @OneToMany(mappedBy="tipoServico")
     private List<ServicoPrestado> listaServicosPrestados;

@@ -17,7 +17,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -36,11 +35,11 @@ public class Advogado implements Comparable, Serializable {
     @SequenceGenerator(name = "Advogado_Gen", sequenceName = "advogado_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "Advogado_Gen")
     private Integer id;
-    @NotNull
+    @Column(nullable=false, length=10)
     private String oab;
     @Column(name = "digest_password")
     private String digestPassword;
-    @NotNull
+    @Column(nullable=false,length=255)
     private String nome;
     private boolean administrador;
     private boolean ativo;
