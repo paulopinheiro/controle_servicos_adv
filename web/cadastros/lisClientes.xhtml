@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <body>
+        <ui:composition template="./../resources/templates/topBottom.xhtml">
+            <ui:define name="top">Clientes Cadastrados</ui:define>
+            <ui:define name="content">
+                <f:view>
+                    <h:form id="formFiltraCliente">
+                        <p:panelGrid columns="2">
+                            <f:facet name="header"><h:outputText value="Filtrar Clientes" /></f:facet>
+                            <p:outputLabel for="nome" id="lblNome" value="Nome" />
+                            <p:inputText id="nome" value="#{lisClientesMB.filtro.nome}" size="100" maxlength="255"/>
+                            <p:outputLabel for="cpfCnpj" id="lblCpfCnpj" value="CPF/CNPJ (somente números)" />
+                            <p:panelGrid id="gridCpfCnpj" columns="3">
+                                <p:inputText id="cpfCnpj" value="#{lisClientesMB.filtro.cpfCnpj}" size="20" maxlength="14" onkeydown="doCheckNatural(this);" onkeyup="doCheckNatural(this);">
+                                    <f:ajax event="keyup" render=":formFiltraCliente:maskcpf_cnpj" />
+                                </p:inputText>
+                                <p:outputLabel id="labelmaskcpf_cnpj" for="maskcpf_cnpj" value="No formato:" />
+                                <h:outputText transient="true" id="maskcpf_cnpj" value="#{lisClientesMB.filtro.cpfCnpj}" converter="converteCpfCnpj" />
+                            </p:panelGrid>
+                            <p:outputLabel for="advogado" id="lblAdvogado" value="Advogado preferencial" />
+                            <h:selectOneMenu id="advogado" label="Advogados" value="#{lisClientesMB.filtro.advogado}" converter="converteAdvogado" >
+                                <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um advogado --" />
+                                <f:selectItems value="#{lisClientesMB.listaAdvogados}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado}" />
+                            </h:selectOneMenu>
+                            <f:facet name="footer">
+                                <h:panelGrid columns="3">
+                                    <p:commandButton ajax="false" value="Limpar" actionListener="#{lisClientesMB.limpar}">
+                                        <f:ajax execute="@form" render="@form :mensagem" />
+                                    </p:commandButton>
+                                    <p:commandButton ajax="false" value="Filtrar" actionListener="#{lisClientesMB.filtrar}">
+                                        <f:ajax execute="@form" render=":tabCliente :mensagem" />
+                                    </p:commandButton>
+                                    <p:panelGrid columns="1">
+                                        <p:commandLink id="linkNovoCliente" value="Novo Cliente" action="/cadastros/cadCliente.xhtml" />
+                                    </p:panelGrid>
+                                </h:panelGrid>
+                            </f:facet>
+                        </p:panelGrid>
+                    </h:form>
+                    <p:growl id="gmensagem" globalOnly="true" />
+                    <p:messages id="mensagem" globalOnly="true" />
+                    <h:form id="tabCliente">
+                        <p:dataTable id="dtLista" value="#{lisClientesMB.lista}" var="cliente" paginator="true" rows="10">
+                            <f:facet name="header"><h:outputText value="Clientes Cadastrados" /></f:facet>
+                            <p:column>
+                                <f:facet name="header">Nome</f:facet>
+                                <h:link id="linkNome" outcome="/cadastros/cadCliente.xhtml" value="#{cliente.nome}">
+                                    <f:param name="clienteId" value="#{cliente.id}" />
+                                </h:link>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">CPF/CNPJ</f:facet>
+                                <h:outputText value="#{cliente.cpfCnpj}" converter="converteCpfCnpj" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Advogado preferencial</f:facet>
+                                <h:outputText value="#{cliente.advogado}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

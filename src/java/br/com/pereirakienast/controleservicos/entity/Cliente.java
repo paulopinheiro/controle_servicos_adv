@@ -193,6 +193,7 @@ public class Cliente implements Comparable, Serializable {
     public int compareTo(Object o) {
         Cliente other = (Cliente) o;
         Collator c = Collator.getInstance();
-        return c.compare(this.getNome(), other.getNome());
+        if ((this.getNome()==null)||(other.getNome()==null)) return 0;
+        return c.compare(this.getNome().toUpperCase(), other.getNome().toUpperCase());
     }
 }
