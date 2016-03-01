@@ -33,13 +33,10 @@ public class TipoServicoFacade extends AbstractFacade<TipoServico> {
         if (entity !=null) {
             if (entity.getNome()==null||entity.getNome().isEmpty())
                 throw new LogicalException("Informe o nome do tipo de serviço");
-            
-            System.out.println("(Facade) " + entity.getId() + " - " + entity.getNome());
 
             TipoServico pesq = this.getByNome(entity.getNome());
             if (pesq==null || pesq.getId().equals(entity.getId())) {
             } else {
-                System.out.println(pesq.getId() + " é diferente de " + entity.getId());
                 throw new LogicalException("Já existe um tipo de serviço cadastrado com esse nome");
             }
 
@@ -65,7 +62,6 @@ public class TipoServicoFacade extends AbstractFacade<TipoServico> {
 
     @Override
     public void excluir(TipoServico entity) throws LogicalException {
-            System.out.println("Vamos excluir o serviço " + entity);
         if (entity !=null) {
             if (!entity.getListaServicosPrestados().isEmpty()) {
                 throw new LogicalException("Não é possível excluir o tipo de serviço " + entity.getNome()+ ", pois existem prestados desse tipo cadastrados");
