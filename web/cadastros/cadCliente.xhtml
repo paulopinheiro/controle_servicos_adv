@@ -58,26 +58,9 @@
                             </f:facet>
                         </p:panelGrid>
                     </h:form>
-                    <h:form id="formDocumento">
-                        <p:panelGrid id="gridDocumentos" columns="2">
-                            <f:facet name="header"><h:outputText value="Documentos do Cliente" /></f:facet>
-                            <p:outputLabel for="documentos" id="lblDocumentos" value="Documentos" />
-                            <p:panelGrid id="documentos" columns="6">
-                                <h:selectOneMenu id="documento" label="Documentos" value="#{clienteMB.documento.tipo}" converter="converteTipoDocumento" >
-                                    <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione --" />
-                                    <f:selectItems value="#{clienteMB.listaTiposDocumentos}" var="tipoDocumento" itemValue="#{tipoDocumento}" itemLabel="#{tipoDocumento}" />
-                                </h:selectOneMenu>
-                                <p:inputText id="numeroDocumento" value="#{clienteMB.documento.numero}" size="10" maxlength="60" />
-                                <p:outputLabel for="orgaoEmissor" id="lblOrgaoEmissor" value="Emissor" />
-                                <p:inputText id="orgaoEmissor" value="#{clienteMB.documento.orgaoEmissor}" size="10" maxlength="255" />
-                                <p:commandButton ajax="false" value="Incluir" actionListener="#{clienteMB.salvarDocumento}">
-                                    <f:ajax execute="@form" render="@form :mensagem" />
-                                </p:commandButton>
-                            </p:panelGrid>
-                        </p:panelGrid>
-                    </h:form>
                     <p:growl id="gmensagem" globalOnly="true" />
                     <p:messages id="mensagem" globalOnly="true" />
+
                 </f:view>
             </ui:define>
         </ui:composition>
