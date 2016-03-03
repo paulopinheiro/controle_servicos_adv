@@ -23,7 +23,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "TipoDocumento.findByNome", query = "select t from TipoDocumento t where UPPER(t.nome) = :nomeUpper")
 })
 public class TipoDocumento implements Comparable, Serializable {
-    @Id@SequenceGenerator(name = "TipoDocumento_Gen", sequenceName = "tipo_servico_id_seq", allocationSize = 1)
+    @Id@SequenceGenerator(name = "TipoDocumento_Gen", sequenceName = "tipo_documento_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "TipoDocumento_Gen")
     private Integer id;
     @Column(nullable=false,length=40)
@@ -79,7 +79,7 @@ public class TipoDocumento implements Comparable, Serializable {
 
     @Override
     public String toString() {
-        return "TipoDocumento{" + "nome=" + nome + '}';
+        return nome;
     }
 
     @Override

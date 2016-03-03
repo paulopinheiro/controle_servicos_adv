@@ -37,10 +37,10 @@
                             <p:outputLabel for="redeSocial" id="lblRedeSocial" value="Rede social" />
                             <p:inputText id="redeSocial" value="#{clienteMB.cliente.redeSocial}" size="100" maxlength="255" />
                             <p:outputLabel for="advogado" id="lblAdvogado" value="Advogado preferencial" />
-                            <h:selectOneMenu id="advogado" label="Advogados" value="#{clienteMB.cliente.advogado}" converter="converteAdvogado" >
+                            <p:selectOneMenu id="advogado" label="Advogados" value="#{clienteMB.cliente.advogado}" converter="converteAdvogado" >
                                 <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um advogado --" />
                                 <f:selectItems value="#{clienteMB.listaAdvogados}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado}" />
-                            </h:selectOneMenu>
+                            </p:selectOneMenu>
                             <p:outputLabel id="lblAtivo" value="Ativo:" for="ativo" />
                             <p:selectBooleanCheckbox id="ativo" value="#{clienteMB.cliente.ativo}" />
                             <f:facet name="footer">
@@ -60,7 +60,58 @@
                     </h:form>
                     <p:growl id="gmensagem" globalOnly="true" />
                     <p:messages id="mensagem" globalOnly="true" />
+                    <p:accordionPanel id="accordionCliente" multiple="true">
+                        <p:tab id="atabDocumentos" title="Documentos" disabled="#{clienteMB.novoElemento}">
+                            <p:panelGrid id="pgDocumentos1" columns="2">
+                                <h:form id="formDocumentos" rendered="#{!clienteMB.novoElemento}">
+                                    <p:panelGrid id="pgDocumentos2" columns="2">
+                                        <p:selectOneMenu id="tipoDocumento" label="TiposDocumento" value="#{clienteMB.documento.tipo}" converter="converteTipoDocumento" >
+                                            <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="Documento" />
+                                            <f:selectItems value="#{clienteMB.listaTiposDocumentos}" var="tipoDocumento" itemValue="#{tipoDocumento}" itemLabel="#{tipoDocumento}" />
+                                        </p:selectOneMenu>
+                                        <p:inputText id="docNumero" value="#{clienteMB.documento.numero}" size="10" maxlength="60" />
+                                        <p:outputLabel for="orgaoEmissor" id="lblOrgaoEmissor" value="Órgão Emissor" />
+                                        <p:inputText id="orgaoEmissor" value="#{clienteMB.documento.orgaoEmissor}" size="10" maxlength="255" />
+                                        <f:facet name="footer">
+                                            <center>
+                                                <p:panelGrid columns="2">
+                                                    <p:commandButton ajax="false" value="Incluir" actionListener="#{clienteMB.incluirDocumento}">
+                                                        <f:ajax execute="@form" render="@form :mensagem" />
+                                                    </p:commandButton>
+                                                    <p:commandButton ajax="false" value="Limpar" actionListener="#{clienteMB.limparDocumento}">
+                                                        <f:ajax execute="@form" render="@form :mensagem" />
+                                                    </p:commandButton>
+                                                </p:panelGrid>
+                                            </center>
+                                        </f:facet>
+                                    </p:panelGrid>
+                                </h:form>
+                                <h:form id="formtabDocumentos">
+                                    <p:dataTable id="tabDocumentos" value="#{clienteMB.cliente.documentos}" var="documento" selection="#{clienteMB.documento}">
+                                        <p:column id="tipo">
+                                            <h:outputText value="#{documento.tipo}" />
+                                        </p:column>
+                                        <p:column id="numero">
+                                            <h:outputText value="#{documento.numero}" />
+                                        </p:column>
+                                        <p:column id="orgaoEmissor">
+                                            <h:outputText value="#{documento.orgaoEmissor}" />
+                                        </p:column>
+                                        <p:column id="excluirDocumento">
+                                            <p:commandButton ajax="false" value="Excluir" actionListener="#{clienteMB.excluirDocumento}">
+                                                <f:ajax execute="@this" render="@form :formDocumentos :mensagem" />
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:form>
+                            </p:panelGrid>
+                        </p:tab>
+                        <p:tab id="atabHistoricos" title="Histórico" disabled="#{clienteMB.novoElemento}">
+                            <h:form id="formHistorico" rendered="#{!clienteMB.novoElemento}">
 
+                            </h:form>
+                        </p:tab>
+                    </p:accordionPanel>
                 </f:view>
             </ui:define>
         </ui:composition>

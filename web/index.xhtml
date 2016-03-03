@@ -13,10 +13,10 @@
                     <h:form id="formAcesso">
                         <p:panelGrid id="gridUsuario" columns="3" rendered="#{!geralMB.vazioAdvogadosAtivos}">
                             <p:outputLabel id="labelAdvogado" for="advogado" value="Advogado:" />
-                            <h:selectOneMenu id="advogado" value="#{geralMB.advogado}" converter="converteAdvogado">
+                            <p:selectOneMenu id="advogado" value="#{geralMB.advogado}" converter="converteAdvogado">
                                 <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="--- Selecione o usuário ---" />
                                 <f:selectItems id="sgiAdvogado" value="#{geralMB.advogadosAtivos}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado}" />
-                            </h:selectOneMenu>
+                            </p:selectOneMenu>
                             <p:commandButton value="Conectar" action="#{geralMB.conectar}" />
                         </p:panelGrid>
                         <p:outputPanel rendered="#{geralMB.vazioAdvogadosAtivos}">

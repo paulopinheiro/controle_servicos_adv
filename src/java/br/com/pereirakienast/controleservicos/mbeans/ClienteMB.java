@@ -3,26 +3,40 @@ package br.com.pereirakienast.controleservicos.mbeans;
 import br.com.pereirakienast.controleservicos.ejb.AbstractFacade;
 import br.com.pereirakienast.controleservicos.ejb.AdvogadoFacade;
 import br.com.pereirakienast.controleservicos.ejb.ClienteFacade;
+import br.com.pereirakienast.controleservicos.ejb.TipoDocumentoFacade;
 import br.com.pereirakienast.controleservicos.entity.Advogado;
 import br.com.pereirakienast.controleservicos.entity.Cliente;
+import br.com.pereirakienast.controleservicos.entity.Documento;
+import br.com.pereirakienast.controleservicos.entity.TipoDocumento;
+import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import br.com.pereirakienast.controleservicos.mbeans.comum.AbBasicoMB;
 import br.com.pereirakienast.controleservicos.util.DadosSessao;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
 
 @ManagedBean
 @ViewScoped
 public class ClienteMB extends AbBasicoMB<Cliente> implements Serializable {
-    @EJB private ClienteFacade facade;
-    @EJB private AdvogadoFacade advogadoFacade;
+
+    @EJB
+    private ClienteFacade facade;
+    @EJB
+    private AdvogadoFacade advogadoFacade;
+    @EJB
+    private TipoDocumentoFacade tipoDocumentoFacade;
     private List<Advogado> listaAdvogados;
+
+    private List<TipoDocumento> listaTiposDocumentos;
+    private Documento documento;
 
     //TODO:
     // . implementar cadastro de documentos do cliente
-
     public Cliente getCliente() {
         return super.getElemento();
     }
@@ -32,8 +46,65 @@ public class ClienteMB extends AbBasicoMB<Cliente> implements Serializable {
     }
 
     public List<Advogado> getListaAdvogados() {
-        if (this.listaAdvogados==null) this.listaAdvogados = this.advogadoFacade.findAtivos();
+        if (this.listaAdvogados == null) {
+            this.listaAdvogados = this.advogadoFacade.findAtivos();
+        }
         return this.listaAdvogados;
+    }
+
+    public List<TipoDocumento> getListaTiposDocumentos() {
+        if (this.listaTiposDocumentos == null) {
+            this.listaTiposDocumentos = this.tipoDocumentoFacade.findAll();
+        }
+        return listaTiposDocumentos;
+    }
+
+    public void setListaTiposDocumentos(List<TipoDocumento> listaTiposDocumentos) {
+        this.listaTiposDocumentos = listaTiposDocumentos;
+    }
+
+    public Documento getDocumento() {
+        if (documento == null) {
+            documento = new Documento();
+            documento.setCliente(getCliente());
+        }
+        return documento;
+    }
+
+    public void setDocumento(Documento documento) {
+        this.documento = documento;
+    }
+
+    public void incluirDocumento(ActionEvent evt) {
+        try {
+            facade.salvarDocumento(getDocumento());
+            setDocumento(null);
+            refreshListaDocumentos();
+        } catch (LogicalException ex) {
+            mensagemErro(ex.getMessage());
+        }
+    }
+
+    private void refreshListaDocumentos() {
+        if (this.getCliente().getId() != null) {
+            getCliente().setDocumentos(facade.refreshListaDocumentos(getCliente()));
+        }
+    }
+
+    public void excluirDocumento(ActionEvent evt) {
+        try {
+            Logger.getLogger("ClienteMB.java").log(Level.INFO, "Documento: " + getDocumento());
+            //está retornando null para o selecionado
+            facade.excluirDocumento(getDocumento());
+            setDocumento(null);
+            refreshListaDocumentos();
+        } catch (LogicalException ex) {
+            mensagemErro(ex.getMessage());
+        }
+    }
+
+    public void limparDocumento(ActionEvent evt) {
+        setDocumento(null);
     }
 
     @Override
@@ -43,7 +114,7 @@ public class ClienteMB extends AbBasicoMB<Cliente> implements Serializable {
 
     @Override
     public boolean isNovoElemento() {
-        return this.getCliente().getId()==null||this.getCliente().getId()==0;
+        return this.getCliente().getId() == null || this.getCliente().getId() == 0;
     }
 
     @Override
@@ -52,5 +123,5 @@ public class ClienteMB extends AbBasicoMB<Cliente> implements Serializable {
         cliente.setAdvogado(DadosSessao.getAdvogadoSessao());
 
         return cliente;
-    }   
+    }
 }

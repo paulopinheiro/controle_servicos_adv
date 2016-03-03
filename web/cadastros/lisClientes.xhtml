@@ -24,10 +24,10 @@
                                 <h:outputText transient="true" id="maskcpf_cnpj" value="#{lisClientesMB.filtro.cpfCnpj}" converter="converteCpfCnpj" />
                             </p:panelGrid>
                             <p:outputLabel for="advogado" id="lblAdvogado" value="Advogado preferencial" />
-                            <h:selectOneMenu id="advogado" label="Advogados" value="#{lisClientesMB.filtro.advogado}" converter="converteAdvogado" >
+                            <p:selectOneMenu id="advogado" label="Advogados" value="#{lisClientesMB.filtro.advogado}" converter="converteAdvogado" >
                                 <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um advogado --" />
                                 <f:selectItems value="#{lisClientesMB.listaAdvogados}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado}" />
-                            </h:selectOneMenu>
+                            </p:selectOneMenu>
                             <f:facet name="footer">
                                 <h:panelGrid columns="3">
                                     <p:commandButton ajax="false" value="Limpar" actionListener="#{lisClientesMB.limpar}">

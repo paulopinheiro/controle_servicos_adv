@@ -3,17 +3,28 @@ package br.com.pereirakienast.controleservicos.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  *
  * @author paulopinheiro
  */
 @Entity
-public class Documento implements Serializable {
+@Table(name = "documento", catalog = "controladv", schema = "public")
+@NamedQueries(value = {
+    @NamedQuery(name = "Documento.findByCliente", query = "select d from Documento d where d.cliente = :cliente")
+})
+public class Documento implements Serializable, Comparable {
     @Id
+    @SequenceGenerator(name = "Documento_Gen", sequenceName = "documento_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "Documento_Gen")
     private Integer id;
     @ManyToOne
     @JoinColumn(name="tipo_documento_id")
@@ -21,7 +32,9 @@ public class Documento implements Serializable {
     @ManyToOne
     @JoinColumn(name="cliente_id")
     private Cliente cliente;
+    @Column(nullable=false, length=60)
     private String numero;
+    @Column(name="orgao_emissor",length=255)
     private String orgaoEmissor;
 
     public Integer getId() {
@@ -96,7 +109,19 @@ public class Documento implements Serializable {
 
     @Override
     public String toString() {
-        return "Documento{" + "id=" + id + ", tipo=" + tipo.getNome() + ", cliente=" + cliente.getNome() + ", numero=" + numero + ", orgaoEmissor=" + orgaoEmissor + '}';
+        if ((tipo==null)||(cliente==null)) return null;
+        return "Documento{" + "id=" + id + ", tipo=" + tipo.getNome() + ", cliente=" + cliente.getNome() + ", numero=" + numero;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Documento outro = (Documento) o;
+        if ((this.getCliente()==null)||(outro.getCliente()==null)) return 0;
+        if ((this.getTipo()==null)||outro.getTipo()==null) return 0;
+
+        if (this.getCliente().equals(outro.getCliente())) {
+            return this.getTipo().compareTo(outro.getTipo());
+        } else return this.getCliente().compareTo(outro.getCliente());
     }
 
 }

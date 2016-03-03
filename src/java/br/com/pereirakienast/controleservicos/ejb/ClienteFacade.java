@@ -2,6 +2,7 @@ package br.com.pereirakienast.controleservicos.ejb;
 
 import br.jus.trt12.paulopinheiro.cpfcnpjutil.Validador;
 import br.com.pereirakienast.controleservicos.entity.Cliente;
+import br.com.pereirakienast.controleservicos.entity.Documento;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.util.Collections;
 import java.util.List;
@@ -121,5 +122,34 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
         }
 
         return resposta;
+    }
+
+    public void salvarDocumento(Documento documento) throws LogicalException {
+        if (!(documento==null)) {
+            if (documento.getTipo()==null) throw new LogicalException("Informe o tipo do documento");
+            if (documento.getCliente()==null) throw new LogicalException("Informe o cliente titular do documento");
+            if ((documento.getNumero()==null)||(documento.getNumero().isEmpty())) throw new LogicalException("Informe o número do documento");
+
+            if (documento.getId()==null) {
+                getEntityManager().persist(documento);
+            } else getEntityManager().merge(documento);
+            getEntityManager().getEntityManagerFactory().getCache().evict(Cliente.class);
+        }
+    }
+
+    public List<Documento> refreshListaDocumentos(Cliente cliente) {
+        List<Documento> resposta;
+        Query pesquisa = getEntityManager().createNamedQuery("Documento.findByCliente");
+        pesquisa.setParameter("cliente", cliente);
+        resposta = pesquisa.getResultList();
+        if (!(resposta==null)) Collections.sort(resposta);
+        return resposta;
+    }
+
+    public void excluirDocumento(Documento documento) throws LogicalException {
+        if (!(documento==null)) {
+            getEntityManager().remove(getEntityManager().merge(documento));
+            getEntityManager().getEntityManagerFactory().getCache().evict(Cliente.class);
+        }
     }
 }
