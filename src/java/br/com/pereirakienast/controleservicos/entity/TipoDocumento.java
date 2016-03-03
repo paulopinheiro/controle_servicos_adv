@@ -2,18 +2,34 @@ package br.com.pereirakienast.controleservicos.entity;
 
 import java.io.Serializable;
 import java.text.Collator;
+import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  *
  * @author paulopinheiro
  */
 @Entity
+@Table(name = "tipo_documento", catalog = "controladv", schema = "public")
+@NamedQueries(value = {
+    @NamedQuery(name = "TipoDocumento.findByNome", query = "select t from TipoDocumento t where UPPER(t.nome) = :nomeUpper")
+})
 public class TipoDocumento implements Comparable, Serializable {
-    @Id
+    @Id@SequenceGenerator(name = "TipoDocumento_Gen", sequenceName = "tipo_servico_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "TipoDocumento_Gen")
     private Integer id;
+    @Column(nullable=false,length=40)
     private String nome;
+    @OneToMany(mappedBy="tipo")
+    private List<Documento> listaDocumentos;
 
     public Integer getId() {
         return id;
@@ -29,6 +45,14 @@ public class TipoDocumento implements Comparable, Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public List<Documento> getListaDocumentos() {
+        return listaDocumentos;
+    }
+
+    public void setListaDocumentos(List<Documento> listaDocumentos) {
+        this.listaDocumentos = listaDocumentos;
     }
 
     @Override
