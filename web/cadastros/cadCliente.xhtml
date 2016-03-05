@@ -76,7 +76,7 @@
                                             <center>
                                                 <p:panelGrid columns="2">
                                                     <p:commandButton ajax="false" value="Incluir" actionListener="#{clienteMB.incluirDocumento}">
-                                                        <f:ajax execute="@form" render="@form :mensagem" />
+                                                        <f:ajax execute="@form :formCliente" render="@form :mensagem" />
                                                     </p:commandButton>
                                                     <p:commandButton ajax="false" value="Limpar" actionListener="#{clienteMB.limparDocumento}">
                                                         <f:ajax execute="@form" render="@form :mensagem" />
@@ -97,10 +97,10 @@
                                         <p:column id="orgaoEmissor">
                                             <h:outputText value="#{documento.orgaoEmissor}" />
                                         </p:column>
-                                        <p:column id="excluirDocumento">
-                                            <p:commandButton ajax="false" value="Excluir" actionListener="#{clienteMB.excluirDocumento}">
-                                                <f:ajax execute="@this" render="@form :formDocumentos :mensagem" />
-                                            </p:commandButton>
+                                        <p:column id="excluirDocumento" >
+                                            <p:commandLink ajax="false" value="Excluir" action="#{clienteMB.excluirDocumento(documento)}">
+                                                <f:ajax execute="@form" render="@form :formDocumentos :mensagem" />
+                                            </p:commandLink>
                                         </p:column>
                                     </p:dataTable>
                                 </h:form>
@@ -108,7 +108,7 @@
                         </p:tab>
                         <p:tab id="atabHistoricos" title="Histórico" disabled="#{clienteMB.novoElemento}">
                             <h:form id="formHistorico" rendered="#{!clienteMB.novoElemento}">
-
+                                
                             </h:form>
                         </p:tab>
                     </p:accordionPanel>

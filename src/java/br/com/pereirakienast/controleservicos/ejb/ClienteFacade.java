@@ -142,7 +142,6 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
         Query pesquisa = getEntityManager().createNamedQuery("Documento.findByCliente");
         pesquisa.setParameter("cliente", cliente);
         resposta = pesquisa.getResultList();
-        if (!(resposta==null)) Collections.sort(resposta);
         return resposta;
     }
 

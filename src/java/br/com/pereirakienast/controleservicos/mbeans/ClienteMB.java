@@ -13,8 +13,6 @@ import br.com.pereirakienast.controleservicos.mbeans.comum.AbBasicoMB;
 import br.com.pereirakienast.controleservicos.util.DadosSessao;
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -35,8 +33,6 @@ public class ClienteMB extends AbBasicoMB<Cliente> implements Serializable {
     private List<TipoDocumento> listaTiposDocumentos;
     private Documento documento;
 
-    //TODO:
-    // . implementar cadastro de documentos do cliente
     public Cliente getCliente() {
         return super.getElemento();
     }
@@ -91,16 +87,15 @@ public class ClienteMB extends AbBasicoMB<Cliente> implements Serializable {
         }
     }
 
-    public void excluirDocumento(ActionEvent evt) {
+    public String excluirDocumento(Documento doc) {
         try {
-            Logger.getLogger("ClienteMB.java").log(Level.INFO, "Documento: " + getDocumento());
-            //está retornando null para o selecionado
-            facade.excluirDocumento(getDocumento());
+            facade.excluirDocumento(doc);
             setDocumento(null);
             refreshListaDocumentos();
         } catch (LogicalException ex) {
             mensagemErro(ex.getMessage());
         }
+        return null;
     }
 
     public void limparDocumento(ActionEvent evt) {
