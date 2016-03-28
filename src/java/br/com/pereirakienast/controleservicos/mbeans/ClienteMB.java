@@ -21,7 +21,6 @@ import javax.faces.event.ActionEvent;
 @ManagedBean
 @ViewScoped
 public class ClienteMB extends AbBasicoMB<Cliente> implements Serializable {
-
     @EJB
     private ClienteFacade facade;
     @EJB

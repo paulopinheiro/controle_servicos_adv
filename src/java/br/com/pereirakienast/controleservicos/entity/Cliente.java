@@ -186,7 +186,7 @@ public class Cliente implements Comparable, Serializable {
 
     @Override
     public String toString() {
-        return "Cliente{" + "nome=" + nome + '}';
+        return "Cliente{" + "nome=" + nome + "}";
     }
 
     @Override

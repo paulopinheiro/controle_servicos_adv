@@ -1,48 +1,45 @@
 package br.com.pereirakienast.controleservicos.entity;
 
+import br.com.pereirakienast.controleservicos.entity.cobranca.ContaServico;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
-/**
- *
- * @author paulopinheiro
- */
 @Entity
 @Table(name = "servico_prestado", catalog = "controladv", schema = "public")
 public class ServicoPrestado implements Comparable, Serializable {
+
     @Id
+    @SequenceGenerator(name = "ServicoPrestado_Gen", sequenceName = "servico_prestado_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "ServicoPrestado_Gen")
     private Integer id;
     @ManyToOne
-    @JoinColumn(name="cliente_id")
+    @JoinColumn(name="cliente_id",nullable=false)
     private Cliente cliente;
     @Temporal(javax.persistence.TemporalType.DATE)
-    @Column(name="data_prestacao")
+    @Column(name="data_prestacao",nullable=false)
     private Date dataPrestacao;
     @ManyToOne
-    @JoinColumn(name="advogado_id")
+    @JoinColumn(name="advogado_id",nullable=false)
     private Advogado advogado;
+    @Column(name="detalhes", length=800)
     private String detalhes;
-    @Column(name="valor_servico")
-    private double valorServico;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Column(name="data_pagamento")
-    private Date dataPagamento;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Column(name="data_repasse_escritorio")
-    private Date dataRepasseEscritorio;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Column(name="data_repasse_advogado")
-    private Date dataRepasseAdvogado;
+    @Column(name="observacao", length=800)
+    private String observacao;
     @ManyToOne
-    @JoinColumn(name="tipo_servico_id")
+    @JoinColumn(name="tipo_servico_id",nullable=false)
     private TipoServico tipoServico;
+    @OneToOne(mappedBy = "servico")
+    private ContaServico conta;
 
     public Integer getId() {
         return id;
@@ -84,36 +81,12 @@ public class ServicoPrestado implements Comparable, Serializable {
         this.detalhes = detalhes;
     }
 
-    public double getValorServico() {
-        return valorServico;
+    public String getObservacao() {
+        return observacao;
     }
 
-    public void setValorServico(double valorServico) {
-        this.valorServico = valorServico;
-    }
-
-    public Date getDataPagamento() {
-        return dataPagamento;
-    }
-
-    public void setDataPagamento(Date dataPagamento) {
-        this.dataPagamento = dataPagamento;
-    }
-
-    public Date getDataRepasseEscritorio() {
-        return dataRepasseEscritorio;
-    }
-
-    public void setDataRepasseEscritorio(Date dataRepasseEscritorio) {
-        this.dataRepasseEscritorio = dataRepasseEscritorio;
-    }
-
-    public Date getDataRepasseAdvogado() {
-        return dataRepasseAdvogado;
-    }
-
-    public void setDataRepasseAdvogado(Date dataRepasseAdvogado) {
-        this.dataRepasseAdvogado = dataRepasseAdvogado;
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 
     public TipoServico getTipoServico() {
@@ -122,6 +95,14 @@ public class ServicoPrestado implements Comparable, Serializable {
 
     public void setTipoServico(TipoServico tipoServico) {
         this.tipoServico = tipoServico;
+    }
+
+    public ContaServico getConta() {
+        return conta;
+    }
+
+    public void setConta(ContaServico conta) {
+        this.conta = conta;
     }
 
     @Override
