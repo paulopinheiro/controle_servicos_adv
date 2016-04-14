@@ -18,7 +18,7 @@ public class SessaoMB implements Serializable {
 
     public String desconectar() {
         ContextoJSF.getFacesSession().invalidate();
-        return "/faces/index.xhtml";
+        return "/faces/index.xhtml?faces-redirect=true";
     }
 
     public boolean isAdvogadoSessaoEmpty() {
