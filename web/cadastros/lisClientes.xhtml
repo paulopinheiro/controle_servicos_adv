@@ -30,14 +30,10 @@
                             </p:selectOneMenu>
                             <f:facet name="footer">
                                 <h:panelGrid columns="3">
-                                    <p:commandButton ajax="false" value="Limpar" actionListener="#{lisClientesMB.limpar}">
-                                        <f:ajax execute="@form" render="@form :mensagem" />
-                                    </p:commandButton>
-                                    <p:commandButton ajax="false" value="Filtrar" actionListener="#{lisClientesMB.filtrar}">
-                                        <f:ajax execute="@form" render=":tabCliente :mensagem" />
-                                    </p:commandButton>
+                                    <p:commandButton value="Limpar" update="@form :mensagem :gmensagem" actionListener="#{lisClientesMB.limpar}" />
+                                    <p:commandButton value="Filtrar" process="@form" update=":tabCliente :mensagem :gmensagem" actionListener="#{lisClientesMB.filtrar}" />
                                     <p:panelGrid columns="1">
-                                        <p:commandLink id="linkNovoCliente" value="Novo Cliente" action="/cadastros/cadCliente.xhtml" />
+                                        <p:link id="linkNovoCliente" value="Novo Cliente" outcome="/cadastros/cadCliente.xhtml" />
                                     </p:panelGrid>
                                 </h:panelGrid>
                             </f:facet>

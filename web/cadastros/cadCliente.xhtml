@@ -45,15 +45,10 @@
                             <p:selectBooleanCheckbox id="ativo" value="#{clienteMB.cliente.ativo}" />
                             <f:facet name="footer">
                                 <h:panelGroup>
-                                    <p:commandButton ajax="false" value="Salvar" actionListener="#{clienteMB.salvar}">
-                                        <f:ajax execute="@form" render="@form :mensagem" />
-                                    </p:commandButton>
-                                    <p:commandButton ajax="false" value="Novo" actionListener="#{clienteMB.limparElemento}">
-                                        <f:ajax execute="@form" render="@form :mensagem" />
-                                    </p:commandButton>
-                                    <p:commandButton ajax ="false" value="Excluir" disabled="#{clienteMB.novoElemento}" actionListener="#{clienteMB.excluir}">
-                                        <f:ajax execute="@form" render="@form :mensagem" />
-                                    </p:commandButton>
+                                    <p:commandButton value="Salvar" process="@form" update="@form :accordionCliente :mensagem :gmensagem" actionListener="#{clienteMB.salvar}" />
+                                    <p:commandButton value="Novo" update="@form :accordionCliente :mensagem :gmensagem" actionListener="#{clienteMB.limparElemento}" />
+                                    <p:commandButton value="Excluir" process="@form" update="@form :accordionCliente :mensagem :gmensagem" disabled="#{clienteMB.novoElemento}" actionListener="#{clienteMB.excluir}" />
+                                    <p:button value="Voltar" outcome="/cadastros/lisClientes" />
                                 </h:panelGroup>
                             </f:facet>
                         </p:panelGrid>
@@ -75,12 +70,8 @@
                                         <f:facet name="footer">
                                             <center>
                                                 <p:panelGrid columns="2">
-                                                    <p:commandButton ajax="false" value="Incluir" actionListener="#{clienteMB.incluirDocumento}">
-                                                        <f:ajax execute="@form :formCliente" render="@form :mensagem" />
-                                                    </p:commandButton>
-                                                    <p:commandButton ajax="false" value="Limpar" actionListener="#{clienteMB.limparDocumento}">
-                                                        <f:ajax execute="@form" render="@form :mensagem" />
-                                                    </p:commandButton>
+                                                    <p:commandButton value="Incluir" process="@form :formCliente :accordionCliente:formtabDocumentos :mensagem :gmensagem" update="@form :accordionCliente:formtabDocumentos :mensagem :gmensagem" actionListener="#{clienteMB.incluirDocumento}" />
+                                                    <p:commandButton value="Limpar" update="@form :mensagem :gmensagem" actionListener="#{clienteMB.limparDocumento}" />
                                                 </p:panelGrid>
                                             </center>
                                         </f:facet>
@@ -98,9 +89,7 @@
                                             <h:outputText value="#{documento.orgaoEmissor}" />
                                         </p:column>
                                         <p:column id="excluirDocumento" >
-                                            <p:commandLink ajax="false" value="Excluir" action="#{clienteMB.excluirDocumento(documento)}">
-                                                <f:ajax execute="@form" render="@form :formDocumentos :mensagem" />
-                                            </p:commandLink>
+                                            <p:commandLink value="Excluir" process="@form" update="@form :accordionCliente:formDocumentos :mensagem :gmensagem" action="#{clienteMB.excluirDocumento(documento)}" />
                                         </p:column>
                                     </p:dataTable>
                                 </h:form>

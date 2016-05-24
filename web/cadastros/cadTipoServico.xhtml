@@ -17,15 +17,9 @@
                             <p:inputText id="nome" value="#{tipoServicoMB.tipoServico.nome}" maxlength="100" size="60" />
                             <f:facet name="footer">
                                 <h:panelGroup>
-                                    <p:commandButton ajax="false" value="Salvar" actionListener="#{tipoServicoMB.salvar}">
-                                        <f:ajax execute="@form" render="@form :tabTipoServico :mensagem" />
-                                    </p:commandButton>
-                                    <p:commandButton ajax="false" value="Novo" actionListener="#{tipoServicoMB.limparElemento}">
-                                        <f:ajax execute="@form" render="@form :mensagem" />
-                                    </p:commandButton>
-                                    <p:commandButton ajax ="false" value="Excluir" disabled="#{tipoServicoMB.novoElemento}" actionListener="#{tipoServicoMB.excluir}">
-                                        <f:ajax execute="@form" render="@form :tabTipoServico :mensagem" />
-                                    </p:commandButton>
+                                    <p:commandButton value="Salvar" process="@form" update="@form :tabTipoServico :mensagem :gmensagem" actionListener="#{tipoServicoMB.salvar}" />
+                                    <p:commandButton value="Novo" update="@form :mensagem :gmensagem" actionListener="#{tipoServicoMB.limparElemento}" />
+                                    <p:commandButton value="Excluir" process="@form" update="@form :tabTipoServico :mensagem :gmensagem" disabled="#{tipoServicoMB.novoElemento}" actionListener="#{tipoServicoMB.excluir}" />
                                 </h:panelGroup>
                             </f:facet>
                         </p:panelGrid>
@@ -37,10 +31,9 @@
                             <f:facet name="header"><h:outputText value="Tipos de Serviço Cadastrados" /></f:facet>
                             <p:column>
                                 <f:facet name="header">Nome</f:facet>
-                                <h:commandLink value="#{tipoServico.nome}">
+                                <p:commandLink value="#{tipoServico.nome}" update=":formTipoServico :mensagem :gmensagem">
                                     <f:setPropertyActionListener value="#{tipoServico}" target="#{tipoServicoMB.tipoServico}" />
-                                    <f:ajax execute="@this" render=":formTipoServico :mensagem" />
-                                </h:commandLink>
+                                </p:commandLink>
                             </p:column>
                         </p:dataTable>
                     </h:form>

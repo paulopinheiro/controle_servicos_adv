@@ -25,16 +25,10 @@
                             <p:selectBooleanCheckbox id="ativo" value="#{advogadoMB.advogado.ativo}" />
                             <f:facet name="footer">
                                 <h:panelGroup>
-                                    <p:commandButton ajax="false" value="Salvar" actionListener="#{advogadoMB.salvar}">
-                                        <f:ajax execute="@form" render="@form :tabAdvogado :mensagem" />
-                                    </p:commandButton>
-                                    <p:commandButton ajax="false" value="Novo" actionListener="#{advogadoMB.limparElemento}">
-                                        <f:ajax execute="@form" render="@form :mensagem" />
-                                    </p:commandButton>
-                                    <p:commandButton ajax ="false" value="Excluir" disabled="#{advogadoMB.novoElemento}" actionListener="#{advogadoMB.excluir}">
-                                        <f:ajax execute="@form" render="@form :tabAdvogado :mensagem" />
-                                    </p:commandButton>
-                                    <p:commandButton ajax ="false" value="Sair" action="/index.xhtml" />
+                                    <p:commandButton value="Salvar" process="@form" update="@form :tabAdvogado :mensagem :gmensagem" actionListener="#{advogadoMB.salvar}" />
+                                    <p:commandButton value="Novo" update="@form :mensagem :gmensagem" actionListener="#{advogadoMB.limparElemento}" />
+                                    <p:commandButton value="Excluir" process="@form" update="@form :tabAdvogado :mensagem :gmensagem" disabled="#{advogadoMB.novoElemento}" actionListener="#{advogadoMB.excluir}" />
+                                    <p:button value="Sair" outcome="/index.xhtml?faces-redirect=true" />
                                 </h:panelGroup>
                             </f:facet>
                         </p:panelGrid>
@@ -45,10 +39,9 @@
                         <p:dataTable id="dtLista" value="#{advogadoMB.listaAdvogados}" var="advogado">
                             <f:facet name="header"><h:outputText value="Advogados Cadastrados" /></f:facet>
                             <p:column>
-                                <h:commandLink value="#{advogado.oab}">
+                                <p:commandLink value="#{advogado.oab}" update=":formAdvogado :mensagem :gmensagem">
                                     <f:setPropertyActionListener value="#{advogado}" target="#{advogadoMB.advogado}" />
-                                    <f:ajax execute="@this" render=":formAdvogado :mensagem" />
-                                </h:commandLink>
+                                </p:commandLink>
                             </p:column>
                             <p:column>
                                 <f:facet name="header">Nome</f:facet>
