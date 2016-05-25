@@ -15,7 +15,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "servico_prestado", catalog = "controladv", schema = "public")

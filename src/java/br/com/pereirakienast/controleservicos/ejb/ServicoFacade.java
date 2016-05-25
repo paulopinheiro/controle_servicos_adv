@@ -41,8 +41,10 @@ public class ServicoFacade extends AbstractFacade<ServicoPrestado> {
 
             if (servico.getId()==null) getEntityManager().persist(servico);
             else getEntityManager().merge(servico);
-            for (AssessoriaServico as:servico.getAssessorias()) {
-                assessoriaFacade.salvar(as);
+            if (servico.getAssessorias()!=null) {
+                for (AssessoriaServico as:servico.getAssessorias()) {
+                    assessoriaFacade.salvar(as);
+                }
             }
         }
     }

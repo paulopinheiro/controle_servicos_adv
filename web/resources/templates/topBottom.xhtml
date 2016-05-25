@@ -1,55 +1,55 @@
 <?xml version='1.0' encoding='UTF-8' ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <f:view>
         <h:head>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <h:outputStylesheet library="css" name="default.css"/>
             <h:outputStylesheet library="css" name="cssLayout.css"/>
+            <h:outputScript name="calendar_pt.js" library="js" /> 
+            <h:outputScript name="jsf.js" library="javax.faces"/>
             <title><ui:insert name="top">Titulo</ui:insert></title>
             <script language="javascript" type="text/javascript">
-            function limitText(limitField, limitNum) {
-                if (limitField.value.length > limitNum) {
-                    limitField.value = limitField.value.substring(0, limitNum);
-                }
-            }
-            function doCheckNatural(field) {
-                try {
-                    if (isNaN(field.value)) {
-                        if  (field.value.length==1) {
-                            field.value=0;
-                        }
-                        else {
-                            var fieldLength = field.value.length;
-                            field.value = field.value.substring(0,fieldLength-1);
-                        }
+                function limitText(limitField, limitNum) {
+                    if (limitField.value.length > limitNum) {
+                        limitField.value = limitField.value.substring(0, limitNum);
                     }
-                } catch (err) {
-                    alert(err.message);
                 }
-            }
-            function doCheckInteger(field) {
-                try {
-                    if (isNaN(field.value)) {
-                        if ((field.value.length!=1)||(field.value!="-")) {
-                            if (field.value.length==1) {
-                                field.value=0;
-                            }
-                            else {
-                                var fieldLength=field.value.length;
-                                field.value = field.value.substring(0,fieldLength-1);
+                function doCheckNatural(field) {
+                    try {
+                        if (isNaN(field.value)) {
+                            if (field.value.length == 1) {
+                                field.value = 0;
+                            } else {
+                                var fieldLength = field.value.length;
+                                field.value = field.value.substring(0, fieldLength - 1);
                             }
                         }
+                    } catch (err) {
+                        alert(err.message);
                     }
-                } catch (err) {
-                    alert(err.message);
                 }
-            }
-        </script>
+                function doCheckInteger(field) {
+                    try {
+                        if (isNaN(field.value)) {
+                            if ((field.value.length != 1) || (field.value != "-")) {
+                                if (field.value.length == 1) {
+                                    field.value = 0;
+                                } else {
+                                    var fieldLength = field.value.length;
+                                    field.value = field.value.substring(0, fieldLength - 1);
+                                }
+                            }
+                        }
+                    } catch (err) {
+                        alert(err.message);
+                    }
+                }
+            </script>
         </h:head>
 
         <h:body rendered="#{!sessaoMB.advogadoSessaoEmpty}">
@@ -69,6 +69,9 @@
                         <p:submenu id="submenuCadastros" label="Cadastros">
                             <p:menuitem id="menuitemCadCliente" value="Clientes">
                                 <h:link outcome="/cadastros/lisClientes.xhtml" value="Clientes" />
+                            </p:menuitem>
+                            <p:menuitem id="menuitemCadServicoPrestado" value="Serviço Prestado">
+                                <h:link outcome="/cadastros/cadServicoPrestado.xhtml" value="Serviço Prestado" />
                             </p:menuitem>
                             <p:separator />
                             <p:submenu id="submenuCadastrosAdministrativos" label="Administrativos" rendered="#{sessaoMB.advogadoAdmin}">

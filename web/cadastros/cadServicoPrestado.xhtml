@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <body>
+        <ui:composition template="./../resources/templates/topBottom.xhtml">
+            <ui:define name="top">Cadastro de Serviço</ui:define>
+            <ui:define name="content">
+                <f:view>
+                    <h:form id="formServico">
+                        <p:panelGrid columns="2">
+                            <f:facet name="header"><h:outputText value="Formulário de cadastro de serviço" /></f:facet>
+                            <p:outputLabel for="cliente" id="lblCliente" value="Cliente" />
+                            <p:selectOneMenu id="cliente" label="Clientes" value="#{servicoPrestadoMB.servico.cliente}" converter="converteCliente" >
+                                <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um cliente --" />
+                                <f:selectItems value="#{servicoPrestadoMB.listaClientes}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel for="advogado" id="lblAdvogado" value="Advogado" />
+                            <p:selectOneMenu id="advogado" label="Advogados" value="#{servicoPrestadoMB.servico.advogado}" converter="converteAdvogado" >
+                                <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um advogado --" />
+                                <f:selectItems value="#{servicoPrestadoMB.listaAdvogados}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel for="tipoServico" id="lblTipoServico" value="Serviço" />
+                            <p:selectOneMenu id="tipoServico" label="Tipos Serviço" value="#{servicoPrestadoMB.servico.tipoServico}" converter="converteTipoServico" >
+                                <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um servico --" />
+                                <f:selectItems value="#{servicoPrestadoMB.listaTiposServico}" var="tipoServico" itemValue="#{tipoServico}" itemLabel="#{tipoServico}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel id="lblDataPrestacao" for="dataPrestacao" value="Data serviço" />
+                            <p:calendar id="dataPrestacao" value="#{servicoPrestadoMB.servico.dataPrestacao}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" />
+                            <p:outputLabel for="detalhes" id="lblDetalhes" value="Detalhes" />
+                            <p:inputTextarea id="detalhes" value="#{servicoPrestadoMB.servico.detalhes}" rows="3" cols="100" maxlength="800" />
+                            <p:outputLabel for="observacao" id="lblObservacao" value="Observação" />
+                            <p:inputTextarea id="observacao" value="#{servicoPrestadoMB.servico.observacao}" rows="3" cols="100" maxlength="800" />
+                            <f:facet name="footer">
+                                <h:panelGroup>
+                                    <p:commandButton value="Salvar" process="@form" update="@form :mensagem :gmensagem" actionListener="#{servicoPrestadoMB.salvar}" />
+                                    <p:commandButton value="Novo" update="@form :mensagem :gmensagem" actionListener="#{servicoPrestadoMB.limparElemento}" />
+                                    <p:commandButton value="Excluir" process="@form" update="@form :mensagem :gmensagem" disabled="#{servicoPrestadoMB.novoElemento}" actionListener="#{servicoPrestadoMB.excluir}" />
+                                </h:panelGroup>
+                            </f:facet>
+                        </p:panelGrid>
+                    </h:form>
+                    <p:growl id="gmensagem" globalOnly="true" />
+                    <p:messages id="mensagem" globalOnly="true" />
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
