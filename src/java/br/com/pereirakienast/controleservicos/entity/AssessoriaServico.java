@@ -119,8 +119,8 @@ public class AssessoriaServico implements Serializable, Comparable {
     @Override
     public int compareTo(Object o) {
         AssessoriaServico other = (AssessoriaServico) o;
-        if (this.getServico().equals(other.getServico())) {
-            return this.getAdvogado().compareTo(other.getAdvogado());
+        if (!this.getServico().equals(other.getServico())) {
+            return this.getServico().compareTo(other.getServico());
         } else return this.getAdvogado().compareTo(other.getAdvogado());
     }
 }

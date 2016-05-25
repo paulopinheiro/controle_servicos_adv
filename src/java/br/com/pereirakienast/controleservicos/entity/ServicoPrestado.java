@@ -3,16 +3,19 @@ package br.com.pereirakienast.controleservicos.entity;
 import br.com.pereirakienast.controleservicos.entity.cobranca.ContaServico;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "servico_prestado", catalog = "controladv", schema = "public")
@@ -40,6 +43,8 @@ public class ServicoPrestado implements Comparable, Serializable {
     private TipoServico tipoServico;
     @OneToOne(mappedBy = "servico")
     private ContaServico conta;
+    @OneToMany(mappedBy = "servico")
+    private List<AssessoriaServico> assessorias;
 
     public Integer getId() {
         return id;
@@ -103,6 +108,14 @@ public class ServicoPrestado implements Comparable, Serializable {
 
     public void setConta(ContaServico conta) {
         this.conta = conta;
+    }
+
+    public List<AssessoriaServico> getAssessorias() {
+        return assessorias;
+    }
+
+    public void setAssessorias(List<AssessoriaServico> assessorias) {
+        this.assessorias = assessorias;
     }
 
     @Override

@@ -1,20 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.pereirakienast.controleservicos.ejb;
 
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
-/**
- *
- * @author paulopinheiro
- */
 public abstract class AbstractFacade<T> {
     private Class<T> entityClass;
 
@@ -24,8 +17,10 @@ public abstract class AbstractFacade<T> {
 
     protected abstract EntityManager getEntityManager();
     public abstract void salvar(T entity) throws LogicalException;
-    public abstract void excluir(T entity) throws LogicalException;
-    protected abstract CriteriaQuery<T> getCq(T filtro) throws LogicalException;
+    
+    public void excluir(T entity) throws LogicalException {
+        this.remove(entity);
+    }
 
     protected void create(T entity) {
         getEntityManager().persist(entity);
@@ -75,5 +70,16 @@ public abstract class AbstractFacade<T> {
         resposta = pesquisa.getResultList();
 
         return resposta;        
+    }
+
+    protected CriteriaBuilder getCb() {
+        return this.getEntityManager().getCriteriaBuilder();
+    }
+
+    protected CriteriaQuery<T> getCq(T filtro) throws LogicalException {
+        CriteriaQuery<T> cq = this.getCb().createQuery(entityClass);
+        Root<T> r = cq.from(entityClass);
+        cq.select(r);
+        return cq;
     }
 }
