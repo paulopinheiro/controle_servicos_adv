@@ -3,29 +3,16 @@ package br.com.pereirakienast.controleservicos.ejb;
 import br.com.pereirakienast.controleservicos.entity.TipoDocumento;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 @Stateless
 public class TipoDocumentoFacade extends AbstractFacade<TipoDocumento> {
-    @PersistenceContext(unitName = "pkServicosPU")
-    private EntityManager em;
-
     public TipoDocumentoFacade() {
         super(TipoDocumento.class);
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
     }
 
     @Override
@@ -72,18 +59,9 @@ public class TipoDocumentoFacade extends AbstractFacade<TipoDocumento> {
 
     @Override
     protected CriteriaQuery<TipoDocumento> getCq(TipoDocumento filtro) throws LogicalException {
-        CriteriaBuilder cb = this.getEntityManager().getCriteriaBuilder();
-        CriteriaQuery<TipoDocumento> cq = cb.createQuery(TipoDocumento.class);
-        Root<TipoDocumento> root = cq.from(TipoDocumento.class);
-        cq.select(root);
+        CriteriaQuery<TipoDocumento> cq = super.getCq(filtro);
 
-        Predicate nome = cb.conjunction();
-
-        if ((filtro.getNome()!=null)&&(!filtro.getNome().isEmpty())) {
-            Expression<String> a_nome = root.get("nome");
-            nome = cb.like(cb.upper(a_nome), filtro.getNome().toUpperCase());
-        }
-
+        Predicate nome = getPredicateLike(filtro.getNome(),"nome");
         cq.where(nome);
 
         return cq;

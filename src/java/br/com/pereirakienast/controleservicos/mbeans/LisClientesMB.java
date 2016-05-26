@@ -6,7 +6,6 @@ import br.com.pereirakienast.controleservicos.entity.Advogado;
 import br.com.pereirakienast.controleservicos.entity.Cliente;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import br.com.pereirakienast.controleservicos.util.ContextoJSF;
-import br.com.pereirakienast.controleservicos.util.DadosSessao;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,7 +19,6 @@ import javax.faces.event.ActionEvent;
 @ManagedBean
 @ViewScoped
 public class LisClientesMB implements Serializable {
-
     @EJB
     private ClienteFacade clienteFacade;
     @EJB
@@ -43,7 +41,7 @@ public class LisClientesMB implements Serializable {
             if (lista == null) lista = clienteFacade.findAtivos();
         } catch (Exception ex) {
             mensagemErro(ex.getMessage());
-            Logger.getLogger("LisPartesMB").log(Level.SEVERE, ex.getMessage());
+            Logger.getLogger("LisClientesMB").log(Level.SEVERE, ex.getMessage());
         }
         return lista;
     }
@@ -57,7 +55,7 @@ public class LisClientesMB implements Serializable {
             if (listaAdvogados == null) listaAdvogados = advogadoFacade.findAtivos();
         } catch (Exception ex) {
             mensagemErro(ex.getMessage());
-            Logger.getLogger("LisPartesMB").log(Level.SEVERE, ex.getMessage());
+            Logger.getLogger("LisClientesMB").log(Level.SEVERE, ex.getMessage());
         }
         return listaAdvogados;
     }
@@ -77,7 +75,7 @@ public class LisClientesMB implements Serializable {
             mensagemErro(ex.getMessage());
         } catch (Exception ex) {
             mensagemErro(ex.getMessage());
-            Logger.getLogger("LisPartesMB").log(Level.SEVERE, ex.getMessage());
+            Logger.getLogger("LisClientesMB").log(Level.SEVERE, ex.getMessage());
         }
     }
 

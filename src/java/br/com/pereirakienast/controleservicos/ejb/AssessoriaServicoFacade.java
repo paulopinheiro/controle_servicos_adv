@@ -3,21 +3,11 @@ package br.com.pereirakienast.controleservicos.ejb;
 import br.com.pereirakienast.controleservicos.entity.AssessoriaServico;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @Stateless
 public class AssessoriaServicoFacade extends AbstractFacade<AssessoriaServico> {
-    @PersistenceContext(unitName = "pkServicosPU")
-    private EntityManager em;
-
     public AssessoriaServicoFacade() {
         super(AssessoriaServico.class);
-    }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
     }
 
     @Override

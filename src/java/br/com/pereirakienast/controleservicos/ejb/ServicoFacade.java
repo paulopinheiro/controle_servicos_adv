@@ -8,22 +8,15 @@ import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 
 @Stateless
 public class ServicoFacade extends AbstractFacade<ServicoPrestado> {
     @EJB private AssessoriaServicoFacade assessoriaFacade;
-    @PersistenceContext(unitName = "pkServicosPU")
-    private EntityManager em;
 
     public ServicoFacade() {
         super(ServicoPrestado.class);
-    }
-
-    @Override
-    public EntityManager getEntityManager() {
-        return em;
     }
 
     @Override
@@ -64,5 +57,19 @@ public class ServicoFacade extends AbstractFacade<ServicoPrestado> {
             if (assessorias.get(i-1).equals(assessorias.get(i))) return assessorias.get(i);
         }
         return null;
+    }
+
+    @Override
+    protected CriteriaQuery<ServicoPrestado> getCq(ServicoPrestado filtro) throws LogicalException {
+        CriteriaQuery<ServicoPrestado> cq = super.getCq(filtro);
+
+        Predicate cliente = getPredicateEqual(filtro.getCliente(),"cliente");
+        Predicate advogado = getPredicateEqual(filtro.getAdvogado(),"advogado");
+        Predicate dataPrestacao = getPredicateEqual(filtro.getDataPrestacao(),"dataPrestacao");
+        Predicate tipoServico = getPredicateEqual(filtro.getTipoServico(),"tipoServico");
+
+        cq.where(cliente,advogado,dataPrestacao,tipoServico);
+
+        return cq;
     }
 }

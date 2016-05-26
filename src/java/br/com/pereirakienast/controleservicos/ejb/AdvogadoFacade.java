@@ -5,27 +5,14 @@ import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.util.Collections;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 @Stateless
 public class AdvogadoFacade extends AbstractFacade<Advogado> {
-    @PersistenceContext(unitName = "pkServicosPU")
-    private EntityManager em;
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-
     public AdvogadoFacade() {
         super(Advogado.class);
     }
@@ -79,27 +66,13 @@ public class AdvogadoFacade extends AbstractFacade<Advogado> {
     }
 
     @Override
-    protected CriteriaQuery<Advogado> getCq(Advogado filtro) {
-        CriteriaBuilder cb = this.getEntityManager().getCriteriaBuilder();
-        CriteriaQuery<Advogado> cq = cb.createQuery(Advogado.class);
-        Root<Advogado> root = cq.from(Advogado.class);
-        cq.select(root);
+    protected CriteriaQuery<Advogado> getCq(Advogado filtro) throws LogicalException {
+        CriteriaQuery<Advogado> cq = super.getCq(filtro);
 
-        Predicate oab = cb.conjunction();
-        Predicate nome = cb.conjunction();
-        Predicate ativo;
-        Predicate administrador;
-
-        if ((filtro.getOab()!=null)&&(!filtro.getOab().isEmpty())) {
-            Expression<String> a_oab = root.get("oab");
-            oab = cb.like(cb.upper(a_oab), filtro.getOab().toUpperCase());
-        }
-        if ((filtro.getNome()!=null)&&(!filtro.getNome().isEmpty())) {
-            Expression<String> a_nome = root.get("nome");
-            nome = cb.like(cb.upper(a_nome), filtro.getNome().toUpperCase());
-        }
-        ativo = cb.equal(root.get("ativo"), filtro.isAtivo());
-        administrador = cb.equal(root.get("administrador"), filtro.isAdministrador());
+        Predicate oab = getPredicateLike(filtro.getOab(),"oab");
+        Predicate nome = getPredicateLike(filtro.getNome(),"nome");
+        Predicate ativo = getPredicateBoolean(filtro.isAtivo(),"ativo");
+        Predicate administrador = getPredicateBoolean(filtro.isAdministrador(),"admininstrador");
 
         cq.where(oab,nome,ativo,administrador);
 

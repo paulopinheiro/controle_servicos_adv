@@ -159,7 +159,10 @@ public class ServicoPrestado implements Comparable, Serializable {
     @Override
     public int compareTo(Object o) {
         ServicoPrestado other = (ServicoPrestado) o;
+        if (other==null) return 0;
+        if ((this.getCliente()==null)||other.getCliente()==null) return 0;
         if (this.getCliente().equals(other.getCliente())) {
+            if ((this.getDataPrestacao()==null)||(other.getDataPrestacao()==null)) return 0;
             return this.getDataPrestacao().compareTo(other.getDataPrestacao());
         } else return this.getCliente().compareTo(other.getCliente());
     }

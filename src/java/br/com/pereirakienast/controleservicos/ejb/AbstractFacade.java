@@ -3,19 +3,29 @@ package br.com.pereirakienast.controleservicos.ejb;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 public abstract class AbstractFacade<T> {
-    private Class<T> entityClass;
+    private final Class<T> entityClass;
+    private CriteriaQuery cq;
+    private Root root;
+    @PersistenceContext(unitName = "pkServicosPU")
+    private EntityManager em;
 
     public AbstractFacade(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
-    protected abstract EntityManager getEntityManager();
+    public EntityManager getEntityManager() {
+        return em;
+    }
+
     public abstract void salvar(T entity) throws LogicalException;
     
     public void excluir(T entity) throws LogicalException {
@@ -72,14 +82,50 @@ public abstract class AbstractFacade<T> {
         return resposta;        
     }
 
-    protected CriteriaBuilder getCb() {
+    protected final CriteriaBuilder getCb() {
         return this.getEntityManager().getCriteriaBuilder();
     }
 
     protected CriteriaQuery<T> getCq(T filtro) throws LogicalException {
-        CriteriaQuery<T> cq = this.getCb().createQuery(entityClass);
-        Root<T> r = cq.from(entityClass);
-        cq.select(r);
+        return getCq();
+    }
+
+    private CriteriaQuery<T> getCq() {
+        if (cq==null) {
+            cq = getCb().createQuery(entityClass);
+            cq.select(getRoot());
+        }
         return cq;
+    }
+
+    protected Root getRoot() {
+        if (this.root == null) {
+            this.root = getCq().from(entityClass);
+        }
+        return this.root;
+    }
+
+    protected Predicate getPredicateEqual(Object object,String nome) {
+        Predicate resposta = getCb().conjunction();
+
+        if (object!=null) {
+            Expression<String> exp = getRoot().get(nome);
+            resposta = getCb().equal(exp,object);
+        }
+        return resposta;
+    }
+
+    protected Predicate getPredicateLike(String object, String nome) {
+        Predicate resposta = getCb().conjunction();
+
+        if ((object !=null)&&(!object.trim().isEmpty())) {
+            Expression<String> exp = getRoot().get(nome);
+            resposta = getCb().like(getCb().upper(exp), object.trim().toUpperCase());
+        }
+        return resposta;
+    }
+
+    protected Predicate getPredicateBoolean(boolean object, String nome) {
+        return getCb().equal(getRoot().get(nome), object);
     }
 }

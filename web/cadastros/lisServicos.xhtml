@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+        <ui:composition template="./../resources/templates/topBottom.xhtml">
+            <ui:define name="top">Serviços Cadastrados</ui:define>
+            <ui:define name="content">
+                <f:view>
+                    <h:form id="formFiltraServico">
+                        <p:panelGrid columns="2">
+                            <f:facet name="header"><h:outputText value="Filtrar Serviços" /></f:facet>
+                            <p:outputLabel for="cliente" id="lblCliente" value="Cliente" />
+                            <p:selectOneMenu id="cliente" label="Clientes" value="#{lisServicosMB.filtro.cliente}" converter="converteCliente" >
+                                <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um cliente --" />
+                                <f:selectItems value="#{lisServicosMB.listaClientes}" var="cliente" itemValue="#{cliente}" itemLabel="#{cliente}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel for="advogado" id="lblAdvogado" value="Advogado preferencial" />
+                            <p:selectOneMenu id="advogado" label="Advogados" value="#{lisServicosMB.filtro.advogado}" converter="converteAdvogado" >
+                                <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um advogado --" />
+                                <f:selectItems value="#{lisServicosMB.listaAdvogados}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado}" />
+                            </p:selectOneMenu>
+                            <p:outputLabel id="lblDataPrestacao" for="dataPrestacao" value="Data serviço" />
+                            <p:calendar id="dataPrestacao" value="#{lisServicosMB.filtro.dataPrestacao}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" />
+                            <p:outputLabel for="tipoServico" id="lblTipoServico" value="Serviço" />
+                            <p:selectOneMenu id="tipoServico" label="Tipos Serviço" value="#{lisServicosMB.filtro.tipoServico}" converter="converteTipoServico" >
+                                <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um servico --" />
+                                <f:selectItems value="#{lisServicosMB.listaTiposServico}" var="tipoServico" itemValue="#{tipoServico}" itemLabel="#{tipoServico}" />
+                            </p:selectOneMenu>
+
+                            <f:facet name="footer">
+                                <h:panelGrid columns="3" style="align-content: center">
+                                    <p:commandButton value="Limpar" update="@form :mensagem :gmensagem" actionListener="#{lisServicosMB.limpar}" />
+                                    <p:commandButton value="Filtrar" process="@form" update=":tabServico :mensagem :gmensagem" actionListener="#{lisServicosMB.filtrar}" />
+                                    <p:button id="linkNovoServico" value="Novo Serviço" outcome="/cadastros/cadServicoPrestado.xhtml" />
+                                </h:panelGrid>
+                            </f:facet>
+                        </p:panelGrid>
+                    </h:form>
+                    <p:growl id="gmensagem" globalOnly="true" />
+                    <p:messages id="mensagem" globalOnly="true" />
+                    <h:form id="tabServico">
+                        <p:dataTable id="dtLista" value="#{lisServicosMB.lista}" var="servico" paginator="true" rows="10">
+                            <f:facet name="header"><h:outputText value="Serviços Cadastrados" /></f:facet>
+                            <p:column>
+                                <f:facet name="header">Tipo</f:facet>
+                                <h:link value="#{servico.tipoServico}" outcome="/cadastros/cadServicoPrestado.xhtml">
+                                    <f:param name="servicoId" value="#{servico.id}" />
+                                </h:link>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Data</f:facet>
+                                <h:outputText id="linkData" value="#{servico.dataPrestacao}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Cliente</f:facet>
+                                <h:outputText value="#{servico.cliente}" />
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">Advogado</f:facet>
+                                <h:outputText value="#{servico.advogado}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
