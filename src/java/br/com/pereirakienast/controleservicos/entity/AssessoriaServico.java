@@ -34,10 +34,11 @@ public class AssessoriaServico implements Serializable, Comparable {
 
     public AssessoriaServico() {}
 
+    public AssessoriaServico(ServicoPrestado servico) {
+        this.servico = servico;
+    }
+
     public AssessoriaServico(ServicoPrestado servico, Advogado advogado) throws LogicalException {
-        if (servico==null) throw new LogicalException("Informe o serviço prestado");
-        if (advogado==null) throw new LogicalException("Informe o advogado assessor no serviço");
-        if (advogado.equals(servico.getAdvogado())) throw new LogicalException("Advogado prestador do serviço não pode ser assessor no mesmo serviço");
         this.servico = servico;
         this.advogado = advogado;
     }

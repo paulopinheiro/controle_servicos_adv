@@ -9,7 +9,7 @@
         <f:viewParam id="servicoId" name="servicoId" value="#{servicoPrestadoMB.servico}" converter="#{servicoConverterMB}" required="false" />
     </f:metadata>
     <body>
-        <ui:composition template="./../resources/templates/topBottom.xhtml">
+        <ui:composition template="./../../resources/templates/topBottom.xhtml">
             <ui:define name="top">Cadastro de Serviço</ui:define>
             <ui:define name="content">
                 <f:view>
@@ -42,7 +42,7 @@
                                     <p:commandButton value="Salvar" process="@form" update="@form :mensagem :gmensagem" actionListener="#{servicoPrestadoMB.salvar}" />
                                     <p:commandButton value="Novo" update="@form :mensagem :gmensagem" actionListener="#{servicoPrestadoMB.limparElemento}" />
                                     <p:commandButton value="Excluir" process="@form" update="@form :mensagem :gmensagem" disabled="#{servicoPrestadoMB.novoElemento}" actionListener="#{servicoPrestadoMB.excluir}" />
-                                    <p:button value="Voltar" outcome="/cadastros/lisServicos" />
+                                    <p:button value="Voltar" outcome="/cadastros/servico/lisServicos" />
                                 </h:panelGroup>
                             </f:facet>
                         </p:panelGrid>

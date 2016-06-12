@@ -34,6 +34,8 @@ public class ServicoFacade extends AbstractFacade<ServicoPrestado> {
 
             if (servico.getId()==null) getEntityManager().persist(servico);
             else getEntityManager().merge(servico);
+            //aprimorar esta rotina para que perceba se houve exclusão de alguma
+            // assessoria de um serviço existente
             if (servico.getAssessorias()!=null) {
                 for (AssessoriaServico as:servico.getAssessorias()) {
                     assessoriaFacade.salvar(as);

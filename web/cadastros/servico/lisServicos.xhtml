@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui">
 
     <body>
-        <ui:composition template="./../resources/templates/topBottom.xhtml">
+        <ui:composition template="./../../resources/templates/topBottom.xhtml">
             <ui:define name="top">Serviços Cadastrados</ui:define>
             <ui:define name="content">
                 <f:view>
@@ -36,7 +36,7 @@
                                 <h:panelGrid columns="3" style="align-content: center">
                                     <p:commandButton value="Limpar" update="@form :mensagem :gmensagem" actionListener="#{lisServicosMB.limpar}" />
                                     <p:commandButton value="Filtrar" process="@form" update=":tabServico :mensagem :gmensagem" actionListener="#{lisServicosMB.filtrar}" />
-                                    <p:button id="linkNovoServico" value="Novo Serviço" outcome="/cadastros/cadServicoPrestado.xhtml" />
+                                    <p:button id="linkNovoServico" value="Novo Serviço" outcome="/cadastros/servico/cadServicoPrestado.xhtml" />
                                 </h:panelGrid>
                             </f:facet>
                         </p:panelGrid>
@@ -48,7 +48,7 @@
                             <f:facet name="header"><h:outputText value="Serviços Cadastrados" /></f:facet>
                             <p:column>
                                 <f:facet name="header">Tipo</f:facet>
-                                <h:link value="#{servico.tipoServico}" outcome="/cadastros/cadServicoPrestado.xhtml">
+                                <h:link value="#{servico.tipoServico}" outcome="/cadastros/servico/cadServicoPrestado.xhtml">
                                     <f:param name="servicoId" value="#{servico.id}" />
                                 </h:link>
                             </p:column>
