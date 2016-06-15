@@ -45,6 +45,12 @@ public class ServicoPrestado implements Comparable, Serializable {
     @OneToMany(mappedBy = "servico")
     private List<AssessoriaServico> assessorias;
 
+    public ServicoPrestado() {}
+
+    public ServicoPrestado(Advogado advogado) {
+        this.advogado = advogado;
+    }
+
     public Integer getId() {
         return id;
     }

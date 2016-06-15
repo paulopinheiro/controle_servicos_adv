@@ -36,7 +36,7 @@
                                 <h:panelGrid columns="3" style="align-content: center">
                                     <p:commandButton value="Limpar" update="@form :mensagem :gmensagem" actionListener="#{lisServicosMB.limpar}" />
                                     <p:commandButton value="Filtrar" process="@form" update=":tabServico :mensagem :gmensagem" actionListener="#{lisServicosMB.filtrar}" />
-                                    <p:button id="linkNovoServico" value="Novo Serviço" outcome="/cadastros/servico/cadServicoPrestado.xhtml" />
+                                    <p:button id="linkNovoServico" value="Novo Serviço" outcome="/cadastros/servico/novoServico.xhtml" />
                                 </h:panelGrid>
                             </f:facet>
                         </p:panelGrid>
