@@ -1,6 +1,6 @@
 package br.com.pereirakienast.controleservicos.entity;
 
-import br.com.pereirakienast.controleservicos.entity.cobranca.RepasseAssessoria;
+import br.com.pereirakienast.controleservicos.entity.cobranca.RepasseParceria;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.io.Serializable;
 import java.util.List;
@@ -15,11 +15,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "assessoria_servico", catalog = "controladv", schema = "public")
-public class AssessoriaServico implements Serializable, Comparable {
+@Table(name = "parceria_servico", catalog = "controladv", schema = "public")
+public class ParceriaServico implements Serializable, Comparable {
     @Id
-    @SequenceGenerator(name = "AssessoriaServico_Gen", sequenceName = "assessoria_servico_id_seq", allocationSize = 1)
-    @GeneratedValue(generator = "AssessoriaServico_Gen")
+    @SequenceGenerator(name = "ParceriaServico_Gen", sequenceName = "parceria_servico_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "ParceriaServico_Gen")
     private Integer id;
     @ManyToOne
     @JoinColumn(name="servico_prestado_id",nullable=false)
@@ -29,16 +29,16 @@ public class AssessoriaServico implements Serializable, Comparable {
     private Advogado advogado;
     @Column(name="detalhes",length=400)
     private String detalhes;
-    @OneToMany(mappedBy = "assessoria")
-    private List<RepasseAssessoria> repassesParcelas;
+    @OneToMany(mappedBy = "parceria")
+    private List<RepasseParceria> repassesParcelas;
 
-    public AssessoriaServico() {}
+    public ParceriaServico() {}
 
-    public AssessoriaServico(ServicoPrestado servico) {
+    public ParceriaServico(ServicoPrestado servico) {
         this.servico = servico;
     }
 
-    public AssessoriaServico(ServicoPrestado servico, Advogado advogado) throws LogicalException {
+    public ParceriaServico(ServicoPrestado servico, Advogado advogado) throws LogicalException {
         this.servico = servico;
         this.advogado = advogado;
     }
@@ -75,11 +75,11 @@ public class AssessoriaServico implements Serializable, Comparable {
         this.detalhes = detalhes;
     }
 
-    public List<RepasseAssessoria> getRepassesParcelas() {
+    public List<RepasseParceria> getRepassesParcelas() {
         return repassesParcelas;
     }
 
-    public void setRepassesParcelas(List<RepasseAssessoria> repassesParcelas) {
+    public void setRepassesParcelas(List<RepasseParceria> repassesParcelas) {
         this.repassesParcelas = repassesParcelas;
     }
 
@@ -102,7 +102,7 @@ public class AssessoriaServico implements Serializable, Comparable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final AssessoriaServico other = (AssessoriaServico) obj;
+        final ParceriaServico other = (ParceriaServico) obj;
         if (this.servico != other.servico && (this.servico == null || !this.servico.equals(other.servico))) {
             return false;
         }
@@ -119,7 +119,7 @@ public class AssessoriaServico implements Serializable, Comparable {
 
     @Override
     public int compareTo(Object o) {
-        AssessoriaServico other = (AssessoriaServico) o;
+        ParceriaServico other = (ParceriaServico) o;
         if (!this.getServico().equals(other.getServico())) {
             return this.getServico().compareTo(other.getServico());
         } else return this.getAdvogado().compareTo(other.getAdvogado());

@@ -43,7 +43,7 @@ public class ServicoPrestado implements Comparable, Serializable {
     @OneToOne(mappedBy = "servico")
     private ContaServico conta;
     @OneToMany(mappedBy = "servico")
-    private List<AssessoriaServico> assessorias;
+    private List<ParceriaServico> parcerias;
 
     public ServicoPrestado() {}
 
@@ -115,12 +115,12 @@ public class ServicoPrestado implements Comparable, Serializable {
         this.conta = conta;
     }
 
-    public List<AssessoriaServico> getAssessorias() {
-        return assessorias;
+    public List<ParceriaServico> getParcerias() {
+        return parcerias;
     }
 
-    public void setAssessorias(List<AssessoriaServico> assessorias) {
-        this.assessorias = assessorias;
+    public void setParcerias(List<ParceriaServico> parcerias) {
+        this.parcerias = parcerias;
     }
 
     @Override

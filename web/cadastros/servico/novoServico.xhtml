@@ -39,34 +39,34 @@
                                     <p:inputTextarea id="observacao" value="#{servicoPrestadoMB.servico.observacao}" rows="3" cols="100" maxlength="800" />
                                 </p:panelGrid>
                             </p:tab>
-                            <p:tab id="tDadosAssessoria" title="Assessoria">
-                                <p:panelGrid id="gridAssessoria" columns="2">
-                                    <f:facet name="header"><h:outputText value="Dados de assessoria" /></f:facet>
-                                    <p:outputLabel for="assessor" id="lblAssessor" value="Assessor *" />
-                                    <p:selectOneMenu id="assessor" label="Advogados" value="#{servicoPrestadoMB.assessoriaServico.advogado}" converter="converteAdvogado">
+                            <p:tab id="tDadosParceria" title="Parceria">
+                                <p:panelGrid id="gridParceria" columns="2">
+                                    <f:facet name="header"><h:outputText value="Dados de parceria" /></f:facet>
+                                    <p:outputLabel for="parceiro" id="lblParceiro" value="Parceiro *" />
+                                    <p:selectOneMenu id="parceiro" label="Advogados" value="#{servicoPrestadoMB.parceriaServico.advogado}" converter="converteAdvogado">
                                         <f:selectItem noSelectionOption="true" itemValue="-1" itemLabel="-- Selecione um advogado --" />
                                         <f:selectItems value="#{servicoPrestadoMB.listaAdvogados}" var="advogado" itemValue="#{advogado}" itemLabel="#{advogado}" />
                                     </p:selectOneMenu>
-                                    <p:outputLabel for="detalhesAssessoria" id="lblDetalhesAssessoria" value="Detalhes" />
-                                    <p:inputTextarea id="detalhesAssessoria" value="#{servicoPrestadoMB.assessoriaServico.detalhes}" rows="3" cols="100" maxlength="400" />
+                                    <p:outputLabel for="detalhesParceria" id="lblDetalhesParceria" value="Detalhes" />
+                                    <p:inputTextarea id="detalhesParceria" value="#{servicoPrestadoMB.parceriaServico.detalhes}" rows="3" cols="100" maxlength="400" />
                                     <f:facet name="footer">
-                                        <p:commandButton process="@form" update=":formNovoServico:gridAssessoria :formNovoServico:tabAssessoria :msgerro :gmensagem" id="btAdicionarAssessoria" value="Adicionar Assessoria" actionListener="#{servicoPrestadoMB.alterarAssessoria}" />
-                                        <p:commandButton update=":formNovoServico:gridAssessoria :msgerro" value="Limpar" actionListener="#{servicoPrestadoMB.limparAssessoria}" />
+                                        <p:commandButton process="@form" update=":formNovoServico:gridParceria :formNovoServico:tabParceria :msgerro :gmensagem" id="btAdicionarParceria" value="Adicionar Parceria" actionListener="#{servicoPrestadoMB.alterarParceria}" />
+                                        <p:commandButton update=":formNovoServico:gridParceria :msgerro" value="Limpar" actionListener="#{servicoPrestadoMB.limparParceria}" />
                                     </f:facet>
                                 </p:panelGrid>
-                                <p:dataTable  id="tabAssessoria" value="#{servicoPrestadoMB.servico.assessorias}" var="assessoria">
+                                <p:dataTable  id="tabParceria" value="#{servicoPrestadoMB.servico.parcerias}" var="parceria">
                                     <p:column>
-                                        <f:facet name="header">Assessor</f:facet>
-                                        <p:commandLink id="linkAssessor" value="#{assessoria.advogado}" update=":formNovoServico:gridAssessoria :msgerro :gmensagem">
-                                            <f:setPropertyActionListener value="#{assessoria}" target="#{servicoPrestadoMB.assessoriaServico}" />
+                                        <f:facet name="header">Parceiro</f:facet>
+                                        <p:commandLink id="linkParceiro" value="#{parceria.advogado}" update=":formNovoServico:gridParceria :msgerro :gmensagem">
+                                            <f:setPropertyActionListener value="#{parceria}" target="#{servicoPrestadoMB.parceriaServico}" />
                                         </p:commandLink>
                                     </p:column>
                                     <p:column>
                                         <f:facet name="header">Detalhes</f:facet>
-                                        <h:outputText value="#{assessoria.detalhes}" />
+                                        <h:outputText value="#{parceria.detalhes}" />
                                     </p:column>
                                     <p:column>
-                                        <p:commandButton id="btRemoverAssessoria" value="Remover" actionListener="#{servicoPrestadoMB.removerAssessoria(assessoria)}" process="@this" update=":formNovoServico:tabAssessoria :formNovoServico:gridAssessoria" />
+                                        <p:commandButton id="btRemoverParceria" value="Remover" actionListener="#{servicoPrestadoMB.removerParceria(parceria)}" process="@this" update=":formNovoServico:tabParceria :formNovoServico:gridParceria" />
                                     </p:column>
                                 </p:dataTable>
                             </p:tab>

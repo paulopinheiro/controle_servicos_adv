@@ -37,7 +37,7 @@ public class Parcela implements Serializable, Comparable {
     @OneToOne(mappedBy = "parcela")
     private RepasseEscritorio repasseEscritorio;
     @OneToMany(mappedBy = "parcela")
-    private List<RepasseAssessoria> repassesAssessorias;
+    private List<RepasseParceria> repassesParcerias;
 
     public Integer getId() {
         return id;
@@ -87,12 +87,12 @@ public class Parcela implements Serializable, Comparable {
         this.repasseEscritorio = repasseEscritorio;
     }
 
-    public List<RepasseAssessoria> getRepassesAssessorias() {
-        return repassesAssessorias;
+    public List<RepasseParceria> getRepassesParcerias() {
+        return repassesParcerias;
     }
 
-    public void setRepassesAssessorias(List<RepasseAssessoria> repassesAssessorias) {
-        this.repassesAssessorias = repassesAssessorias;
+    public void setRepassesParcerias(List<RepasseParceria> repassesParcerias) {
+        this.repassesParcerias = repassesParcerias;
     }
 
     @Override

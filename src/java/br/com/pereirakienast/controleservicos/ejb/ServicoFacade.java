@@ -1,7 +1,7 @@
 package br.com.pereirakienast.controleservicos.ejb;
 
 import br.com.pereirakienast.controleservicos.entity.Advogado;
-import br.com.pereirakienast.controleservicos.entity.AssessoriaServico;
+import br.com.pereirakienast.controleservicos.entity.ParceriaServico;
 import br.com.pereirakienast.controleservicos.entity.ServicoPrestado;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.util.Collections;
@@ -13,7 +13,7 @@ import javax.persistence.criteria.Predicate;
 
 @Stateless
 public class ServicoFacade extends AbstractFacade<ServicoPrestado> {
-    @EJB private AssessoriaServicoFacade assessoriaFacade;
+    @EJB private ParceriaServicoFacade parceriaFacade;
 
     public ServicoFacade() {
         super(ServicoPrestado.class);
@@ -26,37 +26,37 @@ public class ServicoFacade extends AbstractFacade<ServicoPrestado> {
             if (servico.getDataPrestacao()==null) throw new LogicalException("Informe a data da prestação efetiva do serviço, ou a data de início");
             if (servico.getAdvogado()==null) throw new LogicalException("Informe o advogado que prestou ou prestará o serviço");
             if (servico.getTipoServico()==null) throw new LogicalException("Informe o tipo de serviço prestado");
-            if (servico.getAssessorias() != null) {
-                if (isAdvogadoAssessor(servico.getAdvogado(),servico.getAssessorias())) throw new LogicalException("O advogado que presta o serviço não pode ser também assessor do mesmo");
-                AssessoriaServico resp = duplicidadeAssessoria(servico.getAssessorias());
-                if (resp!=null) throw new LogicalException("O advogado " + resp.getAdvogado() + " aparece em duplicidade na assessoria do serviço");
+            if (servico.getParcerias() != null) {
+                if (isAdvogadoParceiro(servico.getAdvogado(),servico.getParcerias())) throw new LogicalException("O advogado que presta o serviço não pode ser também parceiro do mesmo");
+                ParceriaServico resp = duplicidadeParceria(servico.getParcerias());
+                if (resp!=null) throw new LogicalException("O(A) advogado(a) " + resp.getAdvogado() + " aparece em duplicidade na parceria do serviço");
             }
 
             if (servico.getId()==null) getEntityManager().persist(servico);
             else getEntityManager().merge(servico);
             //aprimorar esta rotina para que perceba se houve exclusão de alguma
-            // assessoria de um serviço existente
-            if (servico.getAssessorias()!=null) {
-                for (AssessoriaServico as:servico.getAssessorias()) {
-                    assessoriaFacade.salvar(as);
+            // parceria de um serviço existente
+            if (servico.getParcerias()!=null) {
+                for (ParceriaServico as:servico.getParcerias()) {
+                    parceriaFacade.salvar(as);
                 }
             }
         }
     }
 
-    private boolean isAdvogadoAssessor(Advogado advogado, List<AssessoriaServico> assessorias) {
-        if ((advogado==null)||(assessorias==null)) return false;
-        for (AssessoriaServico as:assessorias) {
+    private boolean isAdvogadoParceiro(Advogado advogado, List<ParceriaServico> parcerias) {
+        if ((advogado==null)||(parcerias==null)) return false;
+        for (ParceriaServico as:parcerias) {
             if (as.getAdvogado().equals(advogado)) return true;
         }
         return false;
     }
 
-    private AssessoriaServico duplicidadeAssessoria(List<AssessoriaServico> assessorias) {
-        if ((assessorias==null)||(assessorias.size()<2)) return null;
-        Collections.sort(assessorias);
-        for (int i=1;i<assessorias.size();i++) {
-            if (assessorias.get(i-1).equals(assessorias.get(i))) return assessorias.get(i);
+    private ParceriaServico duplicidadeParceria(List<ParceriaServico> parcerias) {
+        if ((parcerias==null)||(parcerias.size()<2)) return null;
+        Collections.sort(parcerias);
+        for (int i=1;i<parcerias.size();i++) {
+            if (parcerias.get(i-1).equals(parcerias.get(i))) return parcerias.get(i);
         }
         return null;
     }

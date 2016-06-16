@@ -6,7 +6,7 @@ import br.com.pereirakienast.controleservicos.ejb.ClienteFacade;
 import br.com.pereirakienast.controleservicos.ejb.ServicoFacade;
 import br.com.pereirakienast.controleservicos.ejb.TipoServicoFacade;
 import br.com.pereirakienast.controleservicos.entity.Advogado;
-import br.com.pereirakienast.controleservicos.entity.AssessoriaServico;
+import br.com.pereirakienast.controleservicos.entity.ParceriaServico;
 import br.com.pereirakienast.controleservicos.entity.Cliente;
 import br.com.pereirakienast.controleservicos.entity.ServicoPrestado;
 import br.com.pereirakienast.controleservicos.entity.TipoServico;
@@ -30,7 +30,7 @@ public class ServicoPrestadoMB extends AbBasicoMB<ServicoPrestado> implements Se
     @EJB private TipoServicoFacade tipoServicoFacade;
     @Inject private SessaoMB sessaoMB;
 
-    private AssessoriaServico assessoriaServico;
+    private ParceriaServico parceriaServico;
 
     public ServicoPrestadoMB() {}
 
@@ -46,45 +46,45 @@ public class ServicoPrestadoMB extends AbBasicoMB<ServicoPrestado> implements Se
         return tipoServicoFacade.findAll();
     }
 
-    public AssessoriaServico getAssessoriaServico() {
-        if (this.assessoriaServico==null) this.assessoriaServico = new AssessoriaServico(getServico());
-        return assessoriaServico;
+    public ParceriaServico getParceriaServico() {
+        if (this.parceriaServico==null) this.parceriaServico = new ParceriaServico(getServico());
+        return parceriaServico;
     }
 
-    public void setAssessoriaServico(AssessoriaServico assessoriaServico) {
-        this.assessoriaServico = assessoriaServico;
+    public void setParceriaServico(ParceriaServico parceriaServico) {
+        this.parceriaServico = parceriaServico;
     }
 
-    public void limparAssessoria(ActionEvent evt) {
-        setAssessoriaServico(null);
+    public void limparParceria(ActionEvent evt) {
+        setParceriaServico(null);
     }
 
-    public void alterarAssessoria(ActionEvent evt) {
+    public void alterarParceria(ActionEvent evt) {
         try {
-            validarAssessoria();
-            addAssessoria();
-            setAssessoriaServico(null);
+            validarParceria();
+            addParceria();
+            setParceriaServico(null);
         } catch (LogicalException ex) {
             mensagemErro(ex.getMessage());
         }
     }
 
-    private void validarAssessoria() throws LogicalException {
-        if (this.getAssessoriaServico().getAdvogado()==null) throw new LogicalException("Escolha o advogado que fará a assessoria");
-        if ((this.getServico().getAdvogado() != null)&&(this.getAssessoriaServico().getAdvogado().equals(this.getServico().getAdvogado())))
-            throw new LogicalException("O advogado " + getServico().getAdvogado() + " já é prestador do serviço");
+    private void validarParceria() throws LogicalException {
+        if (this.getParceriaServico().getAdvogado()==null) throw new LogicalException("Escolha o advogado que fará a parceria");
+        if ((this.getServico().getAdvogado() != null)&&(this.getParceriaServico().getAdvogado().equals(this.getServico().getAdvogado())))
+            throw new LogicalException("O(A) advogado(a) " + getServico().getAdvogado() + " já é prestador(a) do serviço");
     }
 
-    private void addAssessoria() throws LogicalException  {
-        if (this.getServico().getAssessorias()==null) this.getServico().setAssessorias(new ArrayList<AssessoriaServico>());
-        if (this.getServico().getAssessorias().contains(this.getAssessoriaServico()))
-            throw new LogicalException("O advogado " + this.getAssessoriaServico().getAdvogado() + " já é assessor no serviço");
-        this.getServico().getAssessorias().add(this.getAssessoriaServico());
+    private void addParceria() throws LogicalException  {
+        if (this.getServico().getParcerias()==null) this.getServico().setParcerias(new ArrayList<ParceriaServico>());
+        if (this.getServico().getParcerias().contains(this.getParceriaServico()))
+            throw new LogicalException("O(A) advogado(a) " + this.getParceriaServico().getAdvogado() + " já é parceiro(a) no serviço");
+        this.getServico().getParcerias().add(this.getParceriaServico());
     }
 
-    public void removerAssessoria(AssessoriaServico assessoria) {
-        this.getServico().getAssessorias().remove(assessoria);
-        setAssessoriaServico(null);
+    public void removerParceria(ParceriaServico parceria) {
+        this.getServico().getParcerias().remove(parceria);
+        setParceriaServico(null);
     }
 
     public ServicoPrestado getServico() {
