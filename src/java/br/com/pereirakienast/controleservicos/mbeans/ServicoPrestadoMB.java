@@ -179,4 +179,33 @@ public class ServicoPrestadoMB extends AbBasicoMB<ServicoPrestado> implements Se
         this.dataPrimeiraParcela = dataPrimeiraParcela;
     }
 
+    public BigDecimal getMaximoRepasseEscritorio() {
+        if (this.getValorParcelaServico().equals(0)) return new BigDecimal(0);
+        return this.getValorParcelaServico();
+    }
+
+    public BigDecimal getMaximoRepasseParceria() {
+        if (this.getValorParcelaServico().equals(0)) return new BigDecimal(0);
+        if (quantParcerias()==0) return new BigDecimal(0);
+        return (this.getValorParcelaServico().subtract(this.getValorParcelaRepasseEscritorio())).divide(new BigDecimal(quantParcerias()));
+    }
+
+    public BigDecimal getTotalRepasseMensalParceria() {
+        if (quantParcerias()==0) return new BigDecimal(0);
+        return (this.getValorParcelaRepasseParceria().multiply(new BigDecimal(this.getServico().getParcerias().size())));
+    }
+
+    public BigDecimal getSaldoParcelaAdvogado() {
+        if (this.getValorParcelaServico().equals(0)) return new BigDecimal(0);
+        return ((this.getValorParcelaServico().subtract(this.getValorParcelaRepasseEscritorio()))).subtract(this.getTotalRepasseMensalParceria());
+    }
+
+    public BigDecimal getCustoTotalServico() {
+        return this.getValorParcelaServico().multiply(new BigDecimal(this.getQuantParcelasServico()));
+    }
+
+    private int quantParcerias() {
+        if (this.getServico().getParcerias()==null) return 0;
+        return this.getServico().getParcerias().size();
+    }
 }

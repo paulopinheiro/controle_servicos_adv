@@ -71,17 +71,33 @@
                                 </p:dataTable>
                             </p:tab>
                             <p:tab id="tDadosCobranca" title="Cobrança">
+                                <p:messages />
                                 <p:panelGrid id="gridCobranca" columns="2">
+                                    <f:facet name="header"><h:outputText value="Dados de cobrança do serviço" /></f:facet>
                                     <p:outputLabel id="labelQuantParcelas" for="quantParcelas" value="Parcelas" />
                                     <p:spinner id="quantParcelas" value="#{servicoPrestadoMB.quantParcelasServico}" min="1">
                                         <p:ajax update=":formNovoServico:gridCobranca" />
                                     </p:spinner>
                                     <p:outputLabel id="labelvalorParcela" for="valorParcelaServico" value="Valor Parcela" />
-                                    <p:inputNumber id="valorParcelaServico" value="#{servicoPrestadoMB.valorParcelaServico}" minValue="0.0" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2" />
+                                    <p:inputNumber id="valorParcelaServico" value="#{servicoPrestadoMB.valorParcelaServico}" minValue="0.0" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2">
+                                        <p:ajax update=":formNovoServico:gridCobranca" />
+                                    </p:inputNumber>
                                     <p:outputLabel id="labelvalorRepasseEscritorio" for="valorRepasseEscritorio" value="Repasse Escritório" />
-                                    <p:inputNumber id="valorRepasseEscritorio" value="#{servicoPrestadoMB.valorParcelaRepasseEscritorio}" minValue="0.0" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2" />
+                                    <p:inputNumber id="valorRepasseEscritorio" value="#{servicoPrestadoMB.valorParcelaRepasseEscritorio}" minValue="0.00" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2">
+                                        <p:ajax update=":formNovoServico:gridCobranca" />
+                                        <f:validateDoubleRange minimum="0.00" maximum="#{servicoPrestadoMB.maximoRepasseEscritorio}" />
+                                    </p:inputNumber>
                                     <p:outputLabel id="labelvalorRepasseParceria" for="valorRepasseParceria" value="Repasse Parceria" rendered="#{!empty servicoPrestadoMB.servico.parcerias}" />
-                                    <p:inputNumber id="valorRepasseParceria" value="#{servicoPrestadoMB.valorParcelaRepasseParceria}" minValue="0.0" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2" rendered="#{!empty servicoPrestadoMB.servico.parcerias}" />
+                                    <h:panelGroup id="pgRepasseparceria" rendered="#{!empty servicoPrestadoMB.servico.parcerias}">
+                                        <p:inputNumber id="valorRepasseParceria" value="#{servicoPrestadoMB.valorParcelaRepasseParceria}" minValue="0.00" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2">
+                                            <p:ajax update=":formNovoServico:totalParcerias" />
+                                            <f:validateDoubleRange minimum="0.00" maximum="#{servicoPrestadoMB.maximoRepasseParceria}" />
+                                        </p:inputNumber>
+                                        <h:outputText value=" total: " />
+                                        <h:outputText id="totalParcerias" value="#{servicoPrestadoMB.totalRepasseMensalParceria}">
+                                            <f:convertNumber type="currency" />
+                                        </h:outputText>
+                                    </h:panelGroup>
                                     <p:outputLabel id="labelDataPrimeiraParcela" for="dataPrimeiraParcela" value="Primeiro pagamento" />
                                     <p:calendar id="dataPrimeiraParcela" value="#{servicoPrestadoMB.dataPrimeiraParcela}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" required="true" requiredMessage="Informe a data de vencimento da primeira parcela" />
                                     <p:outputLabel id="labelDiaCobrancaMensal" for="diaCobrancaMensal" value="Demais parcelas todo mês no dia" rendered="#{servicoPrestadoMB.quantParcelasServico > 1}" />
@@ -89,7 +105,66 @@
                                 </p:panelGrid>
                             </p:tab>
                             <p:tab id="tResumoDados" title="Resumo">
-                                
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header"><h:outputText value="Confira os dados do serviço e confirme" /></f:facet>
+                                    <p:outputLabel for="resumoCliente" value="Cliente" />
+                                    <h:outputText id="resumoCliente" value="#{servicoPrestadoMB.servico.cliente}" />
+                                    <p:outputLabel for="resumoAdvogado" value="Advogado" />
+                                    <h:outputText id="resumoAdvogado" value="#{servicoPrestadoMB.servico.advogado}" />
+                                    <p:outputLabel for="resumoTipoServico" value="Serviço" />
+                                    <h:outputText id="resumoTipoServico" value="#{servicoPrestadoMB.servico.tipoServico}" />
+                                    <p:outputLabel for="resumoDataServico" value="Data de prestação/início" />
+                                    <h:outputText id="resumoDataServico" value="#{servicoPrestadoMB.servico.dataPrestacao}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                    <p:outputLabel for="resumoDetalhes" value="Detalhes" />
+                                    <h:outputText id="resumoDetalhes" value="#{servicoPrestadoMB.servico.detalhes}" />
+                                    <p:outputLabel for="resumoObservacao" value="Observação" />
+                                    <h:outputText id="resumoObservacao" value="#{servicoPrestadoMB.servico.observacao}" />
+                                    <p:outputLabel for="resumoParcerias" value="Parcerias" />
+                                    <p:dataTable id="resumoParcerias" value="#{servicoPrestadoMB.servico.parcerias}" var="parceria">
+                                        <p:column><h:outputText value="#{parceria.advogado}" /></p:column>
+                                    </p:dataTable>
+                                </p:panelGrid>
+                                <br />
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header"><h:outputText value="Dados de cobrança" /></f:facet>
+                                    <p:outputLabel for="resumoQuantParcelas" value="Quantidade de parcelas para pagar" />
+                                    <h:outputText id="resumoQuantParcelas" value="#{servicoPrestadoMB.quantParcelasServico}" />
+                                    <p:outputLabel for="resumoValorParcela" value="Valor de cada parcela a ser paga" />
+                                    <h:outputText id="resumoValorParcela" value="#{servicoPrestadoMB.valorParcelaServico}">
+                                        <f:convertNumber type="currency" />
+                                    </h:outputText>
+                                    <p:outputLabel for="resumoRepasseEscritorio" value="Valor de repasse ao escritório" />
+                                    <h:outputText id="resumoRepasseEscritorio" value="#{servicoPrestadoMB.valorParcelaRepasseEscritorio}">
+                                        <f:convertNumber type="currency" />
+                                    </h:outputText>
+                                    <p:outputLabel for="resumoRepasseParceria" value="Valor de repasse a cada parceiro" />
+                                    <h:outputText id="resumoRepasseParceria" value="#{servicoPrestadoMB.valorParcelaRepasseParceria}">
+                                        <f:convertNumber type="currency" />
+                                    </h:outputText>
+                                    <p:outputLabel for="resumoTotalRepasseParceria" value="Total mensal para parceiros" />
+                                    <h:outputText id="resumoTotalRepasseParceria" value="#{servicoPrestadoMB.totalRepasseMensalParceria}">
+                                        <f:convertNumber type="currency" />
+                                    </h:outputText>
+                                    <p:outputLabel for="resumoSaldoParcela" value="Saldo da parcela ao advogado" />
+                                    <h:outputText id="resumoSaldoParcela" value="#{servicoPrestadoMB.saldoParcelaAdvogado}">
+                                        <f:convertNumber type="currency" />
+                                    </h:outputText>
+                                    <p:outputLabel for="resumoCustoTotalServico" value="Custo total do Serviço" />
+                                    <h:outputText id="resumoCustoTotalServico" value="#{servicoPrestadoMB.custoTotalServico}">
+                                        <f:convertNumber type="currency" />
+                                    </h:outputText>
+                                    <p:outputLabel for="resumoDataPrimeiraParcela" value="Primeira parcela a ser paga em" />
+                                    <h:outputText id="resumoDataPrimeiraParcela" value="#{servicoPrestadoMB.dataPrimeiraParcela}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                    <p:outputLabel for="resumoDiaCobrancaMensal" value="Demais parcelas todo mês no dia" rendered="#{servicoPrestadoMB.quantParcelasServico > 1}" />
+                                    <h:outputText id="resumoDiaCobrancaMensal" value="#{servicoPrestadoMB.diaCobrancaMensal}" rendered="#{servicoPrestadoMB.quantParcelasServico > 1}"/>
+                                </p:panelGrid>
+                                <center>
+                                    <p:button value="Confirmar" />
+                                </center>
                             </p:tab>
                         </p:wizard>
                     </h:form>
