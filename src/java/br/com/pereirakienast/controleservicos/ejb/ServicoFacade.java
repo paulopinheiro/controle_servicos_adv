@@ -4,6 +4,7 @@ import br.com.pereirakienast.controleservicos.entity.Advogado;
 import br.com.pereirakienast.controleservicos.entity.ParceriaServico;
 import br.com.pereirakienast.controleservicos.entity.ServicoPrestado;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
+import br.com.pereirakienast.controleservicos.model.CobrancaServico;
 import java.util.Collections;
 import java.util.List;
 import javax.ejb.EJB;
@@ -42,6 +43,10 @@ public class ServicoFacade extends AbstractFacade<ServicoPrestado> {
                 }
             }
         }
+    }
+
+    public void salvar(ServicoPrestado servico, CobrancaServico cobranca) throws LogicalException {
+        salvar(servico);
     }
 
     private boolean isAdvogadoParceiro(Advogado advogado, List<ParceriaServico> parcerias) {

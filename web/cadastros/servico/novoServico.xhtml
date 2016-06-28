@@ -66,7 +66,8 @@
                                         <h:outputText value="#{parceria.detalhes}" />
                                     </p:column>
                                     <p:column>
-                                        <p:commandButton id="btRemoverParceria" value="Remover" actionListener="#{servicoPrestadoMB.removerParceria(parceria)}" process="@this" update=":formNovoServico:tabParceria :formNovoServico:gridParceria" />
+                                        <p:commandButton id="btRemoverParceria" value="Remover" actionListener="#{servicoPrestadoMB.removerParceria(parceria)}" process="@this" update=":formNovoServico:tabParceria :formNovoServico:gridParceria">
+                                        </p:commandButton>
                                     </p:column>
                                 </p:dataTable>
                             </p:tab>
@@ -75,33 +76,33 @@
                                 <p:panelGrid id="gridCobranca" columns="2">
                                     <f:facet name="header"><h:outputText value="Dados de cobrança do serviço" /></f:facet>
                                     <p:outputLabel id="labelQuantParcelas" for="quantParcelas" value="Parcelas" />
-                                    <p:spinner id="quantParcelas" value="#{servicoPrestadoMB.quantParcelasServico}" min="1">
+                                    <p:spinner id="quantParcelas" value="#{servicoPrestadoMB.cobranca.quantParcelasServico}" min="1">
                                         <p:ajax update=":formNovoServico:gridCobranca" />
                                     </p:spinner>
                                     <p:outputLabel id="labelvalorParcela" for="valorParcelaServico" value="Valor Parcela" />
-                                    <p:inputNumber id="valorParcelaServico" value="#{servicoPrestadoMB.valorParcelaServico}" minValue="0.0" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2">
+                                    <p:inputNumber id="valorParcelaServico" value="#{servicoPrestadoMB.cobranca.valorParcelaServico}" onfocus="this.select();" onmouseup="return false;" minValue="0" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2">
                                         <p:ajax update=":formNovoServico:gridCobranca" />
                                     </p:inputNumber>
                                     <p:outputLabel id="labelvalorRepasseEscritorio" for="valorRepasseEscritorio" value="Repasse Escritório" />
-                                    <p:inputNumber id="valorRepasseEscritorio" value="#{servicoPrestadoMB.valorParcelaRepasseEscritorio}" minValue="0.00" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2">
+                                    <p:inputNumber id="valorRepasseEscritorio" value="#{servicoPrestadoMB.cobranca.valorParcelaRepasseEscritorio}" onfocus="this.select();" onmouseup="return false;" minValue="0" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2">
                                         <p:ajax update=":formNovoServico:gridCobranca" />
-                                        <f:validateDoubleRange minimum="0.00" maximum="#{servicoPrestadoMB.maximoRepasseEscritorio}" />
+                                        <f:validateDoubleRange minimum="0" maximum="#{servicoPrestadoMB.cobranca.maximoRepasseEscritorio}" />
                                     </p:inputNumber>
                                     <p:outputLabel id="labelvalorRepasseParceria" for="valorRepasseParceria" value="Repasse Parceria" rendered="#{!empty servicoPrestadoMB.servico.parcerias}" />
-                                    <h:panelGroup id="pgRepasseparceria" rendered="#{!empty servicoPrestadoMB.servico.parcerias}">
-                                        <p:inputNumber id="valorRepasseParceria" value="#{servicoPrestadoMB.valorParcelaRepasseParceria}" minValue="0.00" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2">
+                                    <h:panelGroup id="pgRepasseParceria" rendered="#{!empty servicoPrestadoMB.servico.parcerias}">
+                                        <p:inputNumber id="valorRepasseParceria" value="#{servicoPrestadoMB.cobranca.valorParcelaRepasseParceria}" onfocus="this.select();" onmouseup="return false;" minValue="0" symbol="R$ " symbolPosition="p" decimalSeparator="," thousandSeparator="." decimalPlaces="2">
                                             <p:ajax update=":formNovoServico:totalParcerias" />
-                                            <f:validateDoubleRange minimum="0.00" maximum="#{servicoPrestadoMB.maximoRepasseParceria}" />
+                                            <f:validateDoubleRange minimum="0" maximum="#{servicoPrestadoMB.cobranca.maximoRepasseParceria}" />
                                         </p:inputNumber>
                                         <h:outputText value=" total: " />
-                                        <h:outputText id="totalParcerias" value="#{servicoPrestadoMB.totalRepasseMensalParceria}">
+                                        <h:outputText id="totalParcerias" value="#{servicoPrestadoMB.cobranca.totalRepasseMensalParceria}">
                                             <f:convertNumber type="currency" />
                                         </h:outputText>
                                     </h:panelGroup>
                                     <p:outputLabel id="labelDataPrimeiraParcela" for="dataPrimeiraParcela" value="Primeiro pagamento" />
-                                    <p:calendar id="dataPrimeiraParcela" value="#{servicoPrestadoMB.dataPrimeiraParcela}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" required="true" requiredMessage="Informe a data de vencimento da primeira parcela" />
-                                    <p:outputLabel id="labelDiaCobrancaMensal" for="diaCobrancaMensal" value="Demais parcelas todo mês no dia" rendered="#{servicoPrestadoMB.quantParcelasServico > 1}" />
-                                    <p:spinner id="diaCobrancaMensal" value="#{servicoPrestadoMB.diaCobrancaMensal}" min="1" max="28" rendered="#{servicoPrestadoMB.quantParcelasServico > 1}" />
+                                    <p:calendar id="dataPrimeiraParcela" value="#{servicoPrestadoMB.cobranca.dataPrimeiraParcela}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" required="true" requiredMessage="Informe a data de vencimento da primeira parcela" />
+                                    <p:outputLabel id="labelDiaCobrancaMensal" for="diaCobrancaMensal" value="Demais parcelas todo mês no dia" rendered="#{servicoPrestadoMB.cobranca.quantParcelasServico > 1}" />
+                                    <p:spinner id="diaCobrancaMensal" value="#{servicoPrestadoMB.cobranca.diaCobrancaMensal}" min="1" max="28" rendered="#{servicoPrestadoMB.cobranca.quantParcelasServico > 1}" />
                                 </p:panelGrid>
                             </p:tab>
                             <p:tab id="tResumoDados" title="Resumo">
@@ -121,8 +122,8 @@
                                     <h:outputText id="resumoDetalhes" value="#{servicoPrestadoMB.servico.detalhes}" />
                                     <p:outputLabel for="resumoObservacao" value="Observação" />
                                     <h:outputText id="resumoObservacao" value="#{servicoPrestadoMB.servico.observacao}" />
-                                    <p:outputLabel for="resumoParcerias" value="Parcerias" />
-                                    <p:dataTable id="resumoParcerias" value="#{servicoPrestadoMB.servico.parcerias}" var="parceria">
+                                    <p:outputLabel for="resumoParcerias" value="Parcerias" rendered="#{!empty servicoPrestadoMB.servico.parcerias}" />
+                                    <p:dataTable id="resumoParcerias" value="#{servicoPrestadoMB.servico.parcerias}" var="parceria" rendered="#{!empty servicoPrestadoMB.servico.parcerias}">
                                         <p:column><h:outputText value="#{parceria.advogado}" /></p:column>
                                     </p:dataTable>
                                 </p:panelGrid>
@@ -130,40 +131,40 @@
                                 <p:panelGrid columns="2">
                                     <f:facet name="header"><h:outputText value="Dados de cobrança" /></f:facet>
                                     <p:outputLabel for="resumoQuantParcelas" value="Quantidade de parcelas para pagar" />
-                                    <h:outputText id="resumoQuantParcelas" value="#{servicoPrestadoMB.quantParcelasServico}" />
+                                    <h:outputText id="resumoQuantParcelas" value="#{servicoPrestadoMB.cobranca.quantParcelasServico}" />
                                     <p:outputLabel for="resumoValorParcela" value="Valor de cada parcela a ser paga" />
-                                    <h:outputText id="resumoValorParcela" value="#{servicoPrestadoMB.valorParcelaServico}">
+                                    <h:outputText id="resumoValorParcela" value="#{servicoPrestadoMB.cobranca.valorParcelaServico}">
                                         <f:convertNumber type="currency" />
                                     </h:outputText>
                                     <p:outputLabel for="resumoRepasseEscritorio" value="Valor de repasse ao escritório" />
-                                    <h:outputText id="resumoRepasseEscritorio" value="#{servicoPrestadoMB.valorParcelaRepasseEscritorio}">
+                                    <h:outputText id="resumoRepasseEscritorio" value="#{servicoPrestadoMB.cobranca.valorParcelaRepasseEscritorio}">
                                         <f:convertNumber type="currency" />
                                     </h:outputText>
-                                    <p:outputLabel for="resumoRepasseParceria" value="Valor de repasse a cada parceiro" />
-                                    <h:outputText id="resumoRepasseParceria" value="#{servicoPrestadoMB.valorParcelaRepasseParceria}">
+                                    <p:outputLabel for="resumoRepasseParceria" value="Valor de repasse a cada parceiro" rendered="#{!empty servicoPrestadoMB.servico.parcerias}" />
+                                    <h:outputText id="resumoRepasseParceria" value="#{servicoPrestadoMB.cobranca.valorParcelaRepasseParceria}" rendered="#{!empty servicoPrestadoMB.servico.parcerias}">
                                         <f:convertNumber type="currency" />
                                     </h:outputText>
-                                    <p:outputLabel for="resumoTotalRepasseParceria" value="Total mensal para parceiros" />
-                                    <h:outputText id="resumoTotalRepasseParceria" value="#{servicoPrestadoMB.totalRepasseMensalParceria}">
+                                    <p:outputLabel for="resumoTotalRepasseParceria" value="Total mensal para parceiros" rendered="#{!empty servicoPrestadoMB.servico.parcerias}" />
+                                    <h:outputText id="resumoTotalRepasseParceria" value="#{servicoPrestadoMB.cobranca.totalRepasseMensalParceria}" rendered="#{!empty servicoPrestadoMB.servico.parcerias}">
                                         <f:convertNumber type="currency" />
                                     </h:outputText>
                                     <p:outputLabel for="resumoSaldoParcela" value="Saldo da parcela ao advogado" />
-                                    <h:outputText id="resumoSaldoParcela" value="#{servicoPrestadoMB.saldoParcelaAdvogado}">
+                                    <h:outputText id="resumoSaldoParcela" value="#{servicoPrestadoMB.cobranca.saldoParcelaAdvogado}">
                                         <f:convertNumber type="currency" />
                                     </h:outputText>
                                     <p:outputLabel for="resumoCustoTotalServico" value="Custo total do Serviço" />
-                                    <h:outputText id="resumoCustoTotalServico" value="#{servicoPrestadoMB.custoTotalServico}">
+                                    <h:outputText id="resumoCustoTotalServico" value="#{servicoPrestadoMB.cobranca.custoTotalServico}">
                                         <f:convertNumber type="currency" />
                                     </h:outputText>
                                     <p:outputLabel for="resumoDataPrimeiraParcela" value="Primeira parcela a ser paga em" />
-                                    <h:outputText id="resumoDataPrimeiraParcela" value="#{servicoPrestadoMB.dataPrimeiraParcela}">
+                                    <h:outputText id="resumoDataPrimeiraParcela" value="#{servicoPrestadoMB.cobranca.dataPrimeiraParcela}">
                                         <f:convertDateTime pattern="dd/MM/yyyy" />
                                     </h:outputText>
-                                    <p:outputLabel for="resumoDiaCobrancaMensal" value="Demais parcelas todo mês no dia" rendered="#{servicoPrestadoMB.quantParcelasServico > 1}" />
-                                    <h:outputText id="resumoDiaCobrancaMensal" value="#{servicoPrestadoMB.diaCobrancaMensal}" rendered="#{servicoPrestadoMB.quantParcelasServico > 1}"/>
+                                    <p:outputLabel for="resumoDiaCobrancaMensal" value="Demais parcelas todo mês no dia" rendered="#{servicoPrestadoMB.cobranca.quantParcelasServico > 1}" />
+                                    <h:outputText id="resumoDiaCobrancaMensal" value="#{servicoPrestadoMB.cobranca.diaCobrancaMensal}" rendered="#{servicoPrestadoMB.cobranca.quantParcelasServico > 1}"/>
                                 </p:panelGrid>
                                 <center>
-                                    <p:button value="Confirmar" />
+                                    <p:commandButton value="Confirmar" action="#{servicoPrestadoMB.salvarNovoServico}" />
                                 </center>
                             </p:tab>
                         </p:wizard>

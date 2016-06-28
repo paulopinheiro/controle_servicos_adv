@@ -12,13 +12,12 @@ import br.com.pereirakienast.controleservicos.entity.ServicoPrestado;
 import br.com.pereirakienast.controleservicos.entity.TipoServico;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import br.com.pereirakienast.controleservicos.mbeans.comum.AbBasicoMB;
+import br.com.pereirakienast.controleservicos.model.CobrancaServico;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
@@ -34,16 +33,24 @@ public class ServicoPrestadoMB extends AbBasicoMB<ServicoPrestado> implements Se
     @EJB private TipoServicoFacade tipoServicoFacade;
     @Inject private SessaoMB sessaoMB;
 
-    private BigDecimal valorParcelaServico;
-    private Integer quantParcelasServico;
-    private BigDecimal valorParcelaRepasseEscritorio;
-    private BigDecimal valorParcelaRepasseParceria;
-    private Integer diaCobrancaMensal;
-    private Date dataPrimeiraParcela;
+    private CobrancaServico cobranca;
 
     private ParceriaServico parceriaServico;
 
     public ServicoPrestadoMB() {}
+
+    public String salvarNovoServico() {
+        try {
+            servicoFacade.salvar(getServico(), getCobranca());
+            return "/cadastros/servico/sucessoNovoServico.xhtml?faces-redirect=true&servicoId="+this.getServico().getId();
+        } catch (LogicalException ex) {
+            mensagemErro(ex.getMessage());
+        } catch (Exception ex) {
+            mensagemErro(ex.getMessage());
+            Logger.getLogger("ServicoPrestadoMB").log(Level.SEVERE, ex.getMessage());
+        }
+        return null;
+    }
 
     public List<Advogado> getListaAdvogados() {
         return advogadoFacade.findAtivos();
@@ -121,91 +128,12 @@ public class ServicoPrestadoMB extends AbBasicoMB<ServicoPrestado> implements Se
         return new ServicoPrestado(sessaoMB.getAdvogadoSessao());
     }
 
-    public BigDecimal getValorParcelaServico() {
-        if (this.valorParcelaServico==null) this.valorParcelaServico=new BigDecimal(0);
-        return valorParcelaServico;
+    public CobrancaServico getCobranca() {
+        if (this.cobranca==null) this.cobranca = new CobrancaServico(this.getServico());
+        return cobranca;
     }
 
-    public void setValorParcelaServico(BigDecimal valorParcelaServico) {
-        this.valorParcelaServico = valorParcelaServico;
-    }
-
-    public Integer getQuantParcelasServico() {
-        if (this.quantParcelasServico==null) this.quantParcelasServico=1;
-        return quantParcelasServico;
-    }
-
-    public void setQuantParcelasServico(Integer quantParcelasServico) {
-        this.quantParcelasServico = quantParcelasServico;
-    }
-
-    public BigDecimal getValorParcelaRepasseEscritorio() {
-        if (this.valorParcelaRepasseEscritorio==null) this.valorParcelaRepasseEscritorio= new BigDecimal(0);
-        return valorParcelaRepasseEscritorio;
-    }
-
-    public void setValorParcelaRepasseEscritorio(BigDecimal valorParcelaRepasseEscritorio) {
-        this.valorParcelaRepasseEscritorio = valorParcelaRepasseEscritorio;
-    }
-
-    public BigDecimal getValorParcelaRepasseParceria() {
-        if (this.valorParcelaRepasseParceria==null) this.valorParcelaRepasseParceria = new BigDecimal(0);
-        return valorParcelaRepasseParceria;
-    }
-
-    public void setValorParcelaRepasseParceria(BigDecimal valorParcelaRepasseParceria) {
-        this.valorParcelaRepasseParceria = valorParcelaRepasseParceria;
-    }
-
-    public Integer getDiaCobrancaMensal() {
-        if (this.diaCobrancaMensal==null) {
-            Calendar cal = new GregorianCalendar();
-            cal.setTime(new Date());
-            this.diaCobrancaMensal = cal.get(Calendar.DAY_OF_MONTH);
-        }
-        return diaCobrancaMensal;
-    }
-
-    public void setDiaCobrancaMensal(Integer diaCobrancaMensal) {
-        this.diaCobrancaMensal = diaCobrancaMensal;
-    }
-
-    public Date getDataPrimeiraParcela() {
-        if (this.dataPrimeiraParcela==null) this.dataPrimeiraParcela = new Date();
-        return dataPrimeiraParcela;
-    }
-
-    public void setDataPrimeiraParcela(Date dataPrimeiraParcela) {
-        this.dataPrimeiraParcela = dataPrimeiraParcela;
-    }
-
-    public BigDecimal getMaximoRepasseEscritorio() {
-        if (this.getValorParcelaServico().equals(0)) return new BigDecimal(0);
-        return this.getValorParcelaServico();
-    }
-
-    public BigDecimal getMaximoRepasseParceria() {
-        if (this.getValorParcelaServico().equals(0)) return new BigDecimal(0);
-        if (quantParcerias()==0) return new BigDecimal(0);
-        return (this.getValorParcelaServico().subtract(this.getValorParcelaRepasseEscritorio())).divide(new BigDecimal(quantParcerias()));
-    }
-
-    public BigDecimal getTotalRepasseMensalParceria() {
-        if (quantParcerias()==0) return new BigDecimal(0);
-        return (this.getValorParcelaRepasseParceria().multiply(new BigDecimal(this.getServico().getParcerias().size())));
-    }
-
-    public BigDecimal getSaldoParcelaAdvogado() {
-        if (this.getValorParcelaServico().equals(0)) return new BigDecimal(0);
-        return ((this.getValorParcelaServico().subtract(this.getValorParcelaRepasseEscritorio()))).subtract(this.getTotalRepasseMensalParceria());
-    }
-
-    public BigDecimal getCustoTotalServico() {
-        return this.getValorParcelaServico().multiply(new BigDecimal(this.getQuantParcelasServico()));
-    }
-
-    private int quantParcerias() {
-        if (this.getServico().getParcerias()==null) return 0;
-        return this.getServico().getParcerias().size();
+    public void setCobranca(CobrancaServico cobranca) {
+        this.cobranca = cobranca;
     }
 }

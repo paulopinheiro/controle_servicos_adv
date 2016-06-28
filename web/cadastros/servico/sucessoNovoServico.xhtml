@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <f:metadata>
+        <f:viewParam id="servicoId" name="servicoId" value="#{servicoPrestadoMB.servico}" converter="#{servicoConverterMB}" required="false" />
+    </f:metadata>
+    <body>
+        <ui:composition template="./../../resources/templates/topBottom.xhtml">
+            <ui:define name="top">Cadastro de Serviço</ui:define>
+            <ui:define name="content">
+                <f:view>
+                    <center><h1><h:outputText value="Serviço Cadastrado com sucesso" /></h1></center>
+                    <br />
+                    <p:panelGrid columns="2">
+                        <f:facet name="header"><h:outputText value="Dados do serviço" /></f:facet>
+                        <p:outputLabel for="cliente" id="lblCliente" value="Cliente" />
+                        <h:outputText id="cliente" value="#{servicoPrestadoMB.servico.cliente}" />
+                        <p:outputLabel for="advogado" id="lblAdvogado" value="Advogado" />
+                        <h:outputText id="advogado" value="#{servicoPrestadoMB.servico.advogado}" />
+                        <p:outputLabel for="tipoServico" id="lblTipoServico" value="Serviço" />
+                        <h:outputText id="tipoServico" value="#{servicoPrestadoMB.servico.tipoServico}" />
+                        <p:outputLabel id="lblDataPrestacao" for="dataPrestacao" value="Data serviço" />
+                        <h:outputText id="dataPrestacao" value="#{servicoPrestadoMB.servico.dataPrestacao}" >
+                            <f:convertDateTime type="date" />
+                        </h:outputText>
+                        <p:outputLabel for="detalhes" id="lblDetalhes" value="Detalhes" />
+                        <h:outputText id="detalhes" value="#{servicoPrestadoMB.servico.detalhes}" />
+                        <p:outputLabel for="observacao" id="lblObservacao" value="Observação" />
+                        <h:outputText id="observacao" value="#{servicoPrestadoMB.servico.observacao}" />
+                        <f:facet name="footer">
+                            <h:panelGroup>
+                                <p:button value="Novo" outcome="/cadastros/servico/novoServico"  />
+                                <p:button value="Voltar" outcome="/cadastros/servico/lisServicos" />
+                            </h:panelGroup>
+                        </f:facet>
+                    </p:panelGrid>
+                    <p:dataTable id="dtParcerias" var="parceria" value="#{servicoPrestadoMB.servico.parcerias}" rendered="#{!empty servicoPrestadoMB.servico.parcerias}">
+                        <p:column id="colAdvogado" headerText="Parceiro"><h:outputText value="#{parceria.advogado}" /></p:column>
+                        <p:column id="colDetalhes" headerText="Detalhes"><h:outputText value="#{parceria.detalhes}" /></p:column>
+                    </p:dataTable>
+
+                    <p:growl id="gmensagem" globalOnly="true" />
+                    <p:messages id="mensagem" globalOnly="true" />
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
