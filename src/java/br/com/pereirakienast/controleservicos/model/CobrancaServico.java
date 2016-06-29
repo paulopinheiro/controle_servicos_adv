@@ -3,22 +3,21 @@ package br.com.pereirakienast.controleservicos.model;
 import br.com.pereirakienast.controleservicos.entity.ServicoPrestado;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class CobrancaServico implements Serializable {
-
     private ServicoPrestado servico;
-    private BigDecimal valorParcelaServico;
+    private BigDecimal valorServico;
     private Integer quantParcelasServico;
-    private BigDecimal valorParcelaRepasseEscritorio;
-    private BigDecimal valorParcelaRepasseParceria;
+    private double percentualRepasseEscritorio;
+    private double percentualRepasseParceria;
     private Integer diaCobrancaMensal;
     private Date dataPrimeiraParcela;
 
-    public CobrancaServico() {
-    }
+    public CobrancaServico() {}
 
     public CobrancaServico(ServicoPrestado servico) {
         this.servico = servico;
@@ -33,15 +32,15 @@ public class CobrancaServico implements Serializable {
         this.servico = servico;
     }
 
-    public BigDecimal getValorParcelaServico() {
-        if (this.valorParcelaServico == null) {
-            this.valorParcelaServico = new BigDecimal(0);
+    public BigDecimal getValorServico() {
+        if (this.valorServico == null) {
+            this.valorServico = new BigDecimal(0);
         }
-        return valorParcelaServico;
+        return valorServico;
     }
 
-    public void setValorParcelaServico(BigDecimal valorParcelaServico) {
-        this.valorParcelaServico = valorParcelaServico;
+    public void setValorServico(BigDecimal valorServico) {
+        this.valorServico = valorServico;
     }
 
     public Integer getQuantParcelasServico() {
@@ -55,26 +54,20 @@ public class CobrancaServico implements Serializable {
         this.quantParcelasServico = quantParcelasServico;
     }
 
-    public BigDecimal getValorParcelaRepasseEscritorio() {
-        if (this.valorParcelaRepasseEscritorio == null) {
-            this.valorParcelaRepasseEscritorio = new BigDecimal(0);
-        }
-        return valorParcelaRepasseEscritorio;
+    public double getPercentualRepasseEscritorio() {
+        return percentualRepasseEscritorio;
     }
 
-    public void setValorParcelaRepasseEscritorio(BigDecimal valorParcelaRepasseEscritorio) {
-        this.valorParcelaRepasseEscritorio = valorParcelaRepasseEscritorio;
+    public void setPercentualRepasseEscritorio(double percentualRepasseEscritorio) {
+        this.percentualRepasseEscritorio = percentualRepasseEscritorio;
     }
 
-    public BigDecimal getValorParcelaRepasseParceria() {
-        if (this.valorParcelaRepasseParceria == null) {
-            this.valorParcelaRepasseParceria = new BigDecimal(0);
-        }
-        return valorParcelaRepasseParceria;
+    public Double getPercentualRepasseParceria() {
+        return percentualRepasseParceria;
     }
 
-    public void setValorParcelaRepasseParceria(BigDecimal valorParcelaRepasseParceria) {
-        this.valorParcelaRepasseParceria = valorParcelaRepasseParceria;
+    public void setPercentualRepasseParceria(Double percentualRepasseParceria) {
+        this.percentualRepasseParceria = percentualRepasseParceria;
     }
 
     public Integer getDiaCobrancaMensal() {
@@ -98,16 +91,46 @@ public class CobrancaServico implements Serializable {
     public void setDataPrimeiraParcela(Date dataPrimeiraParcela) {
         this.dataPrimeiraParcela = dataPrimeiraParcela;
     }
-    
+//****************************************************************************************
+
+    public BigDecimal getValorParcelaServico() {
+        return getValorServico().divide(new BigDecimal(getQuantParcelasServico()),2,RoundingMode.HALF_DOWN);
+    }
+
+    public BigDecimal getValorRepasseEscritorio() {
+        return getValorServico().multiply(new BigDecimal(getPercentualRepasseEscritorio() / 100));
+    }
+
+    public BigDecimal getValorParcelaRepasseEscritorio() {
+        return getValorRepasseEscritorio().divide(new BigDecimal(this.getQuantParcelasServico()),2,RoundingMode.HALF_DOWN);
+    }
+
+    public BigDecimal getValorRepasseParceriaIndividual() {
+        if (this.quantParcerias()==0) return new BigDecimal(0);
+        return getValorServico().multiply(new BigDecimal(getPercentualRepasseParceria() / 100));
+    }
+
+    public BigDecimal getValorParcelaRepasseParceriaIndividual() {
+        return getValorRepasseParceriaIndividual().divide(new BigDecimal(this.getQuantParcelasServico()),2,RoundingMode.HALF_DOWN);
+    }
+
+    public BigDecimal getValorRepasseParceria() {
+        return getValorRepasseParceriaIndividual().multiply(new BigDecimal(quantParcerias()));
+    }
+
+    public BigDecimal getValorParcelaRepasseParceria() {
+        return getValorRepasseParceria().divide(new BigDecimal(this.getQuantParcelasServico()),2,RoundingMode.HALF_DOWN);
+    }
+
     public BigDecimal getMaximoRepasseEscritorio() {
-        if (this.getValorParcelaServico().equals(0)) return new BigDecimal(0);
-        return this.getValorParcelaServico();
+        if (this.getValorServico().equals(0)) return new BigDecimal(0);
+        return this.getValorServico();
     }
 
     public BigDecimal getMaximoRepasseParceria() {
-        if (this.getValorParcelaServico().equals(0)) return new BigDecimal(0);
+        if (this.getValorServico().equals(0)) return new BigDecimal(0);
         if (quantParcerias()==0) return new BigDecimal(0);
-        return (this.getValorParcelaServico().subtract(this.getValorParcelaRepasseEscritorio())).divide(new BigDecimal(quantParcerias()));
+        return (this.getValorServico().subtract(this.getValorParcelaRepasseEscritorio())).divide(new BigDecimal(quantParcerias()),2,RoundingMode.HALF_DOWN);
     }
 
     private int quantParcerias() {
@@ -115,18 +138,9 @@ public class CobrancaServico implements Serializable {
         return this.getServico().getParcerias().size();
     }
 
-    public BigDecimal getTotalRepasseMensalParceria() {
-        if (quantParcerias()==0) return new BigDecimal(0);
-        return (this.getValorParcelaRepasseParceria().multiply(new BigDecimal(this.getServico().getParcerias().size())));
-    }
-
     public BigDecimal getSaldoParcelaAdvogado() {
-        if (this.getValorParcelaServico().equals(0)) return new BigDecimal(0);
-        return ((this.getValorParcelaServico().subtract(this.getValorParcelaRepasseEscritorio()))).subtract(this.getTotalRepasseMensalParceria());
-    }
-
-    public BigDecimal getCustoTotalServico() {
-        return this.getValorParcelaServico().multiply(new BigDecimal(this.getQuantParcelasServico()));
+        if (this.getValorServico().equals(0)) return new BigDecimal(0);
+        return ((this.getValorParcelaServico().subtract(this.getValorParcelaRepasseEscritorio()))).subtract(this.getValorParcelaRepasseParceria());
     }
 
     @Override
