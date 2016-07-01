@@ -103,8 +103,6 @@
                                     </p:panelGrid>
                                     <p:outputLabel id="labelDataPrimeiraParcela" for="dataPrimeiraParcela" value="Primeiro pagamento" />
                                     <p:calendar id="dataPrimeiraParcela" value="#{servicoPrestadoMB.cobranca.dataPrimeiraParcela}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" required="true" requiredMessage="Informe a data de vencimento da primeira parcela" />
-                                    <p:outputLabel id="labelDiaCobrancaMensal" for="diaCobrancaMensal" value="Demais parcelas todo mês no dia" rendered="#{servicoPrestadoMB.cobranca.quantParcelasServico > 1}" />
-                                    <p:spinner id="diaCobrancaMensal" value="#{servicoPrestadoMB.cobranca.diaCobrancaMensal}" min="1" max="28" rendered="#{servicoPrestadoMB.cobranca.quantParcelasServico > 1}" />
                                 </p:panelGrid>
                             </p:tab>
                             <p:tab id="tResumoDados" title="Resumo">
@@ -160,10 +158,8 @@
                                     </h:outputText>
                                     <p:outputLabel for="resumoDataPrimeiraParcela" value="Primeira parcela a ser paga em" />
                                     <h:outputText id="resumoDataPrimeiraParcela" value="#{servicoPrestadoMB.cobranca.dataPrimeiraParcela}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        <f:convertDateTime type="date" />
                                     </h:outputText>
-                                    <p:outputLabel for="resumoDiaCobrancaMensal" value="Demais parcelas todo mês no dia" rendered="#{servicoPrestadoMB.cobranca.quantParcelasServico > 1}" />
-                                    <h:outputText id="resumoDiaCobrancaMensal" value="#{servicoPrestadoMB.cobranca.diaCobrancaMensal}" rendered="#{servicoPrestadoMB.cobranca.quantParcelasServico > 1}"/>
                                 </p:panelGrid>
                                 <center>
                                     <p:commandButton value="Confirmar" action="#{servicoPrestadoMB.salvarNovoServico}" />

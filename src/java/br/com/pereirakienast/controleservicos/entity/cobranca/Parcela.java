@@ -39,6 +39,14 @@ public class Parcela implements Serializable, Comparable {
     @OneToMany(mappedBy = "parcela")
     private List<RepasseParceria> repassesParcerias;
 
+    public Parcela() {}
+
+    public Parcela(ContaServico conta, BigDecimal valor, Date dataVencimento) {
+        this.conta = conta;
+        this.valor = valor;
+        this.dataVencimento = dataVencimento;
+    }
+
     public Integer getId() {
         return id;
     }

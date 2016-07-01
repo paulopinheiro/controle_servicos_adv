@@ -1,5 +1,6 @@
 package br.com.pereirakienast.controleservicos.ejb;
 
+import br.com.pereirakienast.controleservicos.ejb.cobranca.ContaServicoFacade;
 import br.com.pereirakienast.controleservicos.entity.Advogado;
 import br.com.pereirakienast.controleservicos.entity.ParceriaServico;
 import br.com.pereirakienast.controleservicos.entity.ServicoPrestado;
@@ -15,6 +16,7 @@ import javax.persistence.criteria.Predicate;
 @Stateless
 public class ServicoFacade extends AbstractFacade<ServicoPrestado> {
     @EJB private ParceriaServicoFacade parceriaFacade;
+    @EJB private ContaServicoFacade contaFacade;
 
     public ServicoFacade() {
         super(ServicoPrestado.class);
@@ -47,6 +49,7 @@ public class ServicoFacade extends AbstractFacade<ServicoPrestado> {
 
     public void salvar(ServicoPrestado servico, CobrancaServico cobranca) throws LogicalException {
         salvar(servico);
+        contaFacade.gerarConta(cobranca);
     }
 
     private boolean isAdvogadoParceiro(Advogado advogado, List<ParceriaServico> parcerias) {

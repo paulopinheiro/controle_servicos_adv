@@ -29,6 +29,13 @@ public class ContaServico implements Serializable {
     @OneToMany(mappedBy = "conta")
     private List<Parcela> parcelas;
 
+    public ContaServico() {}
+
+    public ContaServico(ServicoPrestado servico, BigDecimal valor) {
+        this.servico = servico;
+        this.valor = valor;
+    }
+
     public Integer getId() {
         return id;
     }

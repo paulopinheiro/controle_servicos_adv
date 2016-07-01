@@ -31,6 +31,13 @@ public class RepasseEscritorio implements Serializable, Comparable {
     @Column(name="observacao",length=400)
     private String observacao;
 
+    public RepasseEscritorio() {}
+
+    public RepasseEscritorio(Parcela parcela, BigDecimal valor) {
+        this.parcela = parcela;
+        this.valor = valor;
+    }
+
     public Integer getId() {
         return id;
     }

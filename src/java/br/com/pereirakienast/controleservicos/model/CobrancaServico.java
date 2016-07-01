@@ -4,9 +4,11 @@ import br.com.pereirakienast.controleservicos.entity.ServicoPrestado;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 public class CobrancaServico implements Serializable {
     private ServicoPrestado servico;
@@ -14,7 +16,6 @@ public class CobrancaServico implements Serializable {
     private Integer quantParcelasServico;
     private double percentualRepasseEscritorio;
     private double percentualRepasseParceria;
-    private Integer diaCobrancaMensal;
     private Date dataPrimeiraParcela;
 
     public CobrancaServico() {}
@@ -68,19 +69,6 @@ public class CobrancaServico implements Serializable {
 
     public void setPercentualRepasseParceria(Double percentualRepasseParceria) {
         this.percentualRepasseParceria = percentualRepasseParceria;
-    }
-
-    public Integer getDiaCobrancaMensal() {
-        if (this.diaCobrancaMensal == null) {
-            Calendar cal = new GregorianCalendar();
-            cal.setTime(new Date());
-            this.diaCobrancaMensal = cal.get(Calendar.DAY_OF_MONTH);
-        }
-        return diaCobrancaMensal;
-    }
-
-    public void setDiaCobrancaMensal(Integer diaCobrancaMensal) {
-        this.diaCobrancaMensal = diaCobrancaMensal;
     }
 
     public Date getDataPrimeiraParcela() {
@@ -143,6 +131,26 @@ public class CobrancaServico implements Serializable {
         return ((this.getValorParcelaServico().subtract(this.getValorParcelaRepasseEscritorio()))).subtract(this.getValorParcelaRepasseParceria());
     }
 
+    public List<Date> getVencimentosParcelas() {
+        if (this.getDataPrimeiraParcela()==null||this.getQuantParcelasServico()==null||this.getQuantParcelasServico()<1) return null;
+        List<Date> resposta = new ArrayList<Date>();
+
+        resposta.add(this.getDataPrimeiraParcela());
+
+        for (int i=1;i<this.getQuantParcelasServico();i++) {
+            resposta.add(somaMeses(this.getDataPrimeiraParcela(),i));
+        }
+
+        return resposta;
+    }
+
+    private static Date somaMeses(Date dataReferencia,int offsetMes) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(dataReferencia);
+        cal.add(Calendar.MONTH, offsetMes);
+        return cal.getTime();
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;

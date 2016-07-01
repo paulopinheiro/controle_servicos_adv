@@ -35,6 +35,14 @@ public class RepasseParceria implements Serializable, Comparable {
     @Column(name="observacao",length=400)
     private String observacao;
 
+    public RepasseParceria() {}
+
+    public RepasseParceria(Parcela parcela, ParceriaServico parceria, BigDecimal valor) {
+        this.parcela = parcela;
+        this.parceria = parceria;
+        this.valor = valor;
+    }
+
     public Integer getId() {
         return id;
     }
