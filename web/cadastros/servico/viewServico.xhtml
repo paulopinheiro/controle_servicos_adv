@@ -17,6 +17,8 @@
                     <br />
                     <p:panelGrid columns="2">
                         <f:facet name="header"><h:outputText value="Dados do serviço" /></f:facet>
+                        <p:outputLabel for="id" id="lblId" value="Id" />
+                        <h:outputText id="id" value="#{servicoPrestadoMB.servico.id}" />
                         <p:outputLabel for="cliente" id="lblCliente" value="Cliente" />
                         <h:outputText id="cliente" value="#{servicoPrestadoMB.servico.cliente}" />
                         <p:outputLabel for="advogado" id="lblAdvogado" value="Advogado" />
@@ -43,6 +45,34 @@
                         <p:column id="colAdvogado" headerText="Parceiro"><h:outputText value="#{parceria.advogado}" /></p:column>
                         <p:column id="colDetalhes" headerText="Detalhes"><h:outputText value="#{parceria.detalhes}" /></p:column>
                     </p:dataTable>
+                    <br />
+                    <h:panelGroup id="pgDadosConta" rendered="#{!empty servicoPrestadoMB.servico.conta}">
+                        <p:panelGrid id="gridDadosConta" columns="2">
+                            <f:facet name="header"><h:outputText value="Dados de conta cobrança" /></f:facet>
+                            <p:outputLabel for="valorConta" value="Valor total:" />
+                            <h:outputText id="valorConta" value="#{servicoPrestadoMB.servico.conta.valor}">
+                                <f:convertNumber type="currency" />
+                            </h:outputText>
+                        </p:panelGrid>
+                        <p:dataTable id="dtParcelasConta" var="parcela" value="#{servicoPrestadoMB.servico.conta.parcelas}" rendered="#{!empty servicoPrestadoMB.servico.conta.parcelas}">
+                            <f:facet name="header"><h:outputText value="Parcelas" /></f:facet>
+                            <p:column id="colData" headerText="Vencimento">
+                                <h:outputText value="#{parcela.dataVencimento}">
+                                    <f:convertDateTime type="date" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column id="colValor" headerText="Valor Parcela">
+                                <h:outputText value="#{parcela.valor}">
+                                    <f:convertNumber type="currency" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column id="colRepasseEscritorio" headerText="Repasse Escritório">
+                                <h:outputText value="#{parcela.repasseEscritorio.valor}">
+                                    <f:convertNumber type="currency" />
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGroup>
                     <p:growl id="gmensagem" globalOnly="true" />
                     <p:messages id="mensagem" globalOnly="true" />
                 </f:view>

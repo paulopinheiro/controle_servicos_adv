@@ -4,7 +4,9 @@ import br.com.pereirakienast.controleservicos.ejb.AbstractFacade;
 import br.com.pereirakienast.controleservicos.entity.cobranca.RepasseEscritorio;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.math.BigDecimal;
+import javax.ejb.Stateless;
 
+@Stateless
 public class RepasseEscritorioFacade extends AbstractFacade<RepasseEscritorio> {
 
     public RepasseEscritorioFacade() {

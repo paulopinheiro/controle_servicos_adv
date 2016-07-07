@@ -1,30 +1,16 @@
 package br.com.pereirakienast.controleservicos.ejb.cobranca;
 
 import br.com.pereirakienast.controleservicos.ejb.AbstractFacade;
-import br.com.pereirakienast.controleservicos.entity.ParceriaServico;
-import br.com.pereirakienast.controleservicos.entity.cobranca.Parcela;
 import br.com.pereirakienast.controleservicos.entity.cobranca.RepasseParceria;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import javax.ejb.Stateless;
 
+@Stateless
 public class RepasseParceriaFacade extends AbstractFacade<RepasseParceria>{
 
     public RepasseParceriaFacade() {
         super(RepasseParceria.class);
-    }
-
-    public List<RepasseParceria> gerarRepassesParceria(Parcela parcela, BigDecimal valorRepasse) throws LogicalException {
-        List<RepasseParceria> resposta = new ArrayList<RepasseParceria>();
-
-        for (ParceriaServico parceria:parcela.getConta().getServico().getParcerias()) {
-            RepasseParceria rp = new RepasseParceria(parcela,parceria,valorRepasse);
-            salvar(rp);
-            resposta.add(rp);
-        }
-
-        return resposta;
     }
 
     @Override

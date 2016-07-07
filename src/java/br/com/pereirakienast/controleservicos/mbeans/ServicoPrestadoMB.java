@@ -5,6 +5,7 @@ import br.com.pereirakienast.controleservicos.ejb.AdvogadoFacade;
 import br.com.pereirakienast.controleservicos.ejb.ClienteFacade;
 import br.com.pereirakienast.controleservicos.ejb.ServicoFacade;
 import br.com.pereirakienast.controleservicos.ejb.TipoServicoFacade;
+import br.com.pereirakienast.controleservicos.ejb.cobranca.CobrancaServicoService;
 import br.com.pereirakienast.controleservicos.entity.Advogado;
 import br.com.pereirakienast.controleservicos.entity.ParceriaServico;
 import br.com.pereirakienast.controleservicos.entity.Cliente;
@@ -28,6 +29,7 @@ import javax.inject.Named;
 @ViewScoped
 public class ServicoPrestadoMB extends AbBasicoMB<ServicoPrestado> implements Serializable {
     @EJB private ServicoFacade servicoFacade;
+    @EJB private CobrancaServicoService cobrancaService;
     @EJB private AdvogadoFacade advogadoFacade;
     @EJB private ClienteFacade clienteFacade;
     @EJB private TipoServicoFacade tipoServicoFacade;
@@ -39,10 +41,10 @@ public class ServicoPrestadoMB extends AbBasicoMB<ServicoPrestado> implements Se
 
     public ServicoPrestadoMB() {}
 
-    public String salvarNovoServico() {
+    public String salvarServicoComCobranca() {
         try {
-            servicoFacade.salvar(getServico(), getCobranca());
-            return "/cadastros/servico/sucessoNovoServico.xhtml?faces-redirect=true&servicoId="+this.getServico().getId();
+            cobrancaService.salvarServicoComCobranca(getCobranca());
+            return "/cadastros/servico/viewServico.xhtml?faces-redirect=true&servicoId="+this.getServico().getId();
         } catch (LogicalException ex) {
             mensagemErro(ex.getMessage());
         } catch (Exception ex) {

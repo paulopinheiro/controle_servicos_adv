@@ -1,44 +1,16 @@
 package br.com.pereirakienast.controleservicos.ejb.cobranca;
 
 import br.com.pereirakienast.controleservicos.ejb.AbstractFacade;
-import br.com.pereirakienast.controleservicos.entity.cobranca.ContaServico;
 import br.com.pereirakienast.controleservicos.entity.cobranca.Parcela;
-import br.com.pereirakienast.controleservicos.entity.cobranca.RepasseEscritorio;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
-import br.com.pereirakienast.controleservicos.model.CobrancaServico;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
+@Stateless
 public class ParcelaFacade extends AbstractFacade<Parcela> {
-    @EJB private RepasseEscritorioFacade repasseEscritorioFacade;
-    @EJB private RepasseParceriaFacade repasseParceriaFacade;
 
     public ParcelaFacade() {
         super(Parcela.class);
-    }
-
-    public List<Parcela> gerarParcelas(ContaServico conta, CobrancaServico cobranca) throws LogicalException {
-        List<Parcela> resposta = new ArrayList<Parcela>();
-
-        for (Date dataVencimento:cobranca.getVencimentosParcelas()) {
-            Parcela parcela = new Parcela(conta,cobranca.getValorParcelaServico(),dataVencimento);
-            salvar(parcela);
-
-            // Gerando repasse do escritório
-            RepasseEscritorio re = new RepasseEscritorio(parcela,cobranca.getValorRepasseEscritorio());
-            repasseEscritorioFacade.salvar(re);
-            parcela.setRepasseEscritorio(re);
-
-            // gerar repasses parceria e setar na parcela
-            parcela.setRepassesParcerias(repasseParceriaFacade.gerarRepassesParceria(parcela, cobranca.getValorParcelaRepasseParceriaIndividual()));
-
-            resposta.add(parcela);
-        }
-
-        return resposta;
     }
 
     @Override
