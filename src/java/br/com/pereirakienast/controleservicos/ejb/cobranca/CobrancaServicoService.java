@@ -56,7 +56,7 @@ public class CobrancaServicoService {
             parcelaFacade.salvar(parcela);
 
             // Gerando repasse do escritório
-            RepasseEscritorio re = new RepasseEscritorio(parcela,cobranca.getValorRepasseEscritorio());
+            RepasseEscritorio re = new RepasseEscritorio(parcela,cobranca.getValorParcelaRepasseEscritorio());
             repasseEscritorioFacade.salvar(re);
             parcela.setRepasseEscritorio(re);
 
