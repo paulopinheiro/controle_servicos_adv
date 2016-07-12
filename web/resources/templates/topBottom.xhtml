@@ -67,11 +67,16 @@
                         </p:submenu>
                         <p:submenu id="submenuCadastros" label="Cadastros">
                             <p:menuitem id="menuitemCadCliente" value="Clientes" outcome="/cadastros/lisClientes.xhtml"/>
-                            <p:menuitem id="menuitemCadServicoPrestado" value="Serviço Prestado" outcome="/cadastros/servico/lisServicos.xhtml" />
                             <p:separator />
                             <p:submenu id="submenuCadastrosAdministrativos" label="Administrativos" rendered="#{sessaoMB.advogadoAdmin}">
                                 <p:menuitem id="menuitemCadAdvogado" value="Advogados" outcome="/cadastros/cadAdvogado.xhtml" />
                                 <p:menuitem id="menuitemCadTipoServico" value="Tipos de Serviço" outcome="/cadastros/cadTipoServico.xhtml"/>
+                            </p:submenu>
+                        </p:submenu>
+                        <p:submenu id="submenuRegistros" label="Registros">
+                            <p:submenu id="submenuRegistrosServicos" label="Serviços">
+                                <p:menuitem id="menuitemNovoServico" value="Novo" outcome="/cadastros/servico/novoServico.xhtml" />
+                                <p:menuitem id="menuitemConsultaServico" value="Consulta" outcome="/cadastros/servico/lisServicos.xhtml" />
                             </p:submenu>
                         </p:submenu>
                     </p:menubar>
