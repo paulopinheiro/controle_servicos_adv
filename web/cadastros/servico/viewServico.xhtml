@@ -57,9 +57,12 @@
                         <p:dataTable id="dtParcelasConta" var="parcela" value="#{servicoPrestadoMB.servico.conta.parcelas}" rendered="#{!empty servicoPrestadoMB.servico.conta.parcelas}">
                             <f:facet name="header"><h:outputText value="Parcelas" /></f:facet>
                             <p:column id="colData" headerText="Vencimento">
-                                <h:outputText value="#{parcela.dataVencimento}">
-                                    <f:convertDateTime type="date" />
-                                </h:outputText>
+                                <h:link id="linkParcela" outcome="/cadastros/cobranca/viewParcela.xhtml">
+                                    <h:outputText value="#{parcela.dataVencimento}">
+                                        <f:convertDateTime type="date" />
+                                    </h:outputText>
+                                    <f:param name="parcelaId" value="#{parcela.id}" />
+                                </h:link>
                             </p:column>
                             <p:column id="colValor" headerText="Valor Parcela">
                                 <h:outputText value="#{parcela.valor}">

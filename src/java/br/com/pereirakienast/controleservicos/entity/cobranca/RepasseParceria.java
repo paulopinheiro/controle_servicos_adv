@@ -43,6 +43,10 @@ public class RepasseParceria implements Serializable, Comparable {
         this.valor = valor;
     }
 
+    public boolean isPendente() {
+        return this.dataRepasse==null;
+    }
+
     public Integer getId() {
         return id;
     }

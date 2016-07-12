@@ -47,6 +47,14 @@ public class Parcela implements Serializable, Comparable {
         this.dataVencimento = dataVencimento;
     }
 
+    public boolean isPendente() {
+        return this.dataPagamento == null;
+    }
+
+    public boolean isPendenteCobrancaEscritorio() {
+        return this.repasseEscritorio==null;
+    }
+
     public Integer getId() {
         return id;
     }

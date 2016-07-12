@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <f:metadata>
+        <f:viewParam id="parcelaId" name="parcelaId" value="#{parcelaMB.parcela}" converter="#{parcelaConverterMB}" required="false" />
+    </f:metadata>
+    <body>
+        <ui:composition template="./../../resources/templates/topBottom.xhtml">
+            <ui:define name="top">Detalhes da Parcela</ui:define>
+            <ui:define name="content">
+                <f:view>
+                    <h:form id="formParcela">
+                        <p:panelGrid id="gridParcela" columns="2">
+                            <f:facet name="header">Dados da Parcela</f:facet>
+                            <p:outputLabel id="labelServico" for="gridServicoParcela" value="Serviço" />
+                            <p:panelGrid id="gridServicoParcela" columns="2">
+                                <p:outputLabel id="labelCliente" for="cliente" value="Cliente" />
+                                <h:outputText id="cliente" value="#{parcelaMB.parcela.conta.servico.cliente}" />
+                                <p:outputLabel id="labelAdvogado" for="advogado" value="Advogado" />
+                                <h:outputText id="advogado" value="#{parcelaMB.parcela.conta.servico.advogado}" />
+                                <p:outputLabel id="labelTipoServico" for="tipoServico" value="Tipo" />
+                                <h:outputText id="tipoServico" value="#{parcelaMB.parcela.conta.servico.tipoServico}" />
+                                <p:outputLabel id="labelDataPrestacao" for="dataPrestacao" value="Data Prestação" />
+                                <h:outputText id="dataPrestacao" value="#{parcelaMB.parcela.conta.servico.dataPrestacao}">
+                                    <f:convertDateTime type="date" />
+                                </h:outputText>
+                                <p:outputLabel id="labelValorConta" for="valorConta" value="Valor total" />
+                                <h:outputText id="valorConta" value="#{parcelaMB.parcela.conta.valor}">
+                                    <f:convertNumber type="currency" />
+                                </h:outputText>
+                            </p:panelGrid>
+                            <p:outputLabel id="labelValorParcela" for="valorParcela" value="Valor parcela" />
+                            <h:outputText id="valorParcela" value="#{parcelaMB.parcela.valor}">
+                                <f:convertNumber type="currency" />
+                            </h:outputText>
+                            <p:outputLabel id="labelDataVencimento" for="dataVencimento" value="Vencimento" />
+                            <h:outputText id="dataVencimento" value="#{parcelaMB.parcela.dataVencimento}">
+                                <f:convertDateTime type="date" />
+                            </h:outputText>
+                            <p:outputLabel id="labelPagamento" for="pgPagamento" value="Pagamento" />
+                            <h:panelGroup id="pgPagamento">
+                                <h:outputText id="dataPagamento" value="#{parcelaMB.parcela.dataPagamento}">
+                                    <f:convertDateTime type="date" />
+                                </h:outputText>
+                            </h:panelGroup>
+                            <p:outputLabel id="labelRepasseEscritorio" for="gridRepasseEscritorio" value="Repasse escritório" />
+                            <p:panelGrid id="gridRepasseEscritorio" columns="2" rendered="#{!parcelaMB.parcela.pendenteCobrancaEscritorio}">
+                                <p:outputLabel id="labelValorRepasseEscritorio" for="valorRepasseEscritorio" value="Valor" />
+                                <h:outputText id="valorRepasseEscritorio" value="#{parcelaMB.parcela.repasseEscritorio.valor}">
+                                    <f:convertNumber type="currency" />
+                                </h:outputText>
+                                <p:outputLabel id="labelPagamentoRepasse" for="pgPagamentoRepasse" value="Pagamento repasse" />
+                                <h:panelGroup id="pgPagamentoRepasse">
+                                    <h:outputText id="pagamentoRepasse" value="#{parcelaMB.parcela.repasseEscritorio.dataRepasse}">
+                                        <f:convertDateTime type="date" />
+                                    </h:outputText>
+                                </h:panelGroup>
+                            </p:panelGrid>
+                            <h:outputText value="Sem cobrança de repasse" rendered="#{parcelaMB.parcela.pendenteCobrancaEscritorio}" />
+                            <p:outputLabel id="labelRepasseParceria" for="dtRepasseParceria" value="Repasse parcerias" />
+                            <p:dataTable id="dtRepasseParceria" value="#{parcelaMB.parcela.repassesParcerias}" var="repasse">
+                                <f:facet name="header">Parcerias cobradas</f:facet>
+                                <p:column headerText="Parceiro">
+                                    <h:outputText value="#{repasse.parceria.advogado}" />
+                                </p:column>
+                                <p:column headerText="Valor Repasse">
+                                    <h:outputText value="#{repasse.valor}">
+                                        <f:convertNumber type="currency" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Repassado em">
+                                    <h:outputText value="#{repasse.dataRepasse}" rendered="#{!repasse.pendente}">
+                                        <f:convertDateTime type="date" />
+                                    </h:outputText>
+                                    <p:button value="Registrar" rendered="#{repasse.pendente}" />
+                                </p:column>
+                            </p:dataTable>
+
+                            <f:facet name="footer">
+                                <p:button value="Serviço" outcome="/cadastros/servico/viewServico.xhtml">
+                                    <f:param name="servicoId" value="#{parcelaMB.parcela.conta.servico.id}" />
+                                </p:button>
+                            </f:facet>
+                        </p:panelGrid>
+                    </h:form>
+
+                </f:view>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

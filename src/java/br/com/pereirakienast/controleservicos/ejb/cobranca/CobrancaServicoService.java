@@ -55,13 +55,16 @@ public class CobrancaServicoService {
             Parcela parcela = new Parcela(conta,cobranca.getValorParcelaServico(),dataVencimento);
             parcelaFacade.salvar(parcela);
 
-            // Gerando repasse do escritório
-            RepasseEscritorio re = new RepasseEscritorio(parcela,cobranca.getValorParcelaRepasseEscritorio());
-            repasseEscritorioFacade.salvar(re);
-            parcela.setRepasseEscritorio(re);
+            // Gerando repasse do escritório (se percentual for maior que zero)
+            if (cobranca.getPercentualRepasseEscritorio()>0) {
+                RepasseEscritorio re = new RepasseEscritorio(parcela,cobranca.getValorParcelaRepasseEscritorio());
+                repasseEscritorioFacade.salvar(re);
+                parcela.setRepasseEscritorio(re);
+            }
 
-            // gerar repasses parceria e setar na parcela
-            parcela.setRepassesParcerias(gerarRepassesParceria(parcela, cobranca.getValorParcelaRepasseParceriaIndividual()));
+            // gerar repasses parceria e setar na parcela (se percentual for maior que zero
+            if (cobranca.getPercentualRepasseParceria()>0)
+                parcela.setRepassesParcerias(gerarRepassesParceria(parcela, cobranca.getValorParcelaRepasseParceriaIndividual()));
 
             resposta.add(parcela);
         }
