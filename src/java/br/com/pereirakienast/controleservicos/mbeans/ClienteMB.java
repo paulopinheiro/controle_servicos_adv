@@ -7,6 +7,7 @@ import br.com.pereirakienast.controleservicos.ejb.TipoDocumentoFacade;
 import br.com.pereirakienast.controleservicos.entity.Advogado;
 import br.com.pereirakienast.controleservicos.entity.Cliente;
 import br.com.pereirakienast.controleservicos.entity.Documento;
+import br.com.pereirakienast.controleservicos.entity.Historico;
 import br.com.pereirakienast.controleservicos.entity.TipoDocumento;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import br.com.pereirakienast.controleservicos.mbeans.comum.AbBasicoMB;
@@ -31,6 +32,9 @@ public class ClienteMB extends AbBasicoMB<Cliente> implements Serializable {
 
     private List<TipoDocumento> listaTiposDocumentos;
     private Documento documento;
+
+    private List<Historico> listaHistoricos;
+    private Historico historico;
 
     public Cliente getCliente() {
         return super.getElemento();
@@ -99,6 +103,46 @@ public class ClienteMB extends AbBasicoMB<Cliente> implements Serializable {
 
     public void limparDocumento(ActionEvent evt) {
         setDocumento(null);
+    }
+
+    public Historico getHistorico() {
+        if (historico==null) historico = new Historico(getCliente());
+        return historico;
+    }
+
+    public void setHistorico(Historico historico) {
+        this.historico = historico;
+    }
+
+    public void incluirHistorico(ActionEvent evt) {
+        try {
+            facade.salvarHistorico(getHistorico());
+            setHistorico(null);
+            refreshListaHistoricos();
+        } catch (LogicalException ex) {
+            mensagemErro(ex.getMessage());
+        }
+    }
+
+    private void refreshListaHistoricos() {
+        if (this.getCliente().getId() != null) {
+            getCliente().setHistoricos(facade.refreshListaHistoricos(getCliente()));
+        }
+    }
+
+    public String excluirHistorico(Historico historico) {
+        try {
+            facade.excluirHistorico(historico);
+            setHistorico(null);
+            refreshListaHistoricos();
+        } catch (LogicalException ex) {
+            mensagemErro(ex.getMessage());
+        }
+        return null;
+    }
+
+    public void limparHistorico(ActionEvent evt) {
+        setHistorico(null);
     }
 
     @Override

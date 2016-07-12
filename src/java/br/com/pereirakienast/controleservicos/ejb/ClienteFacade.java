@@ -3,6 +3,7 @@ package br.com.pereirakienast.controleservicos.ejb;
 import br.jus.trt12.paulopinheiro.cpfcnpjutil.Validador;
 import br.com.pereirakienast.controleservicos.entity.Cliente;
 import br.com.pereirakienast.controleservicos.entity.Documento;
+import br.com.pereirakienast.controleservicos.entity.Historico;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.util.Collections;
 import java.util.List;
@@ -105,6 +106,32 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
     public void excluirDocumento(Documento documento) throws LogicalException {
         if (!(documento==null)) {
             getEntityManager().remove(getEntityManager().merge(documento));
+            getEntityManager().getEntityManagerFactory().getCache().evict(Cliente.class);
+        }
+    }
+
+    public void salvarHistorico(Historico historico) throws LogicalException {
+        if (historico != null) {
+            if (historico.getDataHistorico()==null) throw new LogicalException("Informe a data do histórico");
+            if (historico.getCliente()==null) throw new LogicalException("Informe o cliente ao qual se refere o histórico");
+            if (historico.getDescricao()==null||historico.getDescricao().trim().isEmpty()) throw new LogicalException("Forneça uma descrição do histórico");
+            if (historico.getId()==null) getEntityManager().persist(historico);
+            else getEntityManager().merge(historico);
+            getEntityManager().getEntityManagerFactory().getCache().evict(Cliente.class);
+        }
+    }
+
+    public List<Historico> refreshListaHistoricos(Cliente cliente) {
+        List<Historico> resposta;
+        Query pesquisa = getEntityManager().createNamedQuery("Historico.findByCliente");
+        pesquisa.setParameter("cliente", cliente);
+        resposta = pesquisa.getResultList();
+        return resposta;
+    }
+
+    public void excluirHistorico(Historico historico) throws LogicalException {
+        if (!(historico==null)) {
+            getEntityManager().remove(getEntityManager().merge(historico));
             getEntityManager().getEntityManagerFactory().getCache().evict(Cliente.class);
         }
     }

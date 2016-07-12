@@ -4,9 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 
 /**
@@ -14,8 +19,14 @@ import javax.persistence.Temporal;
  * @author paulopinheiro
  */
 @Entity
+@Table(name = "historico", catalog = "controladv", schema = "public")
+@NamedQueries(value = {
+    @NamedQuery(name = "Historico.findByCliente", query = "select h from Historico h where h.cliente = :cliente")
+})
 public class Historico implements Comparable, Serializable {
     @Id
+    @SequenceGenerator(name = "Historico_Gen", sequenceName = "historico_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "Historico_Gen")
     private Integer id;
     @Temporal(javax.persistence.TemporalType.DATE)
     @Column(name="data_historico")
@@ -24,6 +35,12 @@ public class Historico implements Comparable, Serializable {
     @ManyToOne
     @JoinColumn(name="cliente_id")
     private Cliente cliente;
+
+    public Historico() {}
+
+    public Historico(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
     public Integer getId() {
         return id;

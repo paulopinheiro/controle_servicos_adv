@@ -96,9 +96,40 @@
                             </p:panelGrid>
                         </p:tab>
                         <p:tab id="atabHistoricos" title="Histórico" disabled="#{clienteMB.novoElemento}">
-                            <h:form id="formHistorico" rendered="#{!clienteMB.novoElemento}">
-                                
-                            </h:form>
+                            <p:panelGrid id="gridHistorico" columns="2">
+                                <h:form id="formHistorico" rendered="#{!clienteMB.novoElemento}">
+                                    <p:panelGrid id="gridHistorico2" columns="2">
+                                        <p:outputLabel for="dataHistorico" id="lblDataHistorico" value="Data" />
+                                        <p:calendar id="dataHistorico" value="#{clienteMB.historico.dataHistorico}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" />
+                                        <p:outputLabel for="descricao" id="lblDescricao" value="Descrição" />
+                                        <p:inputTextarea id="descricao" value="#{clienteMB.historico.descricao}" rows="6" cols="50" maxlength="800" />
+                                        <f:facet name="footer">
+                                            <center>
+                                                <p:panelGrid columns="2">
+                                                    <p:commandButton value="Incluir" process="@form :formCliente :accordionCliente:formTabHistoricos :mensagem :gmensagem" update="@form :accordionCliente:formTabHistoricos :mensagem :gmensagem" actionListener="#{clienteMB.incluirHistorico}" />
+                                                    <p:commandButton value="Limpar" update="@form :mensagem :gmensagem" actionListener="#{clienteMB.limparHistorico}" />
+                                                </p:panelGrid>
+                                            </center>
+                                        </f:facet>
+                                    </p:panelGrid>
+                                </h:form>
+                                <h:form id="formTabHistoricos">
+                                    <p:dataTable id="tabHistoricos" value="#{clienteMB.cliente.historicos}" var="historico" selection="#{clienteMB.historico}">
+                                        <f:facet name="header"><h:outputText value="Histórico do cliente" /></f:facet>
+                                        <p:column id="colDataHistorico" headerText="Data">
+                                            <h:outputText value="#{historico.dataHistorico}">
+                                                <f:convertDateTime type="date" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column id="colDescricao" headerText="Descrição">
+                                            <h:outputText value="#{historico.descricao}" />
+                                        </p:column>
+                                        <p:column id="excluirHistorico" >
+                                            <p:commandLink value="Excluir" process="@form" update="@form :accordionCliente:formHistorico :mensagem :gmensagem" action="#{clienteMB.excluirHistorico(historico)}" />
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:form>
+                            </p:panelGrid>
                         </p:tab>
                     </p:accordionPanel>
                 </f:view>
