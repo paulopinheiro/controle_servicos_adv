@@ -51,6 +51,14 @@ public class Parcela implements Serializable, Comparable {
         return this.dataPagamento == null;
     }
 
+    public boolean isPendenteCobrancaParcerias() {
+        if ((this.getConta().getServico().getParcerias()!=null)&&this.getConta().getServico().getParcerias().size()>0) {
+            System.out.println("Tem Parcerias");
+            return this.getRepassesParcerias()==null||this.getRepassesParcerias().size()<1;
+        }
+        return false;
+    }
+
     public boolean isPendenteCobrancaEscritorio() {
         return this.repasseEscritorio==null;
     }
@@ -148,9 +156,9 @@ public class Parcela implements Serializable, Comparable {
     @Override
     public int compareTo(Object o) {
         Parcela other = (Parcela) o;
+        if (this.getConta()==null||other.getConta()==null) return 0;
         if (this.getConta().equals(other.getConta())) {
             return this.getDataVencimento().compareTo(other.getDataVencimento());
         } else return this.getConta().getServico().compareTo(other.getConta().getServico());
     }
-
 }

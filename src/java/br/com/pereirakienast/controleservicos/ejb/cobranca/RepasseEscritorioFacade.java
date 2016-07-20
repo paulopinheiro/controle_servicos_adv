@@ -24,4 +24,11 @@ public class RepasseEscritorioFacade extends AbstractFacade<RepasseEscritorio> {
             else getEntityManager().merge(repasse);
         }
     }
+
+    public void registrarPagamentoRepasse(RepasseEscritorio repasseEscritorio) throws LogicalException {
+        if (repasseEscritorio!=null) {
+            if (repasseEscritorio.getDataRepasse()==null) throw new LogicalException("Informe a data do repasse ao escritório");
+            this.salvar(repasseEscritorio);
+        }
+    }
 }

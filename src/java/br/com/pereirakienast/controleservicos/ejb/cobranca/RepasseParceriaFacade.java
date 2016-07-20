@@ -25,5 +25,12 @@ public class RepasseParceriaFacade extends AbstractFacade<RepasseParceria>{
             else getEntityManager().merge(repasse);
         }
     }
+
+    public void registrarPagamentoRepasse(RepasseParceria repasseParceria) throws LogicalException {
+        if (repasseParceria!=null) {
+            if (repasseParceria.getDataRepasse()==null) throw new LogicalException("Informe a data do repasse à parceria");
+            this.salvar(repasseParceria);
+        }
+    }
     
 }
