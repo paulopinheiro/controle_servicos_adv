@@ -26,6 +26,8 @@ public class ParcelaMB extends AbBasicoMB<Parcela> implements Serializable {
     private Boolean propagaRepasseEscritorio;
     private Boolean propagaRepasseParcerias;
 
+    private RepasseParceria repasseParceriaSelecionada;
+
     public ParcelaMB() {}
 
     public void registrarPagamento(ActionEvent evt) {
@@ -52,9 +54,9 @@ public class ParcelaMB extends AbBasicoMB<Parcela> implements Serializable {
         }
     }
 
-    public void registrarPagamentoRepasseParceria(RepasseParceria repasseParceria) {
+    public void registrarPagamentoRepasseParceria(ActionEvent evt) {
         try {
-            repasseParceriaFacade.registrarPagamentoRepasse(repasseParceria);
+            repasseParceriaFacade.registrarPagamentoRepasse(getRepasseParceriaSelecionada());
             super.mensagemSucesso("Pagamento de repasse registrado com sucesso");
         } catch (LogicalException ex) {
             super.mensagemErro(ex.getMessage());
@@ -88,6 +90,15 @@ public class ParcelaMB extends AbBasicoMB<Parcela> implements Serializable {
 
     public void setParcela(Parcela parcela) {
         super.setElemento(parcela);
+    }
+
+    public RepasseParceria getRepasseParceriaSelecionada() {
+        if (this.repasseParceriaSelecionada==null) this.repasseParceriaSelecionada = new RepasseParceria();
+        return repasseParceriaSelecionada;
+    }
+
+    public void setRepasseParceriaSelecionada(RepasseParceria repasseParceriaSelecionada) {
+        this.repasseParceriaSelecionada = repasseParceriaSelecionada;
     }
 
     @Override

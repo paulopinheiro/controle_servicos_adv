@@ -82,7 +82,9 @@
                                     <h:outputText value="#{repasse.dataRepasse}" rendered="#{!repasse.pendente}">
                                         <f:convertDateTime type="date" />
                                     </h:outputText>
-                                    <p:button value="Registrar" rendered="#{repasse.pendente}" />
+                                    <p:commandButton process="@this" value="Registrar" rendered="#{repasse.pendente}" onclick="PF('dlgRepasseParceria').show();">
+                                        <f:setPropertyActionListener value="#{repasse}" target="#{parcelaMB.repasseParceriaSelecionada}" />
+                                    </p:commandButton>
                                 </p:column>
                             </p:dataTable>
 
@@ -116,7 +118,17 @@
                                 </f:facet>
                             </h:panelGrid>
                         </p:dialog>
-                        
+
+                        <p:dialog header="Registrar pagamento de repasse de parceria" id="dlgRegRepassseParceria" widgetVar="dlgRepasseParceria" resizable="false" showEffect="bounce" hideEffect="bounce">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="regDataPagamentoRepasseParceria" value="Data do repasse" />
+                                <p:calendar id="regDataPagamentoRepasseParceria" value="#{parcelaMB.repasseParceriaSelecionada.dataRepasse}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" />
+                                <f:facet name="footer">
+                                    <p:commandButton process="@form" update="@form :gmensagem :mensagem" value="Registrar" actionListener="#{parcelaMB.registrarPagamentoRepasseParceria}" oncomplete="PF('dlgRepasseParceria').hide();" />
+                                </f:facet>
+                            </h:panelGrid>
+                        </p:dialog>
+
                     </h:form>
                     <p:growl id="gmensagem" globalOnly="true" />
                     <p:messages id="mensagem" globalOnly="true" />
