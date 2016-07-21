@@ -63,7 +63,7 @@
                                     <h:outputText id="pagamentoRepasse" value="#{parcelaMB.parcela.repasseEscritorio.dataRepasse}" rendered="#{!parcelaMB.parcela.repasseEscritorio.pendente}">
                                         <f:convertDateTime type="date" />
                                     </h:outputText>
-                                    <p:button value="Registrar" rendered="#{parcelaMB.parcela.repasseEscritorio.pendente}" />
+                                    <p:button value="Registrar" onclick="PF('dlgRepasseEscrit').show(); return false;" rendered="#{parcelaMB.parcela.repasseEscritorio.pendente}" />
                                 </h:panelGroup>
                             </p:panelGrid>
                             <h:outputText value="Sem cobrança de repasse" rendered="#{parcelaMB.parcela.pendenteCobrancaEscritorio}" />
@@ -99,13 +99,24 @@
                                 <p:calendar id="regDataPagamento" value="#{parcelaMB.parcela.dataPagamento}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" />
                                 <p:outputLabel id="labelPropagaEscritorio" for="chkPropagaEscritorio" value="Registrar repasse para escritório na mesma data" rendered="#{!parcelaMB.parcela.pendenteCobrancaEscritorio}" />
                                 <p:selectBooleanCheckbox id="chkPropagaEscritorio" value="#{parcelaMB.propagaRepasseEscritorio}" rendered="#{!parcelaMB.parcela.pendenteCobrancaEscritorio}" />
-                                <p:outputLabel id="labelPropagaParcerias" for="chkPropagaParcerias" value="Registrar repasse para parcerias na mesma data" rendered="#{!parcelaMB.parcela.pendenteCobrancaParcerias}" />
-                                <p:selectBooleanCheckbox id="chkPropagaParcerias" value="#{parcelaMB.propagaRepasseParcerias}" rendered="#{!parcelaMB.parcela.pendenteCobrancaParcerias}" />
+                                <p:outputLabel id="labelPropagaParcerias" for="chkPropagaParcerias" value="Registrar repasse para parcerias na mesma data" rendered="#{!empty parcelaMB.parcela.repassesParcerias}" />
+                                <p:selectBooleanCheckbox id="chkPropagaParcerias" value="#{parcelaMB.propagaRepasseParcerias}" rendered="#{!empty parcelaMB.parcela.repassesParcerias}" />
                                 <f:facet name="footer">
                                     <p:commandButton process="@form" update="@form :gmensagem :mensagem" value="Registrar" actionListener="#{parcelaMB.registrarPagamento}" oncomplete="PF('dlgRegPagto').hide();" />
                                 </f:facet>
                             </h:panelGrid>
                         </p:dialog>
+
+                        <p:dialog header="Registrar pagamento de repasse ao escritório" id="dlgRegRepassseEscritorio" widgetVar="dlgRepasseEscrit" resizable="false" showEffect="bounce" hideEffect="bounce">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel for="regDataPagamentoRepasseEscritorio" value="Data do repasse" />
+                                <p:calendar id="regDataPagamentoRepasseEscritorio" value="#{parcelaMB.parcela.repasseEscritorio.dataRepasse}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" />
+                                <f:facet name="footer">
+                                    <p:commandButton process="@form" update="@form :gmensagem :mensagem" value="Registrar" actionListener="#{parcelaMB.registrarPagamentoRepasseEscritorio}" oncomplete="PF('dlgRepasseEscrit').hide();" />
+                                </f:facet>
+                            </h:panelGrid>
+                        </p:dialog>
+                        
                     </h:form>
                     <p:growl id="gmensagem" globalOnly="true" />
                     <p:messages id="mensagem" globalOnly="true" />
