@@ -15,10 +15,10 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "conta_servico", catalog = "controladv", schema = "public")
+@Table(name = "conta_servico", catalog = "controladv", schema = "cobranca")
 public class ContaServico implements Serializable {
     @Id
-    @SequenceGenerator(name = "ContaServico_Gen", sequenceName = "conta_servico_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "ContaServico_Gen", sequenceName = "cobranca.conta_servico_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "ContaServico_Gen")
     private Integer id;
     @OneToOne

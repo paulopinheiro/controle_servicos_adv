@@ -3,56 +3,31 @@ package br.com.pereirakienast.controleservicos.entity.cobranca;
 import br.com.pereirakienast.controleservicos.entity.ParceriaServico;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
-import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
 
 @Entity
-@Table(name = "repasse_parceria", catalog = "controladv", schema = "public")
-public class RepasseParceria implements Serializable, Comparable {
-    @Id
-    @SequenceGenerator(name = "RepasseParceria_Gen", sequenceName = "repasse_parceria_id_seq", allocationSize = 1)
-    @GeneratedValue(generator = "RepasseParceria_Gen")
-    private Integer id;
+@Table(name = "repasse_parceria", catalog = "controladv", schema = "cobranca")
+@PrimaryKeyJoinColumn(name="id")
+@DiscriminatorValue("P")
+public class RepasseParceria extends Obrigacao implements Serializable, Comparable {
     @ManyToOne
     @JoinColumn(name="parcela_id",nullable=false)
     private Parcela parcela;
     @ManyToOne
     @JoinColumn(name="parceria_servico_id",nullable=false)
     private ParceriaServico parceria;
-    @Column(name="valor",nullable=false,precision=8,scale=2)
-    private BigDecimal valor;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Column(name="data_repasse")
-    private Date dataRepasse;
-    @Column(name="observacao",length=400)
-    private String observacao;
 
     public RepasseParceria() {}
 
     public RepasseParceria(Parcela parcela, ParceriaServico parceria, BigDecimal valor) {
+        super(valor,parcela.getDataVencimento());
         this.parcela = parcela;
         this.parceria = parceria;
-        this.valor = valor;
-    }
-
-    public boolean isPendente() {
-        return this.dataRepasse==null;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Parcela getParcela() {
@@ -69,30 +44,6 @@ public class RepasseParceria implements Serializable, Comparable {
 
     public void setParceria(ParceriaServico parceria) {
         this.parceria = parceria;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
-    public Date getDataRepasse() {
-        return dataRepasse;
-    }
-
-    public void setDataRepasse(Date dataRepasse) {
-        this.dataRepasse = dataRepasse;
-    }
-
-    public String getObservacao() {
-        return observacao;
-    }
-
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
     }
 
     @Override
@@ -122,11 +73,6 @@ public class RepasseParceria implements Serializable, Comparable {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "RepasseParceria{" + "parcela=" + parcela + ", parceria=" + parceria + ", valor=" + valor + '}';
     }
 
     @Override

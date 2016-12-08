@@ -1,6 +1,7 @@
 package br.com.pereirakienast.controleservicos.ejb.cobranca;
 
 import br.com.pereirakienast.controleservicos.ejb.AbstractFacade;
+import br.com.pereirakienast.controleservicos.entity.cobranca.Pagamento;
 import br.com.pereirakienast.controleservicos.entity.cobranca.RepasseParceria;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.math.BigDecimal;
@@ -28,9 +29,11 @@ public class RepasseParceriaFacade extends AbstractFacade<RepasseParceria>{
 
     public void registrarPagamentoRepasse(RepasseParceria repasseParceria) throws LogicalException {
         if (repasseParceria!=null) {
-            if (repasseParceria.getDataRepasse()==null) throw new LogicalException("Informe a data do repasse à parceria");
+            if (repasseParceria.getBaixa()==null || !repasseParceria.getBaixa().isPagamento()) throw new LogicalException("Opção inválida para pagamento");
+            Pagamento pagto = (Pagamento) repasseParceria.getBaixa();
+            if (pagto.getDataPagamento()==null) throw new LogicalException("Informe a data do repasse à parceria");
+            if (pagto.getValorPago()==null) pagto.setValorPago(pagto.getObrigacao().getValor());
             this.salvar(repasseParceria);
         }
     }
-    
 }

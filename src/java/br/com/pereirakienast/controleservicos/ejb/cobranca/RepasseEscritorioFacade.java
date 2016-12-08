@@ -1,6 +1,7 @@
 package br.com.pereirakienast.controleservicos.ejb.cobranca;
 
 import br.com.pereirakienast.controleservicos.ejb.AbstractFacade;
+import br.com.pereirakienast.controleservicos.entity.cobranca.Pagamento;
 import br.com.pereirakienast.controleservicos.entity.cobranca.RepasseEscritorio;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.math.BigDecimal;
@@ -27,7 +28,10 @@ public class RepasseEscritorioFacade extends AbstractFacade<RepasseEscritorio> {
 
     public void registrarPagamentoRepasse(RepasseEscritorio repasseEscritorio) throws LogicalException {
         if (repasseEscritorio!=null) {
-            if (repasseEscritorio.getDataRepasse()==null) throw new LogicalException("Informe a data do repasse ao escritório");
+            if (repasseEscritorio.getBaixa()==null || !repasseEscritorio.getBaixa().isPagamento()) throw new LogicalException("Opção inválida para pagamento");
+            Pagamento pagto = (Pagamento) repasseEscritorio.getBaixa();
+            if (pagto.getDataPagamento()==null) throw new LogicalException("Informe a data do pagamento do repasse ao escritório");
+            if (pagto.getValorPago()==null) pagto.setValorPago(pagto.getObrigacao().getValor());
             this.salvar(repasseEscritorio);
         }
     }

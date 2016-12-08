@@ -1,6 +1,7 @@
 package br.com.pereirakienast.controleservicos.ejb.cobranca;
 
 import br.com.pereirakienast.controleservicos.ejb.AbstractFacade;
+import br.com.pereirakienast.controleservicos.entity.cobranca.Pagamento;
 import br.com.pereirakienast.controleservicos.entity.cobranca.Parcela;
 import br.com.pereirakienast.controleservicos.entity.cobranca.RepasseParceria;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
@@ -32,17 +33,20 @@ public class ParcelaFacade extends AbstractFacade<Parcela> {
 
     public void registrarPagamento(Parcela parcela, boolean propagaRepasseEscritorio, boolean propagaRepasseParcerias) throws LogicalException {
         if (parcela!=null) {
-            if (parcela.getDataPagamento()==null) throw new LogicalException("Informe a data do pagamento");
+            if (parcela.getBaixa()==null || !parcela.getBaixa().isPagamento()) throw new LogicalException("Opção inválida para pagamento");
+            Pagamento pagto = (Pagamento) parcela.getBaixa();
+            if (pagto.getDataPagamento()==null) throw new LogicalException("Informe a data do pagamento");
+            if (pagto.getValorPago()==null) pagto.setValorPago(parcela.getValor());
             this.salvar(parcela);
             if (propagaRepasseEscritorio) {
                 if (parcela.isPendenteCobrancaEscritorio()) throw new LogicalException("Não foi encontrada cobrança de repasse ao escritório para essa parcela");
-                parcela.getRepasseEscritorio().setDataRepasse(parcela.getDataPagamento());
+                parcela.getRepasseEscritorio().setBaixa(pagto);
                 repasseEscritorioFacade.registrarPagamentoRepasse(parcela.getRepasseEscritorio());
             }
             if (propagaRepasseParcerias) {
                 if (parcela.isPendenteCobrancaParcerias()) throw new LogicalException("Não foram encontradas cobranças de repasse a parcerias para esta parcela");
                 for (RepasseParceria r:parcela.getRepassesParcerias()) {
-                    r.setDataRepasse(parcela.getDataPagamento());
+                    r.setBaixa(pagto);
                     repasseParceriaFacade.registrarPagamentoRepasse(r);
                 }
             }
