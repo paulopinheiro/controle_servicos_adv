@@ -1,9 +1,8 @@
 package br.com.pereirakienast.controleservicos.ejb.cobranca;
 
 import br.com.pereirakienast.controleservicos.ejb.AbstractFacade;
-import br.com.pereirakienast.controleservicos.entity.cobranca.Pagamento;
+import br.com.pereirakienast.controleservicos.entity.cobranca.Baixa;
 import br.com.pereirakienast.controleservicos.entity.cobranca.Parcela;
-import br.com.pereirakienast.controleservicos.entity.cobranca.RepasseParceria;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.math.BigDecimal;
 import javax.ejb.EJB;
@@ -13,6 +12,7 @@ import javax.ejb.Stateless;
 public class ParcelaFacade extends AbstractFacade<Parcela> {
    @EJB private RepasseEscritorioFacade repasseEscritorioFacade;
    @EJB private RepasseParceriaFacade repasseParceriaFacade;
+   @EJB private BaixaFacade baixaFacade;
 
     public ParcelaFacade() {
         super(Parcela.class);
@@ -31,25 +31,17 @@ public class ParcelaFacade extends AbstractFacade<Parcela> {
         }
     }
 
-    public void registrarPagamento(Parcela parcela, boolean propagaRepasseEscritorio, boolean propagaRepasseParcerias) throws LogicalException {
+    public void registrarBaixaParcela(Parcela parcela, boolean propagaRepasseEscritorio, boolean propagaRepasseParcerias) throws LogicalException {
         if (parcela!=null) {
-            if (parcela.getBaixa()==null || !parcela.getBaixa().isPagamento()) throw new LogicalException("Opção inválida para pagamento");
-            Pagamento pagto = (Pagamento) parcela.getBaixa();
-            if (pagto.getDataPagamento()==null) throw new LogicalException("Informe a data do pagamento");
-            if (pagto.getValorPago()==null) pagto.setValorPago(parcela.getValor());
-            this.salvar(parcela);
-            if (propagaRepasseEscritorio) {
-                if (parcela.isPendenteCobrancaEscritorio()) throw new LogicalException("Não foi encontrada cobrança de repasse ao escritório para essa parcela");
-                parcela.getRepasseEscritorio().setBaixa(pagto);
-                repasseEscritorioFacade.registrarPagamentoRepasse(parcela.getRepasseEscritorio());
-            }
-            if (propagaRepasseParcerias) {
-                if (parcela.isPendenteCobrancaParcerias()) throw new LogicalException("Não foram encontradas cobranças de repasse a parcerias para esta parcela");
-                for (RepasseParceria r:parcela.getRepassesParcerias()) {
-                    r.setBaixa(pagto);
-                    repasseParceriaFacade.registrarPagamentoRepasse(r);
-                }
-            }
+            if (parcela.getBaixa()==null) throw new LogicalException ("Informe os dados para baixa");
+
+            Baixa baixa = parcela.getBaixa();
+            baixa.setObrigacao(parcela);
+
+            baixaFacade.salvar(baixa);
+
+            if (propagaRepasseEscritorio) repasseEscritorioFacade.propagarBaixaParcela(parcela);
+            if (propagaRepasseParcerias) repasseParceriaFacade.propagarBaixaParcela(parcela);
         }
     }
 }

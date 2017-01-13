@@ -21,7 +21,7 @@ import javax.persistence.Temporal;
 @DiscriminatorColumn(name="dcolumn")
 public class Baixa implements Serializable {
     @Id
-    @SequenceGenerator(name = "Baixa_Gen", sequenceName = "cobranca.obrigacao_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "Baixa_Gen", sequenceName = "cobranca.baixa_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "Baixa_Gen")
     private Integer id;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -34,6 +34,22 @@ public class Baixa implements Serializable {
     private Obrigacao obrigacao;
 
     public Baixa() {}
+
+    public Baixa(Obrigacao obrigacao) {
+        this.obrigacao = obrigacao;
+    }
+
+    public Baixa copia() {
+        Baixa resposta = new Baixa(this.getObrigacao(),this.getDataBaixa(),this.getObservacao());
+
+        return resposta;
+    }
+
+    public Baixa(Obrigacao obrigacao, Date dataBaixa, String observacao) {
+        this.obrigacao = obrigacao;
+        this.dataBaixa = dataBaixa;
+        this.observacao = observacao;
+    }
 
     public boolean isDispensa() {
         return this instanceof Dispensa;

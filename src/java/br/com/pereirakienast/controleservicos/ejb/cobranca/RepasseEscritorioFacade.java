@@ -1,14 +1,18 @@
 package br.com.pereirakienast.controleservicos.ejb.cobranca;
 
 import br.com.pereirakienast.controleservicos.ejb.AbstractFacade;
+import br.com.pereirakienast.controleservicos.entity.cobranca.Baixa;
 import br.com.pereirakienast.controleservicos.entity.cobranca.Pagamento;
+import br.com.pereirakienast.controleservicos.entity.cobranca.Parcela;
 import br.com.pereirakienast.controleservicos.entity.cobranca.RepasseEscritorio;
 import br.com.pereirakienast.controleservicos.exceptions.LogicalException;
 import java.math.BigDecimal;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless
 public class RepasseEscritorioFacade extends AbstractFacade<RepasseEscritorio> {
+   @EJB private BaixaFacade baixaFacade;
 
     public RepasseEscritorioFacade() {
         super(RepasseEscritorio.class);
@@ -26,13 +30,21 @@ public class RepasseEscritorioFacade extends AbstractFacade<RepasseEscritorio> {
         }
     }
 
-    public void registrarPagamentoRepasse(RepasseEscritorio repasseEscritorio) throws LogicalException {
-        if (repasseEscritorio!=null) {
-            if (repasseEscritorio.getBaixa()==null || !repasseEscritorio.getBaixa().isPagamento()) throw new LogicalException("Opção inválida para pagamento");
-            Pagamento pagto = (Pagamento) repasseEscritorio.getBaixa();
-            if (pagto.getDataPagamento()==null) throw new LogicalException("Informe a data do pagamento do repasse ao escritório");
-            if (pagto.getValorPago()==null) pagto.setValorPago(pagto.getObrigacao().getValor());
-            this.salvar(repasseEscritorio);
+    public void propagarBaixaParcela(Parcela parcela) throws LogicalException {
+        if (parcela.isPendenteCobrancaEscritorio()) throw new LogicalException("Não foi encontrada cobrança de repasse ao escritório para essa parcela");
+        Baixa propagacao = parcela.getBaixa().copia();
+        propagacao.setObrigacao(parcela.getRepasseEscritorio());
+        // O campo "Valor Pago" neste momento não é importante, pois o sistema
+        // ainda não prevê pagamento parcial da obrigação
+        // Caso futuramente isso seja adotado tomar novas decisões (exemplo: 
+        // propagar o percentual pago ou deixar a escolha para o usuário)
+        // Esta rotina é apenas para evitar que o valor da parcela apareça como
+        // o valor pago no repasse
+        if (propagacao.isPagamento()) {
+            Pagamento pagto = (Pagamento) propagacao;
+            pagto.setValorPago(pagto.getObrigacao().getValor());
         }
+
+        baixaFacade.salvar(propagacao);
     }
 }

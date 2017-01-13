@@ -1,6 +1,7 @@
 package br.com.pereirakienast.controleservicos.entity.cobranca;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -17,6 +18,20 @@ public class Dispensa extends Baixa implements Serializable {
 
     public Dispensa() {}
 
+    public Dispensa(Obrigacao obrigacao) {
+        super(obrigacao);
+    }
+
+    @Override
+    public Dispensa copia() {
+        Dispensa resposta = new Dispensa(this.getObrigacao());
+        resposta.setDataBaixa(this.getDataBaixa());
+        resposta.setObservacao(this.getObservacao());
+        resposta.setMotivo(this.getMotivo());
+
+        return resposta;
+    }
+
     public String getMotivo() {
         return motivo;
     }
@@ -27,7 +42,12 @@ public class Dispensa extends Baixa implements Serializable {
 
     @Override
     public String toString() {
-        return "Dispensa(" + "motivo=" + motivo + ')';
+        String dataFormatada;
+        if (this.getDataBaixa()==null) dataFormatada = null;
+        else {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            dataFormatada = sdf.format(this.getDataBaixa());
+        }
+        return "Dispensado em " + dataFormatada + " (" + motivo + ')';
     }
-
 }

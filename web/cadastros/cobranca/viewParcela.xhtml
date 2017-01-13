@@ -45,12 +45,11 @@
                         <br />
                         <p:panelGrid id="gridCobranca" columns="2">
                             <f:facet name="header">Dados de Cobrança</f:facet>
-                            <p:outputLabel id="labelPagamento" for="pgPagamento" value="Pagamento" />
-                            <h:panelGroup id="pgPagamento">
-                                <h:outputText id="dataPagamento" value="#{parcelaMB.parcela.dataPagamento}" rendered="#{!parcelaMB.parcela.pendente}">
-                                    <f:convertDateTime type="date" />
-                                </h:outputText>
-                                <p:button value="Registrar" onclick="PF('dlgRegPagto').show(); return false;" rendered="#{parcelaMB.parcela.pendente}" />
+                            <p:outputLabel id="labelBaixa" for="pgBaixa" value="Baixa" />
+                            <h:panelGroup id="pgBaixa">
+                                <h:outputText id="baixa" value="#{parcelaMB.parcela.baixa}" rendered="#{!parcelaMB.parcela.pendente}" />
+                                <p:commandButton update=":formParcela:dlgRegBaixa" value="Pagamento" action="#{parcelaMB.dialogoBaixa(0, 0)}" oncomplete="PF('dlgRegBaixa').show(); return false;" rendered="#{parcelaMB.parcela.pendente}" />
+                                <p:commandButton update=":formParcela:dlgRegBaixa" value="Dispensa" action="#{parcelaMB.dialogoBaixa(0, 1)}" oncomplete="PF('dlgRegBaixa').show(); return false;" rendered="#{parcelaMB.parcela.pendente}" />
                             </h:panelGroup>
                             <p:outputLabel id="labelRepasseEscritorio" for="gridRepasseEscritorio" value="Repasse escritório" />
                             <p:panelGrid id="gridRepasseEscritorio" columns="2" rendered="#{!parcelaMB.parcela.pendenteCobrancaEscritorio}">
@@ -58,12 +57,11 @@
                                 <h:outputText id="valorRepasseEscritorio" value="#{parcelaMB.parcela.repasseEscritorio.valor}">
                                     <f:convertNumber type="currency" />
                                 </h:outputText>
-                                <p:outputLabel id="labelPagamentoRepasse" for="pgPagamentoRepasse" value="Pagamento repasse" />
-                                <h:panelGroup id="pgPagamentoRepasse">
-                                    <h:outputText id="pagamentoRepasse" value="#{parcelaMB.parcela.repasseEscritorio.dataRepasse}" rendered="#{!parcelaMB.parcela.repasseEscritorio.pendente}">
-                                        <f:convertDateTime type="date" />
-                                    </h:outputText>
-                                    <p:button value="Registrar" onclick="PF('dlgRepasseEscrit').show(); return false;" rendered="#{parcelaMB.parcela.repasseEscritorio.pendente}" />
+                                <p:outputLabel id="labelBaixaRepasse" for="pgBaixaRepasse" value="Baixa repasse" />
+                                <h:panelGroup id="pgBaixaRepasse">
+                                    <h:outputText id="baixaRepasse" value="#{parcelaMB.parcela.repasseEscritorio.baixa}" rendered="#{!parcelaMB.parcela.repasseEscritorio.pendente}" />
+                                    <p:commandButton update=":formParcela:dlgRegBaixa" value="Pagamento" action="#{parcelaMB.dialogoBaixa(1, 0)}" oncomplete="PF('dlgRegBaixa').show(); return false;" rendered="#{parcelaMB.parcela.repasseEscritorio.pendente}" />
+                                    <p:commandButton update=":formParcela:dlgRegBaixa" value="Dispensa" action="#{parcelaMB.dialogoBaixa(1, 1)}" oncomplete="PF('dlgRegBaixa').show(); return false;" rendered="#{parcelaMB.parcela.repasseEscritorio.pendente}" />
                                 </h:panelGroup>
                             </p:panelGrid>
                             <h:outputText value="Sem cobrança de repasse" rendered="#{parcelaMB.parcela.pendenteCobrancaEscritorio}" />
@@ -78,11 +76,12 @@
                                         <f:convertNumber type="currency" />
                                     </h:outputText>
                                 </p:column>
-                                <p:column headerText="Repassado em">
-                                    <h:outputText value="#{repasse.dataRepasse}" rendered="#{!repasse.pendente}">
-                                        <f:convertDateTime type="date" />
-                                    </h:outputText>
-                                    <p:commandButton process="@this" value="Registrar" rendered="#{repasse.pendente}" onclick="PF('dlgRepasseParceria').show();">
+                                <p:column headerText="Baixa">
+                                    <h:outputText value="#{repasse.baixa}" rendered="#{!repasse.pendente}" />
+                                    <p:commandButton update=":formParcela:dlgRegBaixa" process="@this" value="Pagamento" action="#{parcelaMB.dialogoBaixa(3, 0)}" rendered="#{repasse.pendente}" oncomplete="PF('dlgRegBaixa').show();">
+                                        <f:setPropertyActionListener value="#{repasse}" target="#{parcelaMB.repasseParceriaSelecionada}" />
+                                    </p:commandButton>
+                                    <p:commandButton update=":formParcela:dlgRegBaixa" process="@this" value="Dispensa" action="#{parcelaMB.dialogoBaixa(3, 1)}" rendered="#{repasse.pendente}" oncomplete="PF('dlgRegBaixa').show();">
                                         <f:setPropertyActionListener value="#{repasse}" target="#{parcelaMB.repasseParceriaSelecionada}" />
                                     </p:commandButton>
                                 </p:column>
@@ -94,41 +93,32 @@
                                 </p:button>
                             </f:facet>
                         </p:panelGrid>
-                        
-                        <p:dialog header="Registrar pagamento de parcela" id="dlgRegPagamento" widgetVar="dlgRegPagto" resizable="false" showEffect="bounce" hideEffect="bounce">
-                            <h:panelGrid columns="2">
+
+                        <p:dialog header="Registrar baixa" id="dlgRegBaixa" widgetVar="dlgRegBaixa" resizable="false" showEffect="bounce" hideEffect="bounce">
+                            <p:panelGrid id="gridRegPagamentoParcela" columns="2" rendered="#{parcelaMB.escolhaTipoBaixa == 0}">
+                                <f:facet name="header">Pagamento</f:facet>
                                 <p:outputLabel id="labelRegDataPagamento" for="regDataPagamento" value="Data do pagamento" />
-                                <p:calendar id="regDataPagamento" value="#{parcelaMB.parcela.dataPagamento}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" />
+                                <p:calendar id="regDataPagamento" value="#{parcelaMB.pagamento.dataPagamento}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" />
+                            </p:panelGrid>
+                            <p:panelGrid id="gridRegDispensa" columns="2" rendered="#{parcelaMB.escolhaTipoBaixa == 1}">
+                                <f:facet name="header">Dispensa</f:facet>
+                                <p:outputLabel id="labelRegDataDispensa" for="regDataDispensa" value="Data" />
+                                <p:calendar id="regDataDispensa" value="#{parcelaMB.dispensa.dataBaixa}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" />
+                                <p:outputLabel id="labelRegMotivoDispensa" for="motivoDispensa" value="Motivo" />
+                                <p:inputText id="motivoDispensa" value="#{parcelaMB.dispensa.motivo}" size="100" maxlength="150" />
+                            </p:panelGrid>
+                            <p:panelGrid id="outrosDadosBaixaParcela" columns="2" rendered="#{parcelaMB.escolhaTipoObrigacao==0}">
                                 <p:outputLabel id="labelPropagaEscritorio" for="chkPropagaEscritorio" value="Registrar repasse para escritório na mesma data" rendered="#{!parcelaMB.parcela.pendenteCobrancaEscritorio}" />
                                 <p:selectBooleanCheckbox id="chkPropagaEscritorio" value="#{parcelaMB.propagaRepasseEscritorio}" rendered="#{!parcelaMB.parcela.pendenteCobrancaEscritorio}" />
                                 <p:outputLabel id="labelPropagaParcerias" for="chkPropagaParcerias" value="Registrar repasse para parcerias na mesma data" rendered="#{!empty parcelaMB.parcela.repassesParcerias}" />
                                 <p:selectBooleanCheckbox id="chkPropagaParcerias" value="#{parcelaMB.propagaRepasseParcerias}" rendered="#{!empty parcelaMB.parcela.repassesParcerias}" />
+                            </p:panelGrid>
+                            <p:panelGrid id="gridBotoesBaixa">
                                 <f:facet name="footer">
-                                    <p:commandButton process="@form" update="@form :gmensagem :mensagem" value="Registrar" actionListener="#{parcelaMB.registrarPagamento}" oncomplete="PF('dlgRegPagto').hide();" />
+                                    <p:commandButton id="btRegistraPagamento" process="@form" update="@form :gmensagem :mensagem" value="Registrar" action="#{parcelaMB.registrarBaixa}" oncomplete="PF('dlgRegBaixa').hide();" />
                                 </f:facet>
-                            </h:panelGrid>
+                            </p:panelGrid>
                         </p:dialog>
-
-                        <p:dialog header="Registrar pagamento de repasse ao escritório" id="dlgRegRepassseEscritorio" widgetVar="dlgRepasseEscrit" resizable="false" showEffect="bounce" hideEffect="bounce">
-                            <h:panelGrid columns="2">
-                                <p:outputLabel for="regDataPagamentoRepasseEscritorio" value="Data do repasse" />
-                                <p:calendar id="regDataPagamentoRepasseEscritorio" value="#{parcelaMB.parcela.repasseEscritorio.dataRepasse}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" />
-                                <f:facet name="footer">
-                                    <p:commandButton process="@form" update="@form :gmensagem :mensagem" value="Registrar" actionListener="#{parcelaMB.registrarPagamentoRepasseEscritorio}" oncomplete="PF('dlgRepasseEscrit').hide();" />
-                                </f:facet>
-                            </h:panelGrid>
-                        </p:dialog>
-
-                        <p:dialog header="Registrar pagamento de repasse de parceria" id="dlgRegRepassseParceria" widgetVar="dlgRepasseParceria" resizable="false" showEffect="bounce" hideEffect="bounce">
-                            <h:panelGrid columns="2">
-                                <p:outputLabel for="regDataPagamentoRepasseParceria" value="Data do repasse" />
-                                <p:calendar id="regDataPagamentoRepasseParceria" value="#{parcelaMB.repasseParceriaSelecionada.dataRepasse}" showOn="button" locale="pt" showButtonPanel="true" navigator="true" />
-                                <f:facet name="footer">
-                                    <p:commandButton process="@form" update="@form :gmensagem :mensagem" value="Registrar" actionListener="#{parcelaMB.registrarPagamentoRepasseParceria}" oncomplete="PF('dlgRepasseParceria').hide();" />
-                                </f:facet>
-                            </h:panelGrid>
-                        </p:dialog>
-
                     </h:form>
                     <p:growl id="gmensagem" globalOnly="true" />
                     <p:messages id="mensagem" globalOnly="true" />
